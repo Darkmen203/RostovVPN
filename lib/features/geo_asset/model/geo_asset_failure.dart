@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/failures.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
 
 part 'geo_asset_failure.freezed.dart';
 

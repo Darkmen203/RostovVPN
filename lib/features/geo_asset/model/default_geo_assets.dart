@@ -1,4 +1,4 @@
-// import 'package:hiddify/features/geo_asset/model/geo_asset_entity.dart';
+// import 'package:rostov_vpn/features/geo_asset/model/geo_asset_entity.dart';
 
 // /// default geoip asset bundled with the app
 // const defaultGeoip = GeoAssetEntity(

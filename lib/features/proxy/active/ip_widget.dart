@@ -1,10 +1,10 @@
 import 'package:circle_flags/circle_flags.dart';
 import 'package:flutter/material.dart';
-import 'package:hiddify/core/haptic/haptic_service.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/utils/ip_utils.dart';
-import 'package:hiddify/gen/fonts.gen.dart';
-import 'package:hiddify/utils/riverpod_utils.dart';
+import 'package:rostov_vpn/core/haptic/haptic_service.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/utils/ip_utils.dart';
+import 'package:rostov_vpn/gen/fonts.gen.dart';
+import 'package:rostov_vpn/utils/riverpod_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final _showIp = StateProvider.autoDispose((ref) {
@@ -133,7 +133,7 @@ class IPCountryFlag extends HookConsumerWidget {
         padding: const EdgeInsets.all(2),
         child: Center(
           child: CircleFlag(
-              countryCode.toLowerCase() == "ir" ? "ir-shir" : countryCode),
+              countryCode.toLowerCase() == "ir" ? "ir-shir" : countryCode,),
         ),
       ),
     );

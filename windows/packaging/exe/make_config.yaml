@@ -1,11 +1,11 @@
-app_id: 6L903538-42B1-4596-G479-BJ779F21A65D
-publisher: Hiddify
-publisher_url: https://github.com/hiddify/hiddify-next
-display_name: Hiddify
-executable_name: Hiddify.exe
-output_base_file_name: Hiddify.exe
+app_id: 5F733CFC-6834-4B37-86B1-D13A9f5C96A6
+publisher: RostovVPN
+publisher_url: https://rostovvpn.run.place
+display_name: RostovVPN
+executable_name: RostovVPN.exe
+output_base_file_name: RostovVPN.exe
 create_desktop_icon: true
-install_dir_name: "{autopf64}\\Hiddify"
+install_dir_name: "{autopf64}\\RostovVPN"
 setup_icon_file: ..\..\windows\runner\resources\app_icon.ico
 locales:
   - ar

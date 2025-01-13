@@ -6,15 +6,15 @@ import 'dart:isolate';
 import 'package:combine/combine.dart';
 import 'package:ffi/ffi.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/model/directories.dart';
-import 'package:hiddify/gen/singbox_generated_bindings.dart';
-import 'package:hiddify/singbox/model/singbox_config_option.dart';
-import 'package:hiddify/singbox/model/singbox_outbound.dart';
-import 'package:hiddify/singbox/model/singbox_stats.dart';
-import 'package:hiddify/singbox/model/singbox_status.dart';
-import 'package:hiddify/singbox/model/warp_account.dart';
-import 'package:hiddify/singbox/service/singbox_service.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/model/directories.dart';
+import 'package:rostov_vpn/gen/singbox_generated_bindings.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
+import 'package:rostov_vpn/singbox/model/singbox_outbound.dart';
+import 'package:rostov_vpn/singbox/model/singbox_stats.dart';
+import 'package:rostov_vpn/singbox/model/singbox_status.dart';
+import 'package:rostov_vpn/singbox/model/warp_account.dart';
+import 'package:rostov_vpn/singbox/service/singbox_service.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path/path.dart' as p;
 import 'package:rxdart/rxdart.dart';
@@ -119,7 +119,7 @@ class FFISingboxService with InfraLogger implements SingboxService {
       () => CombineWorker().execute(
         () {
           final json = jsonEncode(options.toJson());
-          final err = _box.changeHiddifyOptions(json.toNativeUtf8().cast()).cast<Utf8>().toDartString();
+          final err = _box.changeRostovvpnOptions(json.toNativeUtf8().cast()).cast<Utf8>().toDartString();
           if (err.isNotEmpty) {
             return left(err);
           }

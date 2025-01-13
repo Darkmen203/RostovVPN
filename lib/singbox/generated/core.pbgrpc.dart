@@ -13,9 +13,8 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
+import 'package:rostov_vpn/singbox/generated/core.pb.dart' as $0;
 import 'package:protobuf/protobuf.dart' as $pb;
-
-import 'core.pb.dart' as $0;
 
 export 'core.pb.dart';
 
@@ -24,17 +23,17 @@ class CoreServiceClient extends $grpc.Client {
   static final _$parseConfig = $grpc.ClientMethod<$0.ParseConfigRequest, $0.ParseConfigResponse>(
       '/ConfigOptions.CoreService/ParseConfig',
       ($0.ParseConfigRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ParseConfigResponse.fromBuffer(value));
+      ($core.List<$core.int> value) => $0.ParseConfigResponse.fromBuffer(value),);
   static final _$generateFullConfig = $grpc.ClientMethod<$0.GenerateConfigRequest, $0.GenerateConfigResponse>(
       '/ConfigOptions.CoreService/GenerateFullConfig',
       ($0.GenerateConfigRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.GenerateConfigResponse.fromBuffer(value));
+      ($core.List<$core.int> value) => $0.GenerateConfigResponse.fromBuffer(value),);
 
   CoreServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
-      $core.Iterable<$grpc.ClientInterceptor>? interceptors})
+      $core.Iterable<$grpc.ClientInterceptor>? interceptors,})
       : super(channel, options: options,
-        interceptors: interceptors);
+        interceptors: interceptors,);
 
   $grpc.ResponseFuture<$0.ParseConfigResponse> parseConfig($0.ParseConfigRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$parseConfig, request, options: options);
@@ -56,14 +55,14 @@ abstract class CoreServiceBase extends $grpc.Service {
         false,
         false,
         ($core.List<$core.int> value) => $0.ParseConfigRequest.fromBuffer(value),
-        ($0.ParseConfigResponse value) => value.writeToBuffer()));
+        ($0.ParseConfigResponse value) => value.writeToBuffer(),),);
     $addMethod($grpc.ServiceMethod<$0.GenerateConfigRequest, $0.GenerateConfigResponse>(
         'GenerateFullConfig',
         generateFullConfig_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.GenerateConfigRequest.fromBuffer(value),
-        ($0.GenerateConfigResponse value) => value.writeToBuffer()));
+        ($0.GenerateConfigResponse value) => value.writeToBuffer(),),);
   }
 
   $async.Future<$0.ParseConfigResponse> parseConfig_Pre($grpc.ServiceCall call, $async.Future<$0.ParseConfigRequest> request) async {

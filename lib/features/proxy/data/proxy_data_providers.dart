@@ -1,6 +1,6 @@
-import 'package:hiddify/core/http_client/http_client_provider.dart';
-import 'package:hiddify/features/proxy/data/proxy_repository.dart';
-import 'package:hiddify/singbox/service/singbox_service_provider.dart';
+import 'package:rostov_vpn/core/http_client/http_client_provider.dart';
+import 'package:rostov_vpn/features/proxy/data/proxy_repository.dart';
+import 'package:rostov_vpn/singbox/service/singbox_service_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'proxy_data_providers.g.dart';

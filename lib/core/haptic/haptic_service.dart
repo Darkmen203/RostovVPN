@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:hiddify/core/preferences/preferences_provider.dart';
+import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

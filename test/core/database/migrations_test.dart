@@ -1,6 +1,6 @@
 import 'package:drift_dev/api/migrations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hiddify/core/database/app_database.dart';
+import 'package:rostov_vpn/core/database/app_database.dart';
 
 import 'generated_migrations/schema.dart';
 

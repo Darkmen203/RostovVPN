@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/haptic/haptic_service.dart';
-import 'package:hiddify/features/profile/data/profile_data_providers.dart';
-import 'package:hiddify/features/profile/data/profile_repository.dart';
-import 'package:hiddify/features/profile/model/profile_entity.dart';
-import 'package:hiddify/features/profile/model/profile_sort_enum.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/haptic/haptic_service.dart';
+import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
+import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
+import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
+import 'package:rostov_vpn/features/profile/model/profile_sort_enum.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'profiles_overview_notifier.g.dart';

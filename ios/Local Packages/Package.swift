@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-     name: "Hiddify Packages",
+     name: "RostovVPN Packages",
      platforms: [
         // Minimum platform version
          .iOS(.v13)

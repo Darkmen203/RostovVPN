@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
-import 'package:hiddify/core/database/app_database.dart';
-import 'package:hiddify/core/database/tables/database_tables.dart';
-import 'package:hiddify/features/profile/model/profile_sort_enum.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/database/app_database.dart';
+import 'package:rostov_vpn/core/database/tables/database_tables.dart';
+import 'package:rostov_vpn/features/profile/model/profile_sort_enum.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 
 part 'profile_data_source.g.dart';
 
@@ -19,6 +19,7 @@ abstract interface class ProfileDataSource {
   Future<void> insert(ProfileEntriesCompanion entry);
   Future<void> edit(String id, ProfileEntriesCompanion entry);
   Future<void> deleteById(String id);
+  Future<void> deleteAll();
 }
 
 Map<SortMode, OrderingMode> orderMap = {
@@ -125,7 +126,6 @@ class ProfileDao extends DatabaseAccessor<AppDatabase>
   Future<void> edit(String id, ProfileEntriesCompanion entry) async {
     await transaction(
       () async {
-        
         if (entry.active.present && entry.active.value) {
           await update(profileEntries)
               .write(const ProfileEntriesCompanion(active: Value(false)));
@@ -141,6 +141,15 @@ class ProfileDao extends DatabaseAccessor<AppDatabase>
     await transaction(
       () async {
         await (delete(profileEntries)..where((tbl) => tbl.id.equals(id))).go();
+      },
+    );
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await transaction(
+      () async {
+        await delete(profileEntries).go();
       },
     );
   }

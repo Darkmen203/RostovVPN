@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:hiddify/core/directories/directories_provider.dart';
+import 'package:rostov_vpn/core/directories/directories_provider.dart';
 import 'package:path/path.dart' as p;
 
 LazyDatabase openConnection() {

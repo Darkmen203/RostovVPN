@@ -1,21 +1,20 @@
-import 'package:combine/combine.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/notification/in_app_notification_controller.dart';
-import 'package:hiddify/core/preferences/preferences_provider.dart';
-import 'package:hiddify/core/router/router.dart';
-import 'package:hiddify/features/common/qr_code_scanner_screen.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/config_option/notifier/warp_option_notifier.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/notification/in_app_notification_controller.dart';
+import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
+import 'package:rostov_vpn/core/router/router.dart';
+import 'package:rostov_vpn/features/common/qr_code_scanner_screen.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/config_option/notifier/warp_option_notifier.dart';
 
-import 'package:hiddify/features/config_option/overview/warp_options_widgets.dart';
-import 'package:hiddify/features/profile/notifier/profile_notifier.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/features/config_option/overview/warp_options_widgets.dart';
+import 'package:rostov_vpn/features/profile/notifier/profile_notifier.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AddProfileModal extends HookConsumerWidget {
@@ -121,7 +120,7 @@ class AddProfileModal extends HookConsumerWidget {
                             icon: FluentIcons.qr_code_24_regular,
                             size: buttonWidth,
                             onTap: () async {
-                              final cr = await QRCodeScannerScreen().open(context);
+                              final cr = await const QRCodeScannerScreen().open(context);
 
                               if (cr == null) return;
                               if (addProfileState.isLoading) return;
@@ -240,10 +239,10 @@ class AddProfileModal extends HookConsumerWidget {
   }
 
   Future<void> addProfileModal(BuildContext context, WidgetRef ref) async {
-    final _prefs = ref.read(sharedPreferencesProvider).requireValue;
-    final _warp = ref.read(warpOptionNotifierProvider.notifier);
-    final _profile = ref.read(addProfileProvider.notifier);
-    final consent = (_prefs.getBool(warpConsentGiven) ?? false);
+    final prefs = ref.read(sharedPreferencesProvider).requireValue;
+    final warp = ref.read(warpOptionNotifierProvider.notifier);
+    final profile = ref.read(addProfileProvider.notifier);
+    final consent = prefs.getBool(warpConsentGiven) ?? false;
     final region = ref.read(ConfigOptions.region.notifier).raw();
     context.pop();
 
@@ -258,10 +257,10 @@ class AddProfileModal extends HookConsumerWidget {
 
       if (agreed != true) return;
     }
-    await _prefs.setBool(warpConsentGiven, true);
+    await prefs.setBool(warpConsentGiven, true);
     var toast = notification.showInfoToast(t.profile.add.addingWarpMsg, duration: const Duration(milliseconds: 100));
     toast?.pause();
-    await _warp.generateWarpConfig();
+    await warp.generateWarpConfig();
     toast?.start();
 
     // final accountId = _prefs.getString("warp2-account-id");
@@ -271,13 +270,13 @@ class AddProfileModal extends HookConsumerWidget {
     // if (!hasWarp2Config || true) {
     toast = notification.showInfoToast(t.profile.add.addingWarpMsg, duration: const Duration(milliseconds: 100));
     toast?.pause();
-    await _warp.generateWarp2Config();
+    await warp.generateWarp2Config();
     toast?.start();
     // }
     if (region == "cn") {
-      await _profile.add("#profile-title: Hiddify WARP\nwarp://p1@auto#National&&detour=warp://p2@auto#WoW"); //
+      await profile.add("#profile-title: RostovVPN WARP\nwarp://p1@auto#National&&detour=warp://p2@auto#WoW"); //
     } else {
-      await _profile.add("https://raw.githubusercontent.com/hiddify/hiddify-next/main/test.configs/warp"); //
+      await profile.add("https://raw.githubusercontent.com/hiddify/hiddify-next/main/test.configs/warp"); //
     }
   }
 }

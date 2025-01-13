@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/constants.dart';
-import 'package:hiddify/core/model/optional_range.dart';
-import 'package:hiddify/core/widget/custom_alert_dialog.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/config_option/notifier/warp_option_notifier.dart';
-import 'package:hiddify/features/config_option/widget/preference_tile.dart';
-import 'package:hiddify/singbox/model/singbox_config_enum.dart';
-import 'package:hiddify/utils/uri_utils.dart';
-import 'package:hiddify/utils/validators.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/constants.dart';
+import 'package:rostov_vpn/core/model/optional_range.dart';
+import 'package:rostov_vpn/core/widget/custom_alert_dialog.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/config_option/notifier/warp_option_notifier.dart';
+import 'package:rostov_vpn/features/config_option/widget/preference_tile.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
+import 'package:rostov_vpn/utils/uri_utils.dart';
+import 'package:rostov_vpn/utils/validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class WarpOptionsTiles extends HookConsumerWidget {

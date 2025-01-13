@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:hiddify/core/model/failures.dart';
-import 'package:hiddify/features/proxy/model/proxy_failure.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
+import 'package:rostov_vpn/features/proxy/model/proxy_failure.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

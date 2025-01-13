@@ -22,7 +22,17 @@
     "showMore": "زیاتر پێشان بدە",
     "showLess": "کەمتر پێشان بدە",
     "openAppSettings": "کردنەوەی ڕێکخستنەکانی ئەپەکە",
-    "grantPermission": "مۆڵەتدان"
+    "grantPermission": "مۆڵەتدان",
+    "gologin": "تێکهوتن",
+    "login": "تێکهوتن",
+    "logout": "دەرکهوتن",
+    "loginTitle": "تێکهوە بەرنامەکە",
+    "username": "ناوی بەکارهێنەر",
+    "password": "وشەی نهێنی",
+    "cancel": "بەتالکە",
+    "errorLoginTitle": "هەڵە",
+    "errorLogin": "ناوی تێکهوتن یان وشەی نهێنی هەڵەیە",
+    "inputLoginAndPassword": "ناوی بەکارهێنەر و وشەی نهێنی بنووس!"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "بە بەردەوام بوون تۆ ڕازیت لەگەڵ ${tap(@:about.termsAndConditions)}",

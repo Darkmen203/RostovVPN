@@ -1,5 +1,5 @@
-# key="FRu3eopQWgsvWmnycBXxv2eWpbUwGOu2"
-# wget -O ../assets/translations/strings_en.i18n.json  "https://localise.biz/api/export/locale/en-US.json?index=id&format=i18next4&key=$key"
+key="FRu3eopQWgsvWmnycBXxv2eWpbUwGOu2"
+wget -O ../assets/translations/strings_en.i18n.json  "https://localise.biz/api/export/locale/en-US.json?index=id&format=i18next4&key=$key"
 # wget -O ../assets/translations/strings_fa.i18n.json  "https://localise.biz/api/export/locale/fa.json?index=id&format=i18next4&key=$key"
 # wget -O ../assets/translations/strings_zh.i18n.json  "https://localise.biz/api/export/locale/zh.json?index=id&format=i18next4&key=$key"
 # # # wget -O ../assets/translations/strings_pt.i18n.json  "https://localise.biz/api/export/locale/pt.json?index=id&format=i18next4&key=$key"
@@ -17,6 +17,7 @@ python3 auto_translator.py en ru
 python3 auto_translator.py en tr
 python3 auto_translator.py en es
 
+LOCALIZ_KEY="BS576nUudCpZDLL9vyIk4ZPYbGwa8PDCk"
 
 
 function update_localise(){
@@ -32,7 +33,7 @@ curl "https://localise.biz/api/import/json?format=i18next4&delete-absent=false&i
   }
 
 
-# update_localise en
+update_localise en
 # update_localise fa
 # update_localise zh
 # # # # update_localise pt

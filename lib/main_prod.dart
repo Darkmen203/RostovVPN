@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hiddify/bootstrap.dart';
-import 'package:hiddify/core/model/environment.dart';
+import 'package:rostov_vpn/bootstrap.dart';
+import 'package:rostov_vpn/core/model/environment.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

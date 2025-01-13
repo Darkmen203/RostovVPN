@@ -1,15 +1,15 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/failures.dart';
-import 'package:hiddify/core/notification/in_app_notification_controller.dart';
-import 'package:hiddify/core/router/router.dart';
-import 'package:hiddify/features/profile/model/profile_sort_enum.dart';
-import 'package:hiddify/features/profile/notifier/profiles_update_notifier.dart';
-import 'package:hiddify/features/profile/overview/profiles_overview_notifier.dart';
-import 'package:hiddify/features/profile/widget/profile_tile.dart';
-import 'package:hiddify/utils/placeholders.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
+import 'package:rostov_vpn/core/notification/in_app_notification_controller.dart';
+import 'package:rostov_vpn/core/router/router.dart';
+import 'package:rostov_vpn/features/profile/model/profile_sort_enum.dart';
+import 'package:rostov_vpn/features/profile/notifier/profiles_update_notifier.dart';
+import 'package:rostov_vpn/features/profile/overview/profiles_overview_notifier.dart';
+import 'package:rostov_vpn/features/profile/widget/profile_tile.dart';
+import 'package:rostov_vpn/utils/placeholders.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfilesOverviewModal extends HookConsumerWidget {
@@ -76,25 +76,25 @@ class ProfilesOverviewModal extends HookConsumerWidget {
                   alignment: WrapAlignment.center,
                   spacing: 8,
                   children: [
-                    FilledButton.icon(
-                      onPressed: () {
-                        const AddProfileRoute().push(context);
-                      },
-                      icon: const Icon(FluentIcons.add_24_filled),
-                      label: Text(t.profile.add.shortBtnTxt),
-                    ),
-                    FilledButton.icon(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const ProfilesSortModal();
-                          },
-                        );
-                      },
-                      icon: const Icon(FluentIcons.arrow_sort_24_filled),
-                      label: Text(t.general.sort),
-                    ),
+                    // FilledButton.icon(
+                    //   onPressed: () {
+                    //     const AddProfileRoute().push(context);
+                    //   },
+                    //   icon: const Icon(FluentIcons.add_24_filled),
+                    //   label: Text(t.profile.add.shortBtnTxt),
+                    // ),
+                    // FilledButton.icon(
+                    //   onPressed: () {
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return const ProfilesSortModal();
+                    //       },
+                    //     );
+                    //   },
+                    //   icon: const Icon(FluentIcons.arrow_sort_24_filled),
+                    //   label: Text(t.general.sort),
+                    // ),
                     FilledButton.icon(
                       onPressed: () async {
                         await ref

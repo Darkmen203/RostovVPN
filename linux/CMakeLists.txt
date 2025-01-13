@@ -4,10 +4,10 @@ project(runner LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
-set(BINARY_NAME "hiddify")
+set(BINARY_NAME "RostovVPN")
 # The unique GTK application identifier for this application. See:
 # https://wiki.gnome.org/HowDoI/ChooseApplicationID
-set(APPLICATION_ID "app.hiddify.com")
+set(APPLICATION_ID "app.rostovvpn.com")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.
@@ -112,7 +112,7 @@ install(FILES "../libcore/bin/lib/libcore.so" DESTINATION "${INSTALL_BUNDLE_LIB_
   COMPONENT Runtime)
 
 install(
-  FILES "../libcore/bin/HiddifyCli" 
+  FILES "../libcore/bin/RostovVPNCli" 
   DESTINATION "${CMAKE_INSTALL_PREFIX}"
   PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
   COMPONENT Runtime

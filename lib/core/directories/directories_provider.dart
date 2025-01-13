@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:hiddify/core/model/directories.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/core/model/directories.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 
 part 'directories_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class AppDirectories extends _$AppDirectories with InfraLogger {
-  final _methodChannel = const MethodChannel("com.hiddify.app/platform");
+  final _methodChannel = const MethodChannel("com.rostov_vpn.app/platform");
 
   @override
   Future<Directories> build() async {

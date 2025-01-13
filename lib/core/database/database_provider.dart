@@ -1,4 +1,4 @@
-import 'package:hiddify/core/database/app_database.dart';
+import 'package:rostov_vpn/core/database/app_database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database_provider.g.dart';

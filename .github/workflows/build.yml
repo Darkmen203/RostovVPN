@@ -19,15 +19,15 @@ env:
   NDK_VERSION: r26d
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   TAG_NAME: "${{ inputs.tag-name }}"
-  TARGET_NAME_AppImage: "Hiddify-Linux-x64"
-  TARGET_NAME_deb: "Hiddify-Debian-x64"
-  TARGET_NAME_rpm: "Hiddify-rpm-x64"
-  TARGET_NAME_apk: "Hiddify-Android"
-  TARGET_NAME_aab: "Hiddify-Android"
-  #TARGET_NAME_exe: "Hiddify-Windows-x64"
-  TARGET_NAME_dmg: "Hiddify-MacOS"
-  TARGET_NAME_pkg: "Hiddify-MacOS-Installer"
-  TARGET_NAME_ipa: "Hiddify-iOS"
+  TARGET_NAME_AppImage: "RostovVPN-Linux-x64"
+  TARGET_NAME_deb: "RostovVPN-Debian-x64"
+  TARGET_NAME_rpm: "RostovVPN-rpm-x64"
+  TARGET_NAME_apk: "RostovVPN-Android"
+  TARGET_NAME_aab: "RostovVPN-Android"
+  #TARGET_NAME_exe: "RostovVPN-Windows-x64"
+  TARGET_NAME_dmg: "RostovVPN-MacOS"
+  TARGET_NAME_pkg: "RostovVPN-MacOS-Installer"
+  TARGET_NAME_ipa: "RostovVPN-iOS"
   
 
 jobs:
@@ -185,7 +185,7 @@ jobs:
 
       - name: Code Sign
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
-        uses: hiddify/signtool-code-sign-sha256@main
+        uses: rostovvpn/signtool-code-sign-sha256@main
         with:
           certificate: '${{ secrets.WINDOWS_SIGNING_KEY }}'
           cert-password: '${{ secrets.WINDOWS_SIGNING_PASSWORD }}'
@@ -193,7 +193,7 @@ jobs:
           folder: 'dist'
           timestamp-server: 'http://timestamp.digicert.com'
           recursive: true
-          description: 'Hiddify'
+          description: 'RostovVPN'
 
       - name: Copy to out Windows
         if: matrix.platform == 'windows'
@@ -231,7 +231,7 @@ jobs:
         run: |
           mkdir out
           ls -R ./build/app/outputs
-          cp ./build/app/outputs/bundle/release/app-release.aab out/hiddify-android-market.aab || echo "no aab"
+          cp ./build/app/outputs/bundle/release/app-release.aab out/rostovvpn-android-market.aab || echo "no aab"
 
       - name: Copy to out unix
         if: startsWith(matrix.platform,'linux') || matrix.platform == 'macos' || matrix.platform == 'ios'
@@ -349,7 +349,7 @@ jobs:
           ls -R ./out
           ls -R ./.github/
           ls -R ./.git/
-          mv out/hiddify-android-market.aab  hiddify-android-market.aab
+          mv out/rostovvpn-android-market.aab  rostovvpn-android-market.aab
 
       - name: prepare_release_message
         run: |
@@ -374,9 +374,9 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
-          packageName: app.hiddify.com
+          packageName: app.rostovvpn.com
           releaseName: ${{ env.TAG_NAME }}
-          releaseFiles: ./hiddify-android-market.aab
+          releaseFiles: ./rostovvpn-android-market.aab
           track: 'beta'
 
 
@@ -401,13 +401,13 @@ jobs:
 
       - uses: Apple-Actions/download-provisioning-profiles@v1
         with:
-          bundle-id: app.hiddify.com
+          bundle-id: app.rostovvpn.com
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
       - uses: Apple-Actions/download-provisioning-profiles@v1
         with:
-          bundle-id: app.hiddify.com.SingBoxPacketTunnel
+          bundle-id: app.rostovvpn.com.SingBoxPacketTunnel
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
@@ -422,7 +422,7 @@ jobs:
 
       - uses: Apple-Actions/upload-testflight-build@v1
         with:
-          app-path: 'out/Hiddify-iOS.ipa' 
+          app-path: 'out/RostovVPN-iOS.ipa' 
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}

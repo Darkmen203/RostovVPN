@@ -3,21 +3,21 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/database/app_database.dart';
-import 'package:hiddify/core/http_client/dio_http_client.dart';
-import 'package:hiddify/core/utils/exception_handler.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/connection/model/connection_failure.dart';
-import 'package:hiddify/features/profile/data/profile_data_mapper.dart';
-import 'package:hiddify/features/profile/data/profile_data_source.dart';
-import 'package:hiddify/features/profile/data/profile_parser.dart';
-import 'package:hiddify/features/profile/data/profile_path_resolver.dart';
-import 'package:hiddify/features/profile/model/profile_entity.dart';
-import 'package:hiddify/features/profile/model/profile_failure.dart';
-import 'package:hiddify/features/profile/model/profile_sort_enum.dart';
-import 'package:hiddify/singbox/service/singbox_service.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
-import 'package:hiddify/utils/link_parsers.dart';
+import 'package:rostov_vpn/core/database/app_database.dart';
+import 'package:rostov_vpn/core/http_client/dio_http_client.dart';
+import 'package:rostov_vpn/core/utils/exception_handler.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/connection/model/connection_failure.dart';
+import 'package:rostov_vpn/features/profile/data/profile_data_mapper.dart';
+import 'package:rostov_vpn/features/profile/data/profile_data_source.dart';
+import 'package:rostov_vpn/features/profile/data/profile_parser.dart';
+import 'package:rostov_vpn/features/profile/data/profile_path_resolver.dart';
+import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
+import 'package:rostov_vpn/features/profile/model/profile_failure.dart';
+import 'package:rostov_vpn/features/profile/model/profile_sort_enum.dart';
+import 'package:rostov_vpn/singbox/service/singbox_service.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
+import 'package:rostov_vpn/utils/link_parsers.dart';
 import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
@@ -65,9 +65,12 @@ abstract interface class ProfileRepository {
   TaskEither<ProfileFailure, Unit> patch(ProfileEntity profile);
   TaskEither<ProfileFailure, Unit> setAsActive(String id);
   TaskEither<ProfileFailure, Unit> deleteById(String id);
+  TaskEither<ProfileFailure, Unit> deleteAll();
 }
 
-class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements ProfileRepository {
+class ProfileRepositoryImpl
+    with ExceptionHandler, InfraLogger
+    implements ProfileRepository {
   ProfileRepositoryImpl({
     required this.profileDataSource,
     required this.profilePathResolver,
@@ -110,7 +113,10 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
 
   @override
   Stream<Either<ProfileFailure, ProfileEntity?>> watchActiveProfile() {
-    return profileDataSource.watchActiveProfile().map((event) => event?.toEntity()).handleExceptions(
+    return profileDataSource
+        .watchActiveProfile()
+        .map((event) => event?.toEntity())
+        .handleExceptions(
       (error, stackTrace) {
         loggy.error("error watching active profile", error, stackTrace);
         return ProfileUnexpectedFailure(error, stackTrace);
@@ -120,7 +126,10 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
 
   @override
   Stream<Either<ProfileFailure, bool>> watchHasAnyProfile() {
-    return profileDataSource.watchProfilesCount().map((event) => event != 0).handleExceptions(ProfileUnexpectedFailure.new);
+    return profileDataSource
+        .watchProfilesCount()
+        .map((event) => event != 0)
+        .handleExceptions(ProfileUnexpectedFailure.new);
   }
 
   @override
@@ -128,7 +137,10 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
     ProfilesSort sort = ProfilesSort.lastUpdate,
     SortMode sortMode = SortMode.ascending,
   }) {
-    return profileDataSource.watchAll(sort: sort, sortMode: sortMode).map((event) => event.map((e) => e.toEntity()).toList()).handleExceptions(ProfileUnexpectedFailure.new);
+    return profileDataSource
+        .watchAll(sort: sort, sortMode: sortMode)
+        .map((event) => event.map((e) => e.toEntity()).toList())
+        .handleExceptions(ProfileUnexpectedFailure.new);
   }
 
   @override
@@ -139,10 +151,14 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
   }) {
     return exceptionHandler(
       () async {
-        final existingProfile = await profileDataSource.getByUrl(url).then((value) => value?.toEntity());
+        final existingProfile = await profileDataSource
+            .getByUrl(url)
+            .then((value) => value?.toEntity());
         if (existingProfile case RemoteProfileEntity()) {
           loggy.info("profile with same url already exists, updating");
-          final baseProfile = markAsActive ? existingProfile.copyWith(active: true) : existingProfile;
+          final baseProfile = markAsActive
+              ? existingProfile.copyWith(active: true)
+              : existingProfile;
           return updateSubscription(
             baseProfile,
             cancelToken: cancelToken,
@@ -155,7 +171,9 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
               (profile) => TaskEither(
                 () async {
                   await profileDataSource.insert(
-                    profile.copyWith(id: profileId, active: markAsActive).toEntry(),
+                    profile
+                        .copyWith(id: profileId, active: markAsActive)
+                        .toEntry(),
                   );
                   return right(unit);
                 },
@@ -178,9 +196,14 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
   ) {
     return exceptionHandler(
       () async {
-        singbox.changeOptions(await configOptionRepository.getConfigOptions()).run();
+        singbox
+            .changeOptions(await configOptionRepository.getConfigOptions())
+            .run();
 
-        return singbox.validateConfigByPath(path, tempPath, debug).mapLeft(ProfileFailure.invalidConfig).run();
+        return singbox
+            .validateConfigByPath(path, tempPath, debug)
+            .mapLeft(ProfileFailure.invalidConfig)
+            .run();
       },
       ProfileUnexpectedFailure.new,
     );
@@ -284,7 +307,9 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
         singbox.changeOptions(options).mapLeft(InvalidConfigOption.new).run();
 
         return await $(
-          singbox.generateFullConfigByPath(configFile.path).mapLeft(ProfileFailure.unexpected),
+          singbox
+              .generateFullConfigByPath(configFile.path)
+              .mapLeft(ProfileFailure.unexpected),
         );
       },
     ).handleExceptions(ProfileFailure.unexpected);
@@ -305,7 +330,9 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
             .flatMap(
               (remoteProfile) => TaskEither(
                 () async {
-                  final profilePatch = remoteProfile.subInfoPatch().copyWith(lastUpdate: Value(DateTime.now()), active: Value(baseProfile.active));
+                  final profilePatch = remoteProfile.subInfoPatch().copyWith(
+                      lastUpdate: Value(DateTime.now()),
+                      active: Value(baseProfile.active));
 
                   await profileDataSource.edit(
                     baseProfile.id,
@@ -314,7 +341,8 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
                             name: Value(baseProfile.name),
                             url: Value(baseProfile.url),
                             testUrl: Value(baseProfile.testUrl),
-                            updateInterval: Value(baseProfile.options?.updateInterval),
+                            updateInterval:
+                                Value(baseProfile.options?.updateInterval),
                           )
                         : profilePatch,
                   );
@@ -374,6 +402,35 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
     );
   }
 
+  @override
+  TaskEither<ProfileFailure, Unit> deleteAll() {
+    return TaskEither.tryCatch(
+      () async {
+        // 1) Удаляем записи в базе/источнике
+        await profileDataSource.deleteAll();
+
+        // 2) Удаляем файлы в папке configs
+        final dir = profilePathResolver.directory;
+        if (await dir.exists()) {
+          // Проходим по всем сущностям
+          for (final entity in dir.listSync()) {
+            if (entity is File) {
+              // Можно фильтровать только .json, если нужно:
+              // if (p.extension(entity.path) == '.json') {
+              //   await entity.delete();
+              // }
+              await entity.delete();
+            }
+          }
+        }
+
+        return unit; // Всё прошло успешно
+      },
+      // В случае ошибки создаём ProfileUnexpectedFailure с деталями
+      ProfileUnexpectedFailure.new,
+    );
+  }
+
   static final _subInfoHeaders = [
     'profile-title',
     'content-disposition',
@@ -402,9 +459,11 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
             url.trim(),
             tempFile.path,
             cancelToken: cancelToken,
-            userAgent: configs.useXrayCoreWhenPossible ? "v2rayNG/1.8.23" : null,
+            userAgent:
+                configs.useXrayCoreWhenPossible ? "v2rayNG/1.8.23" : null,
           );
-          final headers = await _populateHeaders(response.headers.map, tempFile.path);
+          final headers =
+              await _populateHeaders(response.headers.map, tempFile.path);
           return await validateConfig(file.path, tempFile.path, false)
               .andThen(
                 () => TaskEither(() async {
@@ -454,9 +513,15 @@ class ProfileRepositoryImpl with ExceptionHandler, InfraLogger implements Profil
       if (line.startsWith("#") || line.startsWith("//")) {
         final index = line.indexOf(':');
         if (index == -1) continue;
-        final key = line.substring(0, index).replaceFirst(RegExp("^#|//"), "").trim().toLowerCase();
+        final key = line
+            .substring(0, index)
+            .replaceFirst(RegExp("^#|//"), "")
+            .trim()
+            .toLowerCase();
         final value = line.substring(index + 1).trim();
-        if (!headers.keys.contains(key) && _subInfoHeaders.contains(key) && value.isNotEmpty) {
+        if (!headers.keys.contains(key) &&
+            _subInfoHeaders.contains(key) &&
+            value.isNotEmpty) {
           headers[key] = [value];
         }
       }

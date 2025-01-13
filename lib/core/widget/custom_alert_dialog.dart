@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hiddify/core/model/failures.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
@@ -20,7 +20,6 @@ class CustomAlertDialog extends StatelessWidget {
   Future<void> show(BuildContext context) async {
     await showDialog(
       context: context,
-      useRootNavigator: true,
       builder: (context) => this,
     );
   }

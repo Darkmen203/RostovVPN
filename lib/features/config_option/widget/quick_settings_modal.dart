@@ -1,12 +1,12 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/router/router.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/config_option/notifier/warp_option_notifier.dart';
-import 'package:hiddify/features/config_option/overview/config_options_page.dart';
-import 'package:hiddify/singbox/model/singbox_config_enum.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/router/router.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/config_option/notifier/warp_option_notifier.dart';
+import 'package:rostov_vpn/features/config_option/overview/config_options_page.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class QuickSettingsModal extends HookConsumerWidget {

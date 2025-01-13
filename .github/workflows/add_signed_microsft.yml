@@ -18,8 +18,8 @@ jobs:
 
     steps:
     - name: Upload store MSIX to release
-      uses: hiddify/Upload-Microsoft-Store-MSIX-Package-to-GitHub-Release@develop
+      uses: rostovvpn/Upload-Microsoft-Store-MSIX-Package-to-GitHub-Release@develop
       with:
         store-id: 9pdfnl3qv2s5
         token: ${{ secrets.GITHUB_TOKEN }}
-        asset-name-pattern: Hiddify-Windows-Setup-x64		# Optional
+        asset-name-pattern: rostovvpn-Windows-Setup-x64		# Optional

@@ -2,23 +2,24 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/optional_range.dart';
-import 'package:hiddify/core/model/region.dart';
-import 'package:hiddify/core/notification/in_app_notification_controller.dart';
-import 'package:hiddify/core/widget/adaptive_icon.dart';
-import 'package:hiddify/core/widget/tip_card.dart';
-import 'package:hiddify/features/common/confirmation_dialogs.dart';
-import 'package:hiddify/features/common/nested_app_bar.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/config_option/notifier/config_option_notifier.dart';
-import 'package:hiddify/features/config_option/overview/warp_options_widgets.dart';
-import 'package:hiddify/features/config_option/widget/preference_tile.dart';
-import 'package:hiddify/features/log/model/log_level.dart';
-import 'package:hiddify/features/settings/widgets/sections_widgets.dart';
-import 'package:hiddify/features/settings/widgets/settings_input_dialog.dart';
-import 'package:hiddify/singbox/model/singbox_config_enum.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/constants/colors.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/optional_range.dart';
+import 'package:rostov_vpn/core/model/region.dart';
+import 'package:rostov_vpn/core/notification/in_app_notification_controller.dart';
+import 'package:rostov_vpn/core/widget/adaptive_icon.dart';
+import 'package:rostov_vpn/core/widget/tip_card.dart';
+import 'package:rostov_vpn/features/common/confirmation_dialogs.dart';
+import 'package:rostov_vpn/features/common/nested_app_bar.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/config_option/notifier/config_option_notifier.dart';
+import 'package:rostov_vpn/features/config_option/overview/warp_options_widgets.dart';
+import 'package:rostov_vpn/features/config_option/widget/preference_tile.dart';
+import 'package:rostov_vpn/features/log/model/log_level.dart';
+import 'package:rostov_vpn/features/settings/widgets/sections_widgets.dart';
+import 'package:rostov_vpn/features/settings/widgets/settings_input_dialog.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:humanizer/humanizer.dart';
 
@@ -70,6 +71,7 @@ class ConfigOptionsPage extends HookConsumerWidget {
     }
 
     return Scaffold(
+      backgroundColor: AppColors.darkGray,
       body: CustomScrollView(
         controller: scrollController,
         shrinkWrap: true,

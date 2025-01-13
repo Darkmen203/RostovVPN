@@ -1,19 +1,18 @@
 import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/model/optional_range.dart';
-import 'package:hiddify/core/model/region.dart';
-import 'package:hiddify/core/preferences/general_preferences.dart';
+import 'package:rostov_vpn/core/model/optional_range.dart';
+import 'package:rostov_vpn/core/model/region.dart';
 
-import 'package:hiddify/core/utils/exception_handler.dart';
-import 'package:hiddify/core/utils/json_converters.dart';
-import 'package:hiddify/core/utils/preferences_utils.dart';
-import 'package:hiddify/features/config_option/model/config_option_failure.dart';
+import 'package:rostov_vpn/core/utils/exception_handler.dart';
+import 'package:rostov_vpn/core/utils/json_converters.dart';
+import 'package:rostov_vpn/core/utils/preferences_utils.dart';
+import 'package:rostov_vpn/features/config_option/model/config_option_failure.dart';
 
-import 'package:hiddify/features/log/model/log_level.dart';
-import 'package:hiddify/singbox/model/singbox_config_enum.dart';
-import 'package:hiddify/singbox/model/singbox_config_option.dart';
-import 'package:hiddify/singbox/model/singbox_rule.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/features/log/model/log_level.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
+import 'package:rostov_vpn/singbox/model/singbox_rule.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -60,11 +59,13 @@ abstract class ConfigOptions {
 
   static final remoteDnsAddress = PreferencesNotifier.create<String, String>(
     "remote-dns-address",
-    "udp://1.1.1.1",
+    "udp://8.8.8.8",
     possibleValues: List.of([
       "local",
       "udp://223.5.5.5",
       "udp://1.1.1.1",
+      "udp://8.8.8.8",
+      "tcp://8.8.8.8",
       "udp://1.1.1.2",
       "tcp://1.1.1.1",
       "https://1.1.1.1/dns-query",
@@ -84,7 +85,7 @@ abstract class ConfigOptions {
 
   static final directDnsAddress = PreferencesNotifier.create<String, String>(
     "direct-dns-address",
-    "udp://1.1.1.1",
+    "8.8.8.8",
     possibleValues: List.of([
       "local",
       "udp://223.5.5.5",

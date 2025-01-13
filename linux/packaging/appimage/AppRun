@@ -7,12 +7,12 @@ export LD_LIBRARY_PATH=usr/lib
 show_help() {
 cat << EOF
 Usage: ${0##*/} ...
-start Hiddify or HiddifyCli, when no parameter is given, Hiddify is executed.
+start RostovVPN or RostovVPNCli, when no parameter is given, RostovVPN is executed.
     -v              show version
 EOF
 }
 show_version() {
-    printf "Hiddify version "
+    printf "RostovVPN version "
     jq .version <./data/flutter_assets/version.json
 }
 # Initialize variables:
@@ -22,16 +22,16 @@ OPTIND=1
 # Resetting OPTIND is necessary if getopts was used previously in the script.
 # It is a good idea to make OPTIND local if you process options in a function.
 
-# if no arg is provided, execute hiddify app
+# if no arg is provided, execute rostovvpn app
 if [[ $# == 0 ]];then 
-    exec ./hiddify
+    exec ./rostovvpn
 else
 
 # processing arguments
 
     case $1 in
-        HiddifyCli)  
-            exec ./HiddifyCli ${@:3}
+        RostovVPNCli)  
+            exec ./RostovVPNCli ${@:3}
             exit 0
             ;;
         h)

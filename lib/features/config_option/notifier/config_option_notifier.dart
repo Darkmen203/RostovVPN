@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/connection/data/connection_data_providers.dart';
-import 'package:hiddify/features/connection/notifier/connection_notifier.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/connection/data/connection_data_providers.dart';
+import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:json_path/json_path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

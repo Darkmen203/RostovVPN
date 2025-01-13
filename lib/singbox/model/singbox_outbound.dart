@@ -1,6 +1,5 @@
-import 'package:dartx/dartx.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hiddify/singbox/model/singbox_proxy_type.dart';
+import 'package:rostov_vpn/singbox/model/singbox_proxy_type.dart';
 
 part 'singbox_outbound.freezed.dart';
 part 'singbox_outbound.g.dart';

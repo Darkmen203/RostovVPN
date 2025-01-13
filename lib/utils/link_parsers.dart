@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:dartx/dartx.dart';
-import 'package:hiddify/features/profile/data/profile_parser.dart';
-import 'package:hiddify/features/profile/data/profile_repository.dart';
-import 'package:hiddify/singbox/model/singbox_proxy_type.dart';
-import 'package:hiddify/utils/validators.dart';
+import 'package:rostov_vpn/features/profile/data/profile_parser.dart';
+import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
+import 'package:rostov_vpn/singbox/model/singbox_proxy_type.dart';
+import 'package:rostov_vpn/utils/validators.dart';
 
 typedef ProfileLink = ({String url, String name});
 
@@ -20,12 +20,12 @@ abstract class LinkParser {
       query: uri.query,
       fragment: name ?? uri.fragment,
     );
-    // return 'hiddify://import/$modifiedUri';
+    // return 'rostovvpn://import/$modifiedUri';
     return '$modifiedUri';
   }
 
   // protocols schemas
-  static const protocols = {'clash', 'clashmeta', 'sing-box', 'hiddify'};
+  static const protocols = {'clash', 'clashmeta', 'sing-box', 'rostovvpn'};
 
   static ProfileLink? parse(String link) {
     return simple(link) ?? deep(link);
@@ -84,7 +84,7 @@ abstract class LinkParser {
       case 'sing-box':
         if (uri.authority != 'import-remote-profile' || !queryParams.containsKey('url')) return null;
         return (url: queryParams['url']!, name: queryParams['name'] ?? '');
-      case 'hiddify':
+      case 'rostovvpn':
         if (uri.authority == "import") {
           return (url: uri.path.substring(1) + (uri.hasQuery ? "?${uri.query}" : ""), name: uri.fragment);
         }

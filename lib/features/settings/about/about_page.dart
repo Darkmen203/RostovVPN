@@ -2,18 +2,19 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:hiddify/core/app_info/app_info_provider.dart';
-import 'package:hiddify/core/directories/directories_provider.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/constants.dart';
-import 'package:hiddify/core/model/failures.dart';
-import 'package:hiddify/core/widget/adaptive_icon.dart';
-import 'package:hiddify/features/app_update/notifier/app_update_notifier.dart';
-import 'package:hiddify/features/app_update/notifier/app_update_state.dart';
-import 'package:hiddify/features/app_update/widget/new_version_dialog.dart';
-import 'package:hiddify/features/common/nested_app_bar.dart';
-import 'package:hiddify/gen/assets.gen.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/constants/colors.dart';
+import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
+import 'package:rostov_vpn/core/directories/directories_provider.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/constants.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
+import 'package:rostov_vpn/core/widget/adaptive_icon.dart';
+import 'package:rostov_vpn/features/app_update/notifier/app_update_notifier.dart';
+import 'package:rostov_vpn/features/app_update/notifier/app_update_state.dart';
+import 'package:rostov_vpn/features/app_update/widget/new_version_dialog.dart';
+import 'package:rostov_vpn/features/common/nested_app_bar.dart';
+import 'package:rostov_vpn/gen/assets.gen.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AboutPage extends HookConsumerWidget {
@@ -75,6 +76,7 @@ class AboutPage extends HookConsumerWidget {
     ];
 
     return Scaffold(
+      backgroundColor: AppColors.darkGray,
       body: CustomScrollView(
         slivers: [
           NestedAppBar(
@@ -96,6 +98,7 @@ class AboutPage extends HookConsumerWidget {
                 },
               ),
             ],
+            automaticallyImplyLeading: false,
           ),
           SliverToBoxAdapter(
             child: Padding(

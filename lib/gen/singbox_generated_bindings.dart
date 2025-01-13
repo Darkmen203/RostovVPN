@@ -2402,19 +2402,19 @@ class SingboxNativeLibrary {
       ffi.Pointer<ffi.Char> Function(
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
 
-  ffi.Pointer<ffi.Char> changeHiddifyOptions(
-    ffi.Pointer<ffi.Char> HiddifyOptionsJson,
+  ffi.Pointer<ffi.Char> changeRostovvpnOptions(
+    ffi.Pointer<ffi.Char> RostovvpnOptionsJson,
   ) {
-    return _changeHiddifyOptions(
-      HiddifyOptionsJson,
+    return _changeRostovvpnOptions(
+      RostovvpnOptionsJson,
     );
   }
 
-  late final _changeHiddifyOptionsPtr = _lookup<
+  late final _changeRostovvpnOptionsPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<ffi.Char> Function(
-              ffi.Pointer<ffi.Char>)>>('changeHiddifyOptions');
-  late final _changeHiddifyOptions = _changeHiddifyOptionsPtr
+              ffi.Pointer<ffi.Char>)>>('changeRostovvpnOptions');
+  late final _changeRostovvpnOptions = _changeRostovvpnOptionsPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
   ffi.Pointer<ffi.Char> generateConfig(

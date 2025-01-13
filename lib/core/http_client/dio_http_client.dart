@@ -4,8 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
-import 'package:flutter_loggy_dio/flutter_loggy_dio.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 
 class DioHttpClient with InfraLogger {
   final Map<String, Dio> _dio = {};
@@ -14,7 +13,7 @@ class DioHttpClient with InfraLogger {
     required String userAgent,
     required bool debug,
   }) {
-    for (var mode in ["proxy", "direct", "both"]) {
+    for (final mode in ["proxy", "direct", "both"]) {
       _dio[mode] = Dio(
         BaseOptions(
           connectTimeout: timeout,
@@ -31,7 +30,7 @@ class DioHttpClient with InfraLogger {
                 if (mode != "proxy") ...[
                   const Duration(seconds: 2),
                   const Duration(seconds: 3),
-                ]
+                ],
               ],
             ),
           );

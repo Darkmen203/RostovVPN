@@ -3,18 +3,18 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/model/directories.dart';
-import 'package:hiddify/singbox/model/singbox_config_option.dart';
-import 'package:hiddify/singbox/model/singbox_outbound.dart';
-import 'package:hiddify/singbox/model/singbox_stats.dart';
-import 'package:hiddify/singbox/model/singbox_status.dart';
-import 'package:hiddify/singbox/model/warp_account.dart';
-import 'package:hiddify/singbox/service/singbox_service.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
+import 'package:rostov_vpn/core/model/directories.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
+import 'package:rostov_vpn/singbox/model/singbox_outbound.dart';
+import 'package:rostov_vpn/singbox/model/singbox_stats.dart';
+import 'package:rostov_vpn/singbox/model/singbox_status.dart';
+import 'package:rostov_vpn/singbox/model/warp_account.dart';
+import 'package:rostov_vpn/singbox/service/singbox_service.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlatformSingboxService with InfraLogger implements SingboxService {
-  static const channelPrefix = "com.hiddify.app";
+  static const channelPrefix = "com.rostovvpn.app";
 
   static const methodChannel = MethodChannel("$channelPrefix/method");
   static const statusChannel = EventChannel("$channelPrefix/service.status", JSONMethodCodec());
@@ -74,7 +74,7 @@ class PlatformSingboxService with InfraLogger implements SingboxService {
       () async {
         loggy.debug("changing options");
         await methodChannel.invokeMethod(
-          "change_hiddify_options",
+          "change_rostovvpn_options",
           jsonEncode(options.toJson()),
         );
         return right(unit);

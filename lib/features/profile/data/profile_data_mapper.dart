@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:hiddify/core/database/app_database.dart';
-import 'package:hiddify/features/profile/model/profile_entity.dart';
+import 'package:rostov_vpn/core/database/app_database.dart';
+import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
 
 extension ProfileEntityMapper on ProfileEntity {
   ProfileEntriesCompanion toEntry() {

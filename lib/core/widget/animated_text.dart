@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hiddify/core/model/constants.dart';
+import 'package:rostov_vpn/core/model/constants.dart';
 
 class AnimatedText extends Text {
   const AnimatedText(

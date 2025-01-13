@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/features/per_app_proxy/model/installed_package_info.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/features/per_app_proxy/model/installed_package_info.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 
 abstract interface class PerAppProxyRepository {
   TaskEither<String, List<InstalledPackageInfo>> getInstalledPackages();
@@ -13,7 +13,7 @@ abstract interface class PerAppProxyRepository {
 class PerAppProxyRepositoryImpl
     with InfraLogger
     implements PerAppProxyRepository {
-  final _methodChannel = const MethodChannel("com.hiddify.app/platform");
+  final _methodChannel = const MethodChannel("com.rostovvpn.app/platform");
 
   @override
   TaskEither<String, List<InstalledPackageInfo>> getInstalledPackages() {

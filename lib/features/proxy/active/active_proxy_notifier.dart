@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:hiddify/core/haptic/haptic_service.dart';
-import 'package:hiddify/core/preferences/general_preferences.dart';
-import 'package:hiddify/core/utils/throttler.dart';
-import 'package:hiddify/features/connection/notifier/connection_notifier.dart';
-import 'package:hiddify/features/proxy/data/proxy_data_providers.dart';
-import 'package:hiddify/features/proxy/model/ip_info_entity.dart';
-import 'package:hiddify/features/proxy/model/proxy_entity.dart';
-import 'package:hiddify/features/proxy/model/proxy_failure.dart';
-import 'package:hiddify/utils/riverpod_utils.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/haptic/haptic_service.dart';
+import 'package:rostov_vpn/core/preferences/general_preferences.dart';
+import 'package:rostov_vpn/core/utils/throttler.dart';
+import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
+import 'package:rostov_vpn/features/proxy/data/proxy_data_providers.dart';
+import 'package:rostov_vpn/features/proxy/model/ip_info_entity.dart';
+import 'package:rostov_vpn/features/proxy/model/proxy_entity.dart';
+import 'package:rostov_vpn/features/proxy/model/proxy_failure.dart';
+import 'package:rostov_vpn/utils/riverpod_utils.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'active_proxy_notifier.g.dart';
@@ -48,7 +48,7 @@ class IpInfoNotifier extends _$IpInfoNotifier with AppLogger {
     final info = await ref.watch(proxyRepositoryProvider).getCurrentIpInfo(cancelToken).getOrElse(
       (err) {
         loggy.warning("error getting proxy ip info", err, StackTrace.current);
-        // throw err; //hiddify: remove exception to be logged
+        // throw err; //rostovvpn: remove exception to be logged
         throw const UnknownIp();
       },
     ).run();
@@ -95,7 +95,7 @@ class ActiveProxyNotifier extends _$ActiveProxyNotifier with AppLogger {
   final _urlTestThrottler = Throttler(const Duration(seconds: 2));
 
   Future<void> urlTest(String groupTag_) async {
-    var groupTag = groupTag_;
+    final groupTag = groupTag_;
     _urlTestThrottler(
       () async {
         if (state case AsyncData()) {

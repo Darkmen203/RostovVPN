@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:hiddify/core/localization/translations.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
 
 typedef PresentableError = ({String type, String? message});
 

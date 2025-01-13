@@ -1,12 +1,12 @@
 name: Bug Report
-description: Report a bug encountered while using Hiddify
+description: Report a bug encountered while using RostovVPN
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
         # Only English
-        If you have a feature idea or need help, please go to [our Telegram group](https://t.me/hiddify_board).
+        If you have a feature idea or need help, please go to [our Telegram group](https://t.me/rostovvpn_faq).
 
         Please make sure to provide a descriptive, deterministic, and reproducible report. It saves time for both the developers and users who are looking for solutions. Providing as much information as possible, including screenshots and logs, is highly appreciated. This will help us to better understand the issue and respond more effectively.
 
@@ -15,7 +15,7 @@ body:
     id: confirm-search
     attributes:
       label: Search first
-      description: Please search [existing issues](https://github.com/hiddify/hiddify-next/issues) before reporting.
+      description: Please search [existing issues](https://t.me/rostovvpn_faq) before reporting.
       options:
         - label: I searched and no similar issues were found
           required: true
@@ -52,7 +52,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of Hiddify are you using?
+      description: What version of RostovVPN are you using?
       placeholder: v1.3.8 etc
     validations:
       required: true

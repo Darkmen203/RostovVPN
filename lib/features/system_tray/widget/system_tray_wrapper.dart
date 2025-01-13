@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hiddify/features/system_tray/notifier/system_tray_notifier.dart';
-import 'package:hiddify/features/window/notifier/window_notifier.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
+import 'package:rostov_vpn/features/system_tray/notifier/system_tray_notifier.dart';
+import 'package:rostov_vpn/features/window/notifier/window_notifier.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tray_manager/tray_manager.dart';
 

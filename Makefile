@@ -19,7 +19,7 @@ IOS_OUT=ios$(SEP)Frameworks
 DESKTOP_OUT=libcore$(SEP)bin
 GEO_ASSETS_DIR=assets$(SEP)core
 
-CORE_PRODUCT_NAME=hiddify-core
+CORE_PRODUCT_NAME=RostovVPN-core
 CORE_NAME=$(CORE_PRODUCT_NAME)
 LIB_NAME=libcore
 

@@ -1,8 +1,8 @@
 // ignore_for_file: parameter_assignments
 
 import 'package:dartx/dartx.dart';
-import 'package:hiddify/features/log/model/log_entity.dart';
-import 'package:hiddify/features/log/model/log_level.dart';
+import 'package:rostov_vpn/features/log/model/log_entity.dart';
+import 'package:rostov_vpn/features/log/model/log_level.dart';
 import 'package:tint/tint.dart';
 
 abstract class LogParser {

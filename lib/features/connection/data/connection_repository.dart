@@ -1,16 +1,16 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/model/directories.dart';
-import 'package:hiddify/core/utils/exception_handler.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/connection/data/connection_platform_source.dart';
-import 'package:hiddify/features/connection/model/connection_failure.dart';
-import 'package:hiddify/features/connection/model/connection_status.dart';
+import 'package:rostov_vpn/core/model/directories.dart';
+import 'package:rostov_vpn/core/utils/exception_handler.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/connection/data/connection_platform_source.dart';
+import 'package:rostov_vpn/features/connection/model/connection_failure.dart';
+import 'package:rostov_vpn/features/connection/model/connection_status.dart';
 
-import 'package:hiddify/features/profile/data/profile_path_resolver.dart';
-import 'package:hiddify/singbox/model/singbox_config_option.dart';
-import 'package:hiddify/singbox/model/singbox_status.dart';
-import 'package:hiddify/singbox/service/singbox_service.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/features/profile/data/profile_path_resolver.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
+import 'package:rostov_vpn/singbox/model/singbox_status.dart';
+import 'package:rostov_vpn/singbox/service/singbox_service.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:meta/meta.dart';
 
 abstract interface class ConnectionRepository {
@@ -149,7 +149,7 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
   ) {
     return TaskEither<ConnectionFailure, Unit>.Do(
       ($) async {
-        var options = await $(getConfigOption());
+        final options = await $(getConfigOption());
         loggy.info(
           "config options: ${options.format()}\nMemory Limit: ${!disableMemoryLimit}",
         );
@@ -215,7 +215,7 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
   ) {
     return TaskEither<ConnectionFailure, Unit>.Do(
       ($) async {
-        var options = await $(getConfigOption());
+        final options = await $(getConfigOption());
         loggy.info(
           "config options: ${options.format()}\nMemory Limit: ${!disableMemoryLimit}",
         );

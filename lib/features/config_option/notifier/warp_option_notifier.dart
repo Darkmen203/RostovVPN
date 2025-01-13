@@ -1,9 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hiddify/core/preferences/preferences_provider.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/config_option/model/config_option_failure.dart';
-import 'package:hiddify/singbox/service/singbox_service_provider.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/config_option/model/config_option_failure.dart';
+import 'package:rostov_vpn/singbox/service/singbox_service_provider.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

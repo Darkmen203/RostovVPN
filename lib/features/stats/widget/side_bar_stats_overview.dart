@@ -1,15 +1,15 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/constants.dart';
-import 'package:hiddify/core/utils/preferences_utils.dart';
-import 'package:hiddify/core/widget/animated_text.dart';
-import 'package:hiddify/features/stats/model/stats_entity.dart';
-import 'package:hiddify/features/stats/notifier/stats_notifier.dart';
-import 'package:hiddify/features/stats/widget/connection_stats_card.dart';
-import 'package:hiddify/features/stats/widget/stats_card.dart';
-import 'package:hiddify/utils/number_formatters.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/constants.dart';
+import 'package:rostov_vpn/core/utils/preferences_utils.dart';
+import 'package:rostov_vpn/core/widget/animated_text.dart';
+import 'package:rostov_vpn/features/stats/model/stats_entity.dart';
+import 'package:rostov_vpn/features/stats/notifier/stats_notifier.dart';
+import 'package:rostov_vpn/features/stats/widget/connection_stats_card.dart';
+import 'package:rostov_vpn/features/stats/widget/stats_card.dart';
+import 'package:rostov_vpn/utils/number_formatters.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final showAllSidebarStatsProvider = PreferencesNotifier.createAutoDispose(

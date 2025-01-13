@@ -22,7 +22,17 @@
     "showMore": "نمایش بیشتر",
     "showLess": "نمایش کمتر",
     "openAppSettings": "باز کردن تنظیمات برنامه",
-    "grantPermission": "اجازه دادن"
+    "grantPermission": "اجازه دادن",
+    "gologin": "ورود",
+    "login": "ورود",
+    "logout": "خروج",
+    "loginTitle": "ورود به برنامه",
+    "username": "نام کاربری",
+    "password": "رمز عبور",
+    "cancel": "لغو",
+    "errorLoginTitle": "خطا",
+    "errorLogin": "نام کاربری یا رمز عبور اشتباه است",
+    "inputLoginAndPassword": "نام کاربری و رمز عبور خود را وارد کنید!"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "در صورت ادامه با ${tap(@:about.termsAndConditions)} موافقت می‌کنید",

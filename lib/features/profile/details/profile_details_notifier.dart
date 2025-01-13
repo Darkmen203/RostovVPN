@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/features/profile/data/profile_data_providers.dart';
-import 'package:hiddify/features/profile/data/profile_repository.dart';
-import 'package:hiddify/features/profile/details/profile_details_state.dart';
-import 'package:hiddify/features/profile/model/profile_entity.dart';
-import 'package:hiddify/features/profile/model/profile_failure.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
+import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
+import 'package:rostov_vpn/features/profile/details/profile_details_state.dart';
+import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
+import 'package:rostov_vpn/features/profile/model/profile_failure.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -54,9 +54,9 @@ class ProfileDetailsNotifier extends _$ProfileDetailsNotifier with AppLogger {
         if (configContent.isNotEmpty) {
           try {
             final jsonObject = jsonDecode(configContent);
-            List<Map<String, dynamic>> res = [];
+            final List<Map<String, dynamic>> res = [];
             if (jsonObject is Map<String, dynamic> && jsonObject['outbounds'] is List) {
-              for (var outbound in jsonObject['outbounds'] as List<dynamic>) {
+              for (final outbound in jsonObject['outbounds'] as List<dynamic>) {
                 if (outbound is Map<String, dynamic> && outbound['type'] != null && !['selector', 'urltest', 'dns', 'block'].contains(outbound['type']) && !['direct', 'bypass', 'direct-fragment'].contains(outbound['tag'])) {
                   res.add(outbound);
                 }

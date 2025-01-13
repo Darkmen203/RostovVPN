@@ -4,18 +4,18 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/failures.dart';
-import 'package:hiddify/core/router/router.dart';
-import 'package:hiddify/core/widget/adaptive_icon.dart';
-import 'package:hiddify/core/widget/adaptive_menu.dart';
-import 'package:hiddify/features/common/confirmation_dialogs.dart';
-import 'package:hiddify/features/common/qr_code_dialog.dart';
-import 'package:hiddify/features/profile/model/profile_entity.dart';
-import 'package:hiddify/features/profile/notifier/profile_notifier.dart';
-import 'package:hiddify/features/profile/overview/profiles_overview_notifier.dart';
-import 'package:hiddify/gen/fonts.gen.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
+import 'package:rostov_vpn/core/router/router.dart';
+import 'package:rostov_vpn/core/widget/adaptive_icon.dart';
+import 'package:rostov_vpn/core/widget/adaptive_menu.dart';
+import 'package:rostov_vpn/features/common/confirmation_dialogs.dart';
+import 'package:rostov_vpn/features/common/qr_code_dialog.dart';
+import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
+import 'package:rostov_vpn/features/profile/notifier/profile_notifier.dart';
+import 'package:rostov_vpn/features/profile/overview/profiles_overview_notifier.dart';
+import 'package:rostov_vpn/gen/fonts.gen.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -67,19 +67,19 @@ class ProfileTile extends HookConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (profile is RemoteProfileEntity || !isMain) ...[
-              SizedBox(
-                width: 48,
-                child: Semantics(
-                  sortKey: const OrdinalSortKey(1),
-                  child: ProfileActionButton(profile, !isMain),
-                ),
-              ),
-              VerticalDivider(
-                width: 1,
-                color: effectiveOutlineColor,
-              ),
-            ],
+            // if (profile is RemoteProfileEntity || !isMain) ...[
+            //   SizedBox(
+            //     width: 48,
+            //     child: Semantics(
+            //       sortKey: const OrdinalSortKey(1),
+            //       child: ProfileActionButton(profile, !isMain),
+            //     ),
+            //   ),
+            //   VerticalDivider(
+            //     width: 1,
+            //     color: effectiveOutlineColor,
+            //   ),
+            // ],
             Expanded(
               child: Semantics(
                 button: true,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hiddify/core/utils/preferences_utils.dart';
-import 'package:hiddify/features/settings/widgets/widgets.dart';
+import 'package:rostov_vpn/core/utils/preferences_utils.dart';
+import 'package:rostov_vpn/features/settings/widgets/widgets.dart';
 
 class ValuePreferenceWidget<T> extends StatelessWidget {
   const ValuePreferenceWidget({

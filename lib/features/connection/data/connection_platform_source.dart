@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
-import 'package:hiddify/core/utils/ffi_utils.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/utils/ffi_utils.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:posix/posix.dart';
 import 'package:win32/win32.dart';
 
@@ -26,7 +26,7 @@ class ConnectionPlatformSourceImpl
                 (pElevation) {
               if (OpenProcessToken(
                     GetCurrentProcess(),
-                    TOKEN_QUERY,
+                    TOKEN_ACCESS_MASK.TOKEN_QUERY,
                     phToken.cast(),
                   ) ==
                   1) {

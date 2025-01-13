@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:dartx/dartx.dart';
 
-import 'package:hiddify/core/haptic/haptic_service.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/preferences/preferences_provider.dart';
-import 'package:hiddify/core/utils/preferences_utils.dart';
-import 'package:hiddify/features/connection/notifier/connection_notifier.dart';
-import 'package:hiddify/features/proxy/data/proxy_data_providers.dart';
-import 'package:hiddify/features/proxy/model/proxy_entity.dart';
-import 'package:hiddify/features/proxy/model/proxy_failure.dart';
-import 'package:hiddify/utils/riverpod_utils.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/haptic/haptic_service.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
+import 'package:rostov_vpn/core/utils/preferences_utils.dart';
+import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
+import 'package:rostov_vpn/features/proxy/data/proxy_data_providers.dart';
+import 'package:rostov_vpn/features/proxy/model/proxy_entity.dart';
+import 'package:rostov_vpn/features/proxy/model/proxy_failure.dart';
+import 'package:rostov_vpn/utils/riverpod_utils.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 

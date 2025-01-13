@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:hiddify/core/haptic/haptic_service.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/preferences/general_preferences.dart';
-import 'package:hiddify/features/auto_start/notifier/auto_start_notifier.dart';
-import 'package:hiddify/features/common/general_pref_tiles.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/haptic/haptic_service.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/preferences/general_preferences.dart';
+import 'package:rostov_vpn/features/auto_start/notifier/auto_start_notifier.dart';
+import 'package:rostov_vpn/features/common/general_pref_tiles.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class GeneralSettingTiles extends HookConsumerWidget {

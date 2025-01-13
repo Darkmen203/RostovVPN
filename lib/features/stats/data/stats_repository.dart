@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/utils/exception_handler.dart';
-import 'package:hiddify/features/stats/model/stats_entity.dart';
-import 'package:hiddify/features/stats/model/stats_failure.dart';
-import 'package:hiddify/singbox/service/singbox_service.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
+import 'package:rostov_vpn/core/utils/exception_handler.dart';
+import 'package:rostov_vpn/features/stats/model/stats_entity.dart';
+import 'package:rostov_vpn/features/stats/model/stats_failure.dart';
+import 'package:rostov_vpn/singbox/service/singbox_service.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 
 abstract interface class StatsRepository {
   Stream<Either<StatsFailure, StatsEntity>> watchStats();

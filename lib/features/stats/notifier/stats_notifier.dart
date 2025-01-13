@@ -1,8 +1,8 @@
-import 'package:hiddify/features/connection/notifier/connection_notifier.dart';
-import 'package:hiddify/features/stats/data/stats_data_providers.dart';
-import 'package:hiddify/features/stats/model/stats_entity.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
-import 'package:hiddify/utils/riverpod_utils.dart';
+import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
+import 'package:rostov_vpn/features/stats/data/stats_data_providers.dart';
+import 'package:rostov_vpn/features/stats/model/stats_entity.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
+import 'package:rostov_vpn/utils/riverpod_utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'stats_notifier.g.dart';

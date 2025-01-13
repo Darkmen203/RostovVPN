@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hiddify/features/profile/data/profile_parser.dart';
-import 'package:hiddify/features/profile/model/profile_entity.dart';
+import 'package:rostov_vpn/features/profile/data/profile_parser.dart';
+import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
 
 void main() {
   const validBaseUrl = "https://example.com/configurations/user1/filename.yaml";

@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:hiddify/core/utils/exception_handler.dart';
-import 'package:hiddify/features/settings/model/settings_failure.dart';
-import 'package:hiddify/utils/custom_loggers.dart';
+import 'package:rostov_vpn/core/utils/exception_handler.dart';
+import 'package:rostov_vpn/features/settings/model/settings_failure.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 
 abstract interface class SettingsRepository {
   TaskEither<SettingsFailure, bool> isIgnoringBatteryOptimizations();
@@ -12,7 +12,7 @@ abstract interface class SettingsRepository {
 class SettingsRepositoryImpl
     with ExceptionHandler, InfraLogger
     implements SettingsRepository {
-  final _methodChannel = const MethodChannel("com.hiddify.app/platform");
+  final _methodChannel = const MethodChannel("com.rostovvpn.app/platform");
 
   @override
   TaskEither<SettingsFailure, bool> isIgnoringBatteryOptimizations() {

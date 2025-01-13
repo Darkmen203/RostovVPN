@@ -1,18 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/constants.dart';
-import 'package:hiddify/core/router/router.dart';
-import 'package:hiddify/features/config_option/data/config_option_repository.dart';
-import 'package:hiddify/features/connection/model/connection_status.dart';
-import 'package:hiddify/features/connection/notifier/connection_notifier.dart';
-import 'package:hiddify/features/proxy/active/active_proxy_notifier.dart';
-import 'package:hiddify/features/window/notifier/window_notifier.dart';
-import 'package:hiddify/gen/assets.gen.dart';
-import 'package:hiddify/singbox/model/singbox_config_enum.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/constants.dart';
+import 'package:rostov_vpn/core/router/router.dart';
+import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
+import 'package:rostov_vpn/features/connection/model/connection_status.dart';
+import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
+import 'package:rostov_vpn/features/proxy/active/active_proxy_notifier.dart';
+import 'package:rostov_vpn/features/window/notifier/window_notifier.dart';
+import 'package:rostov_vpn/gen/assets.gen.dart';
+import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
@@ -25,7 +24,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
   Future<void> build() async {
     if (!PlatformUtils.isDesktop) return;
 
-    final activeProxy = await ref.watch(activeProxyNotifierProvider);
+    final activeProxy = ref.watch(activeProxyNotifierProvider);
     final delay = activeProxy.value?.urlTestDelay ?? 0;
     final newConnectionStatus = delay > 0 && delay < 65000;
     ConnectionStatus connection;
@@ -40,7 +39,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
 
     var tooltip = Constants.appName;
     final serviceMode = ref.watch(ConfigOptions.serviceMode);
-    if (connection == Disconnected()) {
+    if (connection == const Disconnected()) {
       setIcon(connection);
     } else if (newConnectionStatus) {
       setIcon(const Connected());
@@ -172,7 +171,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
           }
       }
     }
-    final isDarkMode = false;
+    const isDarkMode = false;
     switch (status) {
       case Connected():
         return Assets.images.trayIconConnectedPng.path;

@@ -1,9 +1,9 @@
-// import 'package:hiddify/core/database/database_provider.dart';
-// import 'package:hiddify/core/directories/directories_provider.dart';
-// import 'package:hiddify/core/http_client/http_client_provider.dart';
-// import 'package:hiddify/features/geo_asset/data/geo_asset_data_source.dart';
-// import 'package:hiddify/features/geo_asset/data/geo_asset_path_resolver.dart';
-// import 'package:hiddify/features/geo_asset/data/geo_asset_repository.dart';
+// import 'package:rostov_vpn/core/database/database_provider.dart';
+// import 'package:rostov_vpn/core/directories/directories_provider.dart';
+// import 'package:rostov_vpn/core/http_client/http_client_provider.dart';
+// import 'package:rostov_vpn/features/geo_asset/data/geo_asset_data_source.dart';
+// import 'package:rostov_vpn/features/geo_asset/data/geo_asset_path_resolver.dart';
+// import 'package:rostov_vpn/features/geo_asset/data/geo_asset_repository.dart';
 // import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // part 'geo_asset_data_providers.g.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/features/app_update/model/remote_version_entity.dart';
-import 'package:hiddify/features/app_update/notifier/app_update_notifier.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/features/app_update/model/remote_version_entity.dart';
+import 'package:rostov_vpn/features/app_update/notifier/app_update_notifier.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NewVersionDialog extends HookConsumerWidget with PresLogger {
@@ -24,7 +24,6 @@ class NewVersionDialog extends HookConsumerWidget with PresLogger {
     if (_dialogKey.currentContext == null) {
       return showDialog(
         context: context,
-        useRootNavigator: true,
         builder: (context) => this,
       );
     } else {

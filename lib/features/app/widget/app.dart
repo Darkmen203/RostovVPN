@@ -3,20 +3,23 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hiddify/core/localization/locale_extensions.dart';
-import 'package:hiddify/core/localization/locale_preferences.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/constants.dart';
-import 'package:hiddify/core/router/router.dart';
-import 'package:hiddify/core/theme/app_theme.dart';
-import 'package:hiddify/core/theme/theme_preferences.dart';
-import 'package:hiddify/features/app_update/notifier/app_update_notifier.dart';
-import 'package:hiddify/features/connection/widget/connection_wrapper.dart';
-import 'package:hiddify/features/profile/notifier/profiles_update_notifier.dart';
-import 'package:hiddify/features/shortcut/shortcut_wrapper.dart';
-import 'package:hiddify/features/system_tray/widget/system_tray_wrapper.dart';
-import 'package:hiddify/features/window/widget/window_wrapper.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/constants/colors.dart';
+import 'package:rostov_vpn/core/localization/locale_extensions.dart';
+import 'package:rostov_vpn/core/localization/locale_preferences.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/login/login_manager_provider.dart';
+import 'package:rostov_vpn/core/model/constants.dart';
+import 'package:rostov_vpn/core/router/router.dart';
+import 'package:rostov_vpn/core/theme/app_theme.dart';
+import 'package:rostov_vpn/core/theme/theme_preferences.dart';
+import 'package:rostov_vpn/features/app_update/notifier/app_update_notifier.dart';
+import 'package:rostov_vpn/features/connection/widget/connection_wrapper.dart';
+import 'package:rostov_vpn/features/login/widget/login_page.dart';
+import 'package:rostov_vpn/features/profile/notifier/profiles_update_notifier.dart';
+import 'package:rostov_vpn/features/shortcut/shortcut_wrapper.dart';
+import 'package:rostov_vpn/features/system_tray/widget/system_tray_wrapper.dart';
+import 'package:rostov_vpn/features/window/widget/window_wrapper.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -41,7 +44,8 @@ class App extends HookConsumerWidget with PresLogger {
         ShortcutWrapper(
           ConnectionWrapper(
             DynamicColorBuilder(
-              builder: (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
+              builder: (ColorScheme? lightColorScheme,
+                  ColorScheme? darkColorScheme) {
                 return MaterialApp.router(
                   routerConfig: router,
                   locale: locale.flutterLocale,
@@ -49,10 +53,24 @@ class App extends HookConsumerWidget with PresLogger {
                   localizationsDelegates: GlobalMaterialLocalizations.delegates,
                   debugShowCheckedModeBanner: false,
                   themeMode: themeMode.flutterThemeMode,
-                  theme: theme.lightTheme(lightColorScheme),
+                  color: AppColors.pink,
+                  theme: theme.lightTheme(darkColorScheme),
                   darkTheme: theme.darkTheme(darkColorScheme),
                   title: Constants.appName,
                   builder: (context, child) {
+                    final loginState = ref.watch(loginManagerProvider);
+                    final isLoggedIn = loginState?.isLoggedIn ?? false;
+
+                    // Если НЕ залогинен — показываем LoginPage, иначе — то, что было (child).
+                    // Но надо иметь в виду, что при таком подходе GoRouter-страницы «спрячутся».
+                    // Это будет работать, если логика GoRouter вам не важна ДО логина.
+                    if (!isLoggedIn) {
+                      return Navigator(
+                        onGenerateRoute: (_) => MaterialPageRoute(
+                          builder: (_) => const LoginPage(),
+                        ),
+                      );
+                    }
                     child = UpgradeAlert(
                       upgrader: upgrader,
                       navigatorKey: router.routerDelegate.navigatorKey,

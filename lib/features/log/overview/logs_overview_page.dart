@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:gap/gap.dart';
-import 'package:hiddify/core/localization/translations.dart';
-import 'package:hiddify/core/model/failures.dart';
-import 'package:hiddify/core/preferences/general_preferences.dart';
-import 'package:hiddify/core/widget/adaptive_icon.dart';
-import 'package:hiddify/features/common/nested_app_bar.dart';
-import 'package:hiddify/features/log/data/log_data_providers.dart';
-import 'package:hiddify/features/log/model/log_level.dart';
-import 'package:hiddify/features/log/overview/logs_overview_notifier.dart';
-import 'package:hiddify/utils/utils.dart';
+import 'package:rostov_vpn/core/localization/translations.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
+import 'package:rostov_vpn/core/preferences/general_preferences.dart';
+import 'package:rostov_vpn/core/widget/adaptive_icon.dart';
+import 'package:rostov_vpn/features/common/nested_app_bar.dart';
+import 'package:rostov_vpn/features/log/data/log_data_providers.dart';
+import 'package:rostov_vpn/features/log/model/log_level.dart';
+import 'package:rostov_vpn/features/log/overview/logs_overview_notifier.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -96,7 +96,7 @@ class LogsOverviewPage extends HookConsumerWidget with PresLogger {
                   SliverPinnedHeader(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:hiddify/gen/fonts.gen.dart';
-import 'package:hiddify/gen/translations.g.dart';
+import 'package:rostov_vpn/gen/fonts.gen.dart';
+import 'package:rostov_vpn/gen/translations.g.dart';
 
 extension AppLocaleX on AppLocale {
   String get preferredFontFamily => this == AppLocale.fa ? FontFamily.shabnam : (!Platform.isWindows ? "" : FontFamily.emoji);
