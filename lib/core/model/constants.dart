@@ -1,13 +1,13 @@
 abstract class Constants {
   static const appName = "RostovVPN";
-  static const githubUrl = "https://github.com/hiddify/hiddify-next";
+  static const githubUrl = "https://github.com/Darkmen203/RostovVPN";
   static const githubReleasesApiUrl =
-      "https://api.github.com/repos/hiddify/hiddify-next/releases";
+      "https://api.github.com/repos/Darkmen203/RostovVPN/releases";
   static const githubLatestReleaseUrl =
-      "https://github.com/hiddify/hiddify-next/releases/latest";
+      "https://github.com/Darkmen203/RostovVPN/releases/latest";
   static const appCastUrl =
-      "https://raw.githubusercontent.com/hiddify/hiddify-next/main/appcast.xml";
-  static const telegramChannelUrl = "https://t.me/hiddify";
+      "https://raw.githubusercontent.com/Darkmen203/RostovVPN/main/appcast.xml";
+  static const telegramChannelUrl = "https://t.me/rostovvpn";
   static const privacyPolicyUrl = "https://hiddify.com/privacy-policy/";
   static const termsAndConditionsUrl = "https://hiddify.com/terms/";
   static const cfWarpPrivacyPolicy =

@@ -97,7 +97,7 @@ abstract class ConfigOptions {
       "4.4.2.2",
       "8.8.8.8",
     ]),
-    defaultValueFunction: (ref) => ref.read(region) == Region.cn ? "223.5.5.5" : "1.1.1.1",
+    defaultValueFunction: (ref) => ref.read(region) == Region.cn ? "223.5.5.5" : "8.8.8.8",
     validator: (value) => value.isNotBlank,
   );
 
