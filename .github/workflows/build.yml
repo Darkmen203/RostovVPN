@@ -187,7 +187,7 @@ jobs:
 
       - name: Code Sign
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
-        uses: rostovvpn/signtool-code-sign-sha256@main
+        uses: Darkmen203/signtool-code-sign-sha256@main
         with:
           certificate: '${{ secrets.WINDOWS_SIGNING_KEY }}'
           cert-password: '${{ secrets.WINDOWS_SIGNING_PASSWORD }}'
