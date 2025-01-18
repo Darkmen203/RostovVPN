@@ -1,6 +1,14 @@
 # Changelog
 
 
+## 2.6.2 (2025-01-18)
+
+#### Other
+
+* Commented ios, android store, fix keys. 
+
+
+
 ## v0.7.4 (2025-01-18)
 
 #### Other
