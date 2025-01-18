@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
@@ -7,6 +8,7 @@ import 'package:rostov_vpn/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:screen_retriever/screen_retriever.dart';
 
 part 'window_notifier.g.dart';
 
@@ -25,8 +27,32 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
     // }
 
     await windowManager.ensureInitialized();
-    await windowManager.setMinimumSize(minimumWindowSize);
-    await windowManager.setSize(defaultWindowSize);
+
+    final display = await screenRetriever.getPrimaryDisplay();
+    final workAreaSize = display.size;
+    //   или 'size' (размер всего экрана),
+    //   но чаще лучше брать 'workAreaSize' (без панели задач).
+
+    var windowWidth = 368.0;
+    var windowHeight = 800.0;
+    log('$windowHeight windowHeight $workAreaSize' );
+
+    // Если не помещается по ширине или высоте - уменьшаем
+    if (windowWidth > workAreaSize.width ||
+        windowHeight > workAreaSize.height) {
+      // Простой вариант — «зажать» до рабочей области
+      windowWidth = windowWidth.clamp(0, workAreaSize.width);
+      windowHeight = windowHeight.clamp(0, workAreaSize.height - 20);
+      await windowManager.setMinimumSize(Size(windowWidth, windowHeight));
+    }else{
+      await windowManager.setMinimumSize(minimumWindowSize);
+    }
+
+    // Устанавливаем итоговый размер (может быть уменьшен)
+    await windowManager.setSize(Size(windowWidth, windowHeight));
+
+    // При желании можно ещё зацентрировать
+    await windowManager.center();
   }
 
   Future<void> open({bool focus = true}) async {
@@ -46,7 +72,11 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
   }
 
   Future<void> quit() async {
-    await ref.read(connectionNotifierProvider.notifier).abortConnection().timeout(const Duration(seconds: 2)).catchError(
+    await ref
+        .read(connectionNotifierProvider.notifier)
+        .abortConnection()
+        .timeout(const Duration(seconds: 2))
+        .catchError(
       (e) {
         loggy.warning("error aborting connection on quit", e);
       },
