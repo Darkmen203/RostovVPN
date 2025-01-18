@@ -95,22 +95,22 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: Import Apple Codesign Certificates
-        if: ${{ inputs.upload-artifact && startsWith(matrix.os,'macos') }}
-        uses: apple-actions/import-codesign-certs@v3
-        with: 
-            p12-file-base64: "${{ secrets.APPLE_CERTIFICATE_P12 }}"
-            p12-password: "${{ secrets.APPLE_CERTIFICATE_P12_PASSWORD }}"
+      # - name: Import Apple Codesign Certificates
+      #   if: ${{ inputs.upload-artifact && startsWith(matrix.os,'macos') }}
+      #   uses: apple-actions/import-codesign-certs@v3
+      #   with: 
+      #       p12-file-base64: "${{ secrets.APPLE_CERTIFICATE_P12 }}"
+      #       p12-password: "${{ secrets.APPLE_CERTIFICATE_P12_PASSWORD }}"
 
-      - name: Import Apple Mobile Provisioning Profile
-        if: ${{ inputs.upload-artifact && startsWith(matrix.os,'macos') }}
-        run: |
-           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-           echo "${{secrets.APPLE_MOBILE_PROVISIONING_PROFILES_TARGZ_BASE64}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
-           ls ~/Library/MobileDevice/Provisioning\ Profiles
-        #   ls ~/Library/MobileDevice/Provisioning\ Profiles
-        #   echo "${{secrets.NEW_APPLE_MOBILE_PROVISIONING_PROFILES_TARXZ_BASE64}}"|base64 --decode | tar xJ -C ~/Library/MobileDevice/Provisioning\ Profiles
-        #   # echo "${{secrets.NEW_APPLE_MOBILE_PROVISIONING_PROFILES_TARGZ_BASE64_2}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
+      # - name: Import Apple Mobile Provisioning Profile
+      #   if: ${{ inputs.upload-artifact && startsWith(matrix.os,'macos') }}
+      #   run: |
+      #      mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+      #      echo "${{secrets.APPLE_MOBILE_PROVISIONING_PROFILES_TARGZ_BASE64}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
+      #      ls ~/Library/MobileDevice/Provisioning\ Profiles
+      #   #   ls ~/Library/MobileDevice/Provisioning\ Profiles
+      #   #   echo "${{secrets.NEW_APPLE_MOBILE_PROVISIONING_PROFILES_TARXZ_BASE64}}"|base64 --decode | tar xJ -C ~/Library/MobileDevice/Provisioning\ Profiles
+      #   #   # echo "${{secrets.NEW_APPLE_MOBILE_PROVISIONING_PROFILES_TARGZ_BASE64_2}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
           
 
 
@@ -275,11 +275,11 @@ jobs:
           path: ./out
           retention-days: 1
 
-      - name: Clean up keychain and provisioning profile
-        if: ${{ always() && startsWith(matrix.os,'macos')}}
-        run: |
-          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db ||echo ok
-          rm ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision ||echo ok
+      # - name: Clean up keychain and provisioning profile
+      #   if: ${{ always() && startsWith(matrix.os,'macos')}}
+      #   run: |
+      #     security delete-keychain $RUNNER_TEMP/app-signing.keychain-db ||echo ok
+      #     rm ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision ||echo ok
   update-draft:
     permissions: write-all
     if: ${{ inputs.upload-artifact }}
@@ -372,59 +372,59 @@ jobs:
       - name: Create service_account.json
         run: echo '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}' > service_account.json
 
-      - name: Deploy to Google Play Internal Testers
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: service_account.json
-          packageName: app.rostovvpn.com
-          releaseName: ${{ env.TAG_NAME }}
-          releaseFiles: ./rostovvpn-android-market.aab
-          track: 'beta'
+      # - name: Deploy to Google Play Internal Testers
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJson: service_account.json
+      #     packageName: app.rostovvpn.com
+      #     releaseName: ${{ env.TAG_NAME }}
+      #     releaseFiles: ./rostovvpn-android-market.aab
+      #     track: 'beta'
 
 
-  upload-to-testflight:
-    needs: [build]
-    if: ${{ inputs.upload-artifact &&  inputs.tag-name != 'draft' }}
-    #if: ${{ inputs.upload-artifact }}
-    runs-on: macOS-latest
-    timeout-minutes: 30
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          merge-multiple: true
-          pattern: "*ios*"
-          path: ./out/
+  # upload-to-testflight:
+  #   needs: [build]
+  #   if: ${{ inputs.upload-artifact &&  inputs.tag-name != 'draft' }}
+  #   #if: ${{ inputs.upload-artifact }}
+  #   runs-on: macOS-latest
+  #   timeout-minutes: 30
+  #   steps:
+  #     - name: Download Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         merge-multiple: true
+  #         pattern: "*ios*"
+  #         path: ./out/
 
-      - uses: Apple-Actions/import-codesign-certs@v2
-        with:
-          p12-file-base64: ${{ secrets.APPLE_UPLOAD_CERTIFICATE_P12 }}
-          p12-password: ${{ secrets.APPLE_CERTIFICATE_P12_PASSWORD }}
+  #     - uses: Apple-Actions/import-codesign-certs@v2
+  #       with:
+  #         p12-file-base64: ${{ secrets.APPLE_UPLOAD_CERTIFICATE_P12 }}
+  #         p12-password: ${{ secrets.APPLE_CERTIFICATE_P12_PASSWORD }}
 
-      - uses: Apple-Actions/download-provisioning-profiles@v1
-        with:
-          bundle-id: app.rostovvpn.com
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-      - uses: Apple-Actions/download-provisioning-profiles@v1
-        with:
-          bundle-id: app.rostovvpn.com.SingBoxPacketTunnel
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+  #     - uses: Apple-Actions/download-provisioning-profiles@v1
+  #       with:
+  #         bundle-id: app.rostovvpn.com
+  #         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+  #         api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+  #         api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+  #     - uses: Apple-Actions/download-provisioning-profiles@v1
+  #       with:
+  #         bundle-id: app.rostovvpn.com.SingBoxPacketTunnel
+  #         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+  #         api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+  #         api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
   
 
 
-      - name: Import Apple Mobile Provisioning Profile
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{secrets.APPLE_DIST_PROVISIONING_PROFILES_TARGZ_BASE64}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
-        #echo "${{secrets.NEW_APPLE_STORE_PROVISIONING_PROFILES_TARXZ_BASE64}}"|base64 --decode | tar xJ -C ~/Library/MobileDevice/Provisioning\ Profiles
+  #     - name: Import Apple Mobile Provisioning Profile
+  #       run: |
+  #         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+  #         echo "${{secrets.APPLE_DIST_PROVISIONING_PROFILES_TARGZ_BASE64}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
+  #       #echo "${{secrets.NEW_APPLE_STORE_PROVISIONING_PROFILES_TARXZ_BASE64}}"|base64 --decode | tar xJ -C ~/Library/MobileDevice/Provisioning\ Profiles
 
-      - uses: Apple-Actions/upload-testflight-build@v1
-        with:
-          app-path: 'out/RostovVPN-iOS.ipa' 
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+  #     - uses: Apple-Actions/upload-testflight-build@v1
+  #       with:
+  #         app-path: 'out/RostovVPN-iOS.ipa' 
+  #         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+  #         api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+  #         api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
