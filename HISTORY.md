@@ -1,7 +1,15 @@
 # Changelog
 
 
-## 2.6.3 (2025-01-18)
+## 2.6.5 (2025-01-18)
+
+#### Other
+
+* Fix windows size on small notebook. 
+
+
+
+## v2.6.3 (2025-01-18)
 
 #### Other
 
