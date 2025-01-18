@@ -24,9 +24,9 @@ CORE_NAME=$(CORE_PRODUCT_NAME)
 LIB_NAME=libcore
 
 ifeq ($(CHANNEL),prod)
-	CORE_URL=https://github.com/hiddify/hiddify-next-core/releases/download/v$(core.version)
+	CORE_URL=https://github.com/Darkmen203/rostovvpn-core/releases/download/v$(core.version)
 else
-	CORE_URL=https://github.com/hiddify/hiddify-next-core/releases/download/draft
+	CORE_URL=https://github.com/Darkmen203/rostovvpn-core/releases/download/draft
 endif
 
 ifeq ($(CHANNEL),prod)
