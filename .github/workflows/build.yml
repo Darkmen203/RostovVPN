@@ -43,6 +43,8 @@ jobs:
           channel: 'stable'
           cache: true
           
+      - name: Install SQLite
+        run: sudo apt-get install sqlite3 libsqlite3-dev
       - name: Prepare
         run: make linux-prepare
       - name: Test
