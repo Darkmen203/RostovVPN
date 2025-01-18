@@ -1,7 +1,7 @@
 name: rostov_vpn
 description: Cross Platform Multi Protocol Proxy Frontend.
 publish_to: "none"
-version: 0.7.2
+version: 0.7.3
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -175,11 +175,3 @@ sentry:
   upload_sources: true
   log_level: info
   ignore_missing: true
-
-msix_config:
-  sign: false
-  # display_name: "My App"
-  # publisher_display_name: "My Company"
-  # identity_name: "com.rostovvpn.myapp"
-  # certificate_path: "windows/sign.pfx"
-  certificate_password: "1234"

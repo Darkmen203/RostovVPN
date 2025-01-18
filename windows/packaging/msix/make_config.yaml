@@ -1,15 +1,15 @@
 display_name: RostovVPN
 publisher_display_name: RostovVPN
 identity_name: RostovVPN.RostovVPNNext
-msix_version: 2.5.7.0
+msix_version: 2.6.2.0
 logo_path: windows\runner\resources\app_icon.ico
 capabilities: internetClient, internetClientServer, privateNetworkClientServer
 languages: en-us, zh-cn, zh-tw, tr-tr,fa-ir,ru-ru,pt-br,es-es
 protocol_activation: rostovvpn
 execution_alias: rostovvpn
 certificate_path: windows\sign.pfx
-certificate_password:
-publisher: CN=8CB43675-F44B-4AA5-9372-E8727781BDC4
+certificate_password: "1234"
+publisher: CN=rostovVPN
 install_certificate: "false"
 enable_at_startup: "true"
 startup_task:
