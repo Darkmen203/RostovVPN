@@ -1,19 +1,11 @@
-<div dir="ltr" align=center>
-    
-[**Русский 🇷🇺**](README_ru.md)
-
-</div>
 <br>
 
-<p align="center"><img src="https://github.com/hiddify/hiddify.com/blob/main/docs/assets/hiddify-app-logo.svg" width=56% /></p>
+<p align="center"><img src="https://github.com/Darkmen203/RostovVPN/blob/main/docs/rostovvpn-logo.svg" width=56% /></p>
 <br>
 
 <div align="center">
 
-<!--
-![Hiddify logo + text](https://github.com/hiddify/hiddify-next/assets/125398461/d821cfe0-b4c4-441f-be4e-eb9209f59542)
-    -->
-     [![Downloads](https://img.shields.io/github/downloads/hiddify/hiddify-next/total?style=flat-square&logo=github)](https://github.com/Darkmen203/RostovVPN/releases/)[![Last Version](https://img.shields.io/github/release/hiddify/hiddify-next/all.svg?style=flat-square)](https://github.com/Darkmen203/RostovVPN/releases/)[![Last Release Date](https://img.shields.io/github/release-date/hiddify/hiddify-next.svg?style=flat-square)](https://github.com/Darkmen203/RostovVPN/releases/)[![Telegram Channel](https://img.shields.io/endpoint?label=Channel&style=flat-square&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Frostovvpn&color=blue)](https://telegram.dog/rostovvpn)
+[![Downloads](https://img.shields.io/github/downloads/Darkmen203/RostovVPN/total?style=flat-square&logo=github)](https://github.com/Darkmen203/RostovVPN/releases/)[![Last Version](https://img.shields.io/github/release/Darkmen203/RostovVPN/all.svg?style=flat-square)](https://github.com/Darkmen203/RostovVPN/releases/)[![Last Release Date](https://img.shields.io/github/release-date/Darkmen203/RostovVPN.svg?style=flat-square)](https://github.com/Darkmen203/RostovVPN/releases/)[![Telegram Channel](https://img.shields.io/endpoint?label=Channel&style=flat-square&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Frostovvpn&color=blue)](https://telegram.dog/rostovvpn)
 
 </div>
 
@@ -24,10 +16,6 @@
 
 <p dir="ltr" style="font-size: 16px">A multi-platform proxy client based on <a href="https://github.com/SagerNet/sing-box">Sing-box</a> universal proxy tool-chain. RostovVPN offers a wide range of capabilities, like automatic node selection, TUN mode, remote profiles etc. RostovVPN is ad-free./p>
 
-<div align=center>
-<img width=90% alt="English Demo" src="https://github.com/hiddify/hiddify-next/assets/125398461/ffe5346d-3404-470f-b5e0-4364e23743d2">
-
-</div>
 
 ## 🚀 Main features
 
@@ -59,12 +47,12 @@
         </tr>
     </thead>
     <tbody align=left>
-        <tr>
+<!--         <tr>
         <td>iOS</td>
             <td>
                 <a href="https://github.com/Darkmen203/RostovVPN/releases/latest/download/RostovVPN-iOS.ipa"><img src="https://img.shields.io/badge/IPA-Universal-c0c0c0.svg?logo=ios"></a>
             </td>
-        </tr>
+        </tr> -->
         <tr>
         <td>Android</td>
             <td>
@@ -85,7 +73,7 @@
         <tr>
             <td>macOS</td>
             <td>
-                <a href="https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532"><img src="https://img.shields.io/badge/IPA-ARM-D33A54.svg?logo=apple"></a><br>
+<!--                 <a href="https://apps.apple.com/us/app/rostovvpn/id6596777532"><img src="https://img.shields.io/badge/IPA-ARM-D33A54.svg?logo=apple"></a><br> -->
                 <a href="https://github.com/Darkmen203/RostovVPN/releases/latest/download/RostovVPN-MacOS.dmg"><img src="https://img.shields.io/badge/DMG-Universal-ea005e.svg?logo=apple"></a><br>
                 <a href="https://github.com/Darkmen203/RostovVpn/releases/latest/download/RostovVPN-MacOS-Installer.pkg"><img src="https://img.shields.io/badge/PKG-Universal-bc544b.svg?logo=apple" /></a>
             </td>
