@@ -1,7 +1,15 @@
 # Changelog
 
 
-## 2.6.5 (2025-01-18)
+## 2.6.6 (2025-01-19)
+
+#### Other
+
+* Added alert for expire subscription. 
+
+
+
+## v2.6.5 (2025-01-18)
 
 #### Other
 
