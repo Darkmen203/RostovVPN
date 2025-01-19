@@ -32,7 +32,15 @@
     "cancel": "取消",
     "errorLoginTitle": "錯誤",
     "errorLogin": "帳號或密碼錯誤",
-    "inputLoginAndPassword": "輸入用戶名和密碼！"
+    "inputLoginAndPassword": "輸入用戶名和密碼！",
+    "title_alert_pay": "訂閱支付",
+    "content_alert_pay": "訂閱即將到期。需要續訂。",
+    "pay_message_alert_pay": "請使用以下信息支付：\n",
+    "number_alert_pay": "號碼：",
+    "bank_alert_pay": "銀行：",
+    "recipient_alert_pay": "收款人：",
+    "remind_later_alert_pay": "稍後提醒",
+    "pay_alert_pay": "支付"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "繼續即表示您同意合約 ${tap(@:about.termsAndConditions)}",

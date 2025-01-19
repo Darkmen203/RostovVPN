@@ -32,7 +32,15 @@
     "cancel": "İptal",
     "errorLoginTitle": "Hata",
     "errorLogin": "Yanlış kullanıcı adı veya şifre",
-    "inputLoginAndPassword": "Kullanıcı adınızı ve şifrenizi girin!"
+    "inputLoginAndPassword": "Kullanıcı adınızı ve şifrenizi girin!",
+    "title_alert_pay": "Abonelik Ödemesi",
+    "content_alert_pay": "Aboneliğiniz yakında sona erecek. Yenilemeniz gerekiyor.",
+    "pay_message_alert_pay": "Aşağıdaki bilgilerle ödeme yapın:\n",
+    "number_alert_pay": "Numara:",
+    "bank_alert_pay": "Banka:",
+    "recipient_alert_pay": "Alıcı:",
+    "remind_later_alert_pay": "Daha sonra hatırlat",
+    "pay_alert_pay": "Öde"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "devam ederek ${tap(@:about.termsAndConditions)} kabul etmiş olursunuz",

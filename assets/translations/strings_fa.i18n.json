@@ -32,7 +32,15 @@
     "cancel": "لغو",
     "errorLoginTitle": "خطا",
     "errorLogin": "نام کاربری یا رمز عبور اشتباه است",
-    "inputLoginAndPassword": "نام کاربری و رمز عبور خود را وارد کنید!"
+    "inputLoginAndPassword": "نام کاربری و رمز عبور خود را وارد کنید!",
+    "title_alert_pay": "پرداخت اشتراک",
+    "content_alert_pay": "اشتراک شما به زودی به پایان می‌رسد. لازم است آن را تمدید کنید.",
+    "pay_message_alert_pay": "با اطلاعات زیر پرداخت کنید:\n",
+    "number_alert_pay": "شماره:",
+    "bank_alert_pay": "بانک:",
+    "recipient_alert_pay": "دریافت‌کننده:",
+    "remind_later_alert_pay": "یادآوری بعداً",
+    "pay_alert_pay": "پرداخت"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "در صورت ادامه با ${tap(@:about.termsAndConditions)} موافقت می‌کنید",

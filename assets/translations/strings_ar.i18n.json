@@ -32,7 +32,15 @@
     "cancel": "يلغي",
     "errorLoginTitle": "خطأ",
     "errorLogin": "تسجيل الدخول الخاطئ أو كلمة المرور",
-    "inputLoginAndPassword": "أدخل تسجيل الدخول وكلمة المرور!"
+    "inputLoginAndPassword": "أدخل تسجيل الدخول وكلمة المرور!",
+    "title_alert_pay": "دفع الاشتراك",
+    "content_alert_pay": "الاشتراك على وشك الانتهاء. يلزم التجديد.",
+    "pay_message_alert_pay": "الدفع باستخدام التفاصيل التالية:\n",
+    "number_alert_pay": "الرقم:",
+    "bank_alert_pay": "البنك:",
+    "recipient_alert_pay": "المستلم:",
+    "remind_later_alert_pay": "تذكير لاحقًا",
+    "pay_alert_pay": "دفع"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "بمواصلة استخدامك، فإنك توافق على ${tap(@:about.termsAndConditions)}",

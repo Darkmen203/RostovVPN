@@ -8,14 +8,19 @@ class LoginState {
   final bool isLoggedIn;
   final String? subscriptionLink;
   final String? dataExpire; // Можно хранить дату строкой (ISO)
-  final bool isLoading; 
+  final String? lastCheckTime;
+  final bool isLoading;
+  final String? lastAlertTime;
 
+  
   LoginState({
     required this.username,
     required this.isLoggedIn,
     this.subscriptionLink,
     this.dataExpire,
+    this.lastCheckTime,
     this.isLoading = false,
+    this.lastAlertTime,
   });
 
     /// Для удобства сделаем copyWith
@@ -24,13 +29,17 @@ class LoginState {
     bool? isLoggedIn,
     String? subscriptionLink,
     String? dataExpire,
+    String? lastCheckTime,
     bool? isLoading,
+    bool overrideDataExpire = false, 
+    String? lastAlertTime,
   }) {
     return LoginState(
       username: username ?? this.username,
       isLoggedIn: isLoggedIn ?? this.isLoggedIn,
       subscriptionLink: subscriptionLink ?? this.subscriptionLink,
-      dataExpire: dataExpire ?? this.dataExpire,
+      dataExpire: overrideDataExpire ? dataExpire : (dataExpire ?? this.dataExpire),
+      lastCheckTime: lastCheckTime ?? this.lastCheckTime,
       isLoading: isLoading ?? this.isLoading,
     );
   }
@@ -40,6 +49,7 @@ class LoginState {
         'isLoggedIn': isLoggedIn,
         'subscriptionLink': subscriptionLink,
         'dataExpire': dataExpire,
+        'lastCheckTime': lastCheckTime,
       };
 
   factory LoginState.fromJson(Map<String, dynamic> map) => LoginState(
@@ -47,6 +57,7 @@ class LoginState {
         isLoggedIn: map['isLoggedIn'] as bool,
         subscriptionLink: map['subscriptionLink'] as String?,
         dataExpire: map['dataExpire'] as String?,
+        lastCheckTime: map['lastCheckTime'] as String?,
       );
 
   /// Преобразуем в JSON-строку

@@ -18,12 +18,14 @@ import 'package:rostov_vpn/features/login/widget/login_page.dart';
 import 'package:rostov_vpn/features/profile/notifier/profiles_update_notifier.dart';
 import 'package:rostov_vpn/features/shortcut/shortcut_wrapper.dart';
 import 'package:rostov_vpn/features/system_tray/widget/system_tray_wrapper.dart';
+import 'package:rostov_vpn/features/update_subscription/data/data_expire_alert.dart';
 import 'package:rostov_vpn/features/window/widget/window_wrapper.dart';
 import 'package:rostov_vpn/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:upgrader/upgrader.dart';
 
 bool _debugAccessibility = false;
+bool _didCheck = false;
 
 class App extends HookConsumerWidget with PresLogger {
   const App({super.key});
@@ -36,7 +38,6 @@ class App extends HookConsumerWidget with PresLogger {
     final theme = AppTheme(themeMode, locale.preferredFontFamily);
 
     final upgrader = ref.watch(upgraderProvider);
-
     ref.listen(foregroundProfilesUpdateNotifierProvider, (_, __) {});
 
     return WindowWrapper(
@@ -61,6 +62,19 @@ class App extends HookConsumerWidget with PresLogger {
                     final loginState = ref.watch(loginManagerProvider);
                     final isLoggedIn = loginState?.isLoggedIn ?? false;
 
+                    if (loginState == null) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    
+                    if (!_didCheck) {
+                      _didCheck = true;
+                      // Запускаем в microtask, чтобы не ломать текущий build
+                      Future.microtask(() {
+                        ref
+                            .read(loginManagerProvider.notifier)
+                            .checkSubscriptionExpiry();
+                      });
+                    }
                     // Если НЕ залогинен — показываем LoginPage, иначе — то, что было (child).
                     // Но надо иметь в виду, что при таком подходе GoRouter-страницы «спрячутся».
                     // Это будет работать, если логика GoRouter вам не важна ДО логина.
@@ -71,11 +85,17 @@ class App extends HookConsumerWidget with PresLogger {
                         ),
                       );
                     }
-                    child = UpgradeAlert(
-                      upgrader: upgrader,
+
+                    child = DataExpireAlert(
                       navigatorKey: router.routerDelegate.navigatorKey,
-                      child: child ?? const SizedBox(),
+                      child: UpgradeAlert(
+                        upgrader: upgrader,
+                        navigatorKey: router.routerDelegate.navigatorKey,
+                        child: child ?? const SizedBox(),
+                      ),
                     );
+
+                    // Остальная логика (AccessibilityTools и т. д.)
                     if (kDebugMode && _debugAccessibility) {
                       return AccessibilityTools(
                         checkFontOverflows: true,

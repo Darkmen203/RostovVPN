@@ -71,62 +71,6 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
     }
   }
 
-  // Future<bool> login(String username, String password) async {
-  //   // Включаем isLoading
-  //   final oldState = state;
-  //   state = (oldState == null)
-  //       ? LoginState(username: '', isLoggedIn: false, isLoading: true)
-  //       : oldState.copyWith(isLoading: true);
-
-  //   try {
-  //     final user = await _authenticateUserFromServer(username, password);
-  //     // Успех
-  //     final newState = LoginState(
-  //       username: user.username,
-  //       isLoggedIn: true,
-  //       subscriptionLink: user.subscriptionLink,
-  //       dataExpire: user.dataExpire?.toIso8601String(),
-  //     );
-  //     state = newState;
-  //     await _saveLoginStateToFile(newState);
-
-  //     // Если есть subscriptionLink => add profile
-  //     if (user.subscriptionLink != null && user.subscriptionLink!.isNotEmpty) {
-  //       final newProfile = RemoteProfileEntity(
-  //         id: const Uuid().v4(),
-  //         active: true,
-  //         name: 'my',
-  //         url: user.subscriptionLink!,
-  //         lastUpdate: DateTime.now(),
-  //       );
-  //       final failureOrSuccess = await _profileRepo.add(newProfile).run();
-  //       if (kDebugMode) {
-  //         print(
-  //           'Я тут',
-  //         );
-  //       }
-  //       if (failureOrSuccess.isLeft()) {
-  //         if (kDebugMode) {
-  //           print('Ошибка при добавлении профиля: ${failureOrSuccess.swap()}');
-  //         }
-  //         return false;
-  //       } else {
-  //         state = state?.copyWith(isLoading: false);
-  //         if (kDebugMode) {
-  //           print('Профиль добавлен');
-  //         }
-  //       }
-  //     }
-  //     state = state?.copyWith(isLoading: false);
-  //     return true;
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print('Login failed: $e');
-  //     }
-  //     state = state?.copyWith(isLoading: false);
-  //     return false;
-  //   }
-  // }
   Future<bool> login(String username, String password) async {
     // Ставим isLoading = true
     final old = state;
@@ -197,7 +141,6 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
       }
     }
     await _clearLoginStateFile();
-    
   }
 
   Future<ServerUser> _authenticateUserFromServer(
@@ -326,6 +269,118 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
       subscriptionLink: subscriptionLink,
       dataExpire: expireDate,
     );
+  }
+
+  Future<void> checkSubscriptionExpiry() async {
+    final current = state;
+    if (current == null || !current.isLoggedIn) {
+      return; // Не залогинен — не проверяем
+    }
+    // 1) Проверяем, прошло ли 24 часа с lastCheckTime
+    final now = DateTime.now();
+    DateTime? lastCheck;
+    if (current.lastCheckTime != null) {
+      lastCheck = DateTime.tryParse(current.lastCheckTime!);
+    }
+    if (lastCheck != null) {
+      final diff = now.difference(lastCheck);
+      if (diff.inHours < 24) {
+        // Не прошло ещё 24 часа с момента последней проверки
+        return;
+      }
+    }
+
+    // 2) Обновляем lastCheckTime в loginState, чтобы не проверять повторно
+    final newState = current.copyWith(
+      lastCheckTime: now.toIso8601String(),
+    );
+    state = newState;
+    await _saveLoginStateToFile(newState);
+
+    // 3) Дёргаем сервер (Strapi) за свежим data_expire
+    //    Напишем вспомогательный метод:
+    final updatedExpire =
+        await _fetchLatestDataExpireFromServer(current.username);
+    if (updatedExpire != null) {
+      // Если дата изменилась — сохраняем
+      if (updatedExpire == "null") {
+        final updatedState = state?.copyWith(
+            dataExpire: null, overrideDataExpire: true,);
+        state = updatedState;
+        if (updatedState != null) {
+          await _saveLoginStateToFile(updatedState);
+        }
+      } else if (updatedExpire != current.dataExpire) {
+        final updatedState = state?.copyWith(dataExpire: updatedExpire);
+        state = updatedState;
+        if (updatedState != null) {
+          await _saveLoginStateToFile(updatedState);
+        }
+      }
+    }
+
+    // 4) Проверяем, сколько осталось дней
+    final expiryStr = state?.dataExpire;
+    if (expiryStr == null || expiryStr.isEmpty) {
+      return; // Нет даты истечения
+    }
+    final expiryDate = DateTime.tryParse(expiryStr);
+    if (expiryDate == null) {
+      return; // Парсинг не удался
+    }
+  }
+
+  /// Пример метода, который ходит на сервер, чтобы получить новую data_expire
+  Future<String?> _fetchLatestDataExpireFromServer(String username) async {
+    try {
+      // Просто повтор используем _authenticateUserFromServer,
+      // но без сверки пароля.  Или делаем отдельный endpoint
+      // get by username
+      final url = Uri.parse(
+        'http://88.218.66.251:1337/api/vpn-users?filters[username][\$eq]=$username',
+      );
+
+      const token =
+          'cc1c7a3f7dc62520422547f76d9913ddb8daac8ff64faeb4561fa3fb3944e38bc5fb634171ddb7589e9c21b2c0d8d79581859a2470eddcbfa56817d6bb577c1ea76321ae3f08e28562be86b589b2f1c92d10ad7f1ddef285de669076e330815425b4f74b1d195affe280b3d92a2d4430bbcef8ff3c3d4588f2361b1a94910ee8'; // как раньше
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data is Map<String, dynamic>) {
+          final dataField = data["data"];
+          if (dataField is List && dataField.isNotEmpty) {
+            final firstObj = dataField[0];
+            final attr = firstObj["attributes"] as Map<String, dynamic>?;
+            if (attr != null) {
+              final dataExpireStr = attr["data_expire"] as String?;
+              if (dataExpireStr == null) {
+                return "null";
+              }
+              return dataExpireStr; // Может быть null
+            }
+          }
+        }
+      }
+      // Иначе null
+      return null;
+    } catch (e) {
+      // Игнорировать или логировать
+      return null;
+    }
+  }
+
+  Future<void> setLastAlertTime(DateTime newTime) async {
+    final s = state;
+    if (s == null) return;
+
+    final updated = s.copyWith(lastAlertTime: newTime.toIso8601String());
+    state = updated;
+    await _saveLoginStateToFile(updated);
   }
 }
 

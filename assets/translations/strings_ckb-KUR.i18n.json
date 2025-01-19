@@ -32,7 +32,15 @@
     "cancel": "بەتالکە",
     "errorLoginTitle": "هەڵە",
     "errorLogin": "ناوی تێکهوتن یان وشەی نهێنی هەڵەیە",
-    "inputLoginAndPassword": "ناوی بەکارهێنەر و وشەی نهێنی بنووس!"
+    "inputLoginAndPassword": "ناوی بەکارهێنەر و وشەی نهێنی بنووس!",
+    "title_alert_pay": "پارەدان بۆ ئابوونە",
+    "content_alert_pay": "ئابوونەکەت نزیکەیە کۆتایی بێت. پێویستە نوێی بکەیتەوە.",
+    "pay_message_alert_pay": "پارە بدە بەم زانیارییانە:\n",
+    "number_alert_pay": "ژمارە:",
+    "bank_alert_pay": "بانک:",
+    "recipient_alert_pay": "وەرگر:",
+    "remind_later_alert_pay": "بیرم خەرەکە دواتر",
+    "pay_alert_pay": "پارەدان"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "بە بەردەوام بوون تۆ ڕازیت لەگەڵ ${tap(@:about.termsAndConditions)}",

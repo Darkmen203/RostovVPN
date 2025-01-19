@@ -32,7 +32,15 @@
     "cancel": "Cancelar",
     "errorLoginTitle": "Error",
     "errorLogin": "Usuario o contraseña incorrectos",
-    "inputLoginAndPassword": "¡Ingrese su nombre de usuario y contraseña!"
+    "inputLoginAndPassword": "¡Ingrese su nombre de usuario y contraseña!",
+    "title_alert_pay": "Pago de suscripción",
+    "content_alert_pay": "La suscripción está a punto de expirar. Es necesario renovarla.",
+    "pay_message_alert_pay": "Pague con los siguientes detalles:\n",
+    "number_alert_pay": "Número:",
+    "bank_alert_pay": "Banco:",
+    "recipient_alert_pay": "Beneficiario:",
+    "remind_later_alert_pay": "Recordar más tarde",
+    "pay_alert_pay": "Pagar"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "al continuar, aceptas ${tap(@:about.termsAndConditions)}",

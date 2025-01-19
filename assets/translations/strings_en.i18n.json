@@ -32,7 +32,15 @@
     "cancel": "Cancel",
     "errorLoginTitle": "Error",
     "errorLogin": "Wrong login or password",
-    "inputLoginAndPassword": "Enter the login and password!"
+    "inputLoginAndPassword": "Enter the login and password!",
+    "title_alert_pay": "Payment of subscriptions",
+    "content_alert_pay": "The subscription will end soon.It is necessary to extend.",
+    "pay_message_alert_pay": "Pay on the details:\n",
+    "number_alert_pay": "Number:",
+    "bank_alert_pay": "Bank:",
+    "recipient_alert_pay": "Recipient:",
+    "remind_later_alert_pay": "Remind you later",
+    "pay_alert_pay": "Pay"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "By Continuing You Agree With ${tap(@:about.termsAndConditions)}",

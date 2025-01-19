@@ -32,7 +32,15 @@
     "cancel": "取消",
     "errorLoginTitle": "错误",
     "errorLogin": "用户名或密码错误",
-    "inputLoginAndPassword": "输入用户名和密码！"
+    "inputLoginAndPassword": "输入用户名和密码！",
+    "title_alert_pay": "订阅支付",
+    "content_alert_pay": "订阅即将到期。需要续订。",
+    "pay_message_alert_pay": "请使用以下信息支付：\n",
+    "number_alert_pay": "号码：",
+    "bank_alert_pay": "银行：",
+    "recipient_alert_pay": "收款人：",
+    "remind_later_alert_pay": "稍后提醒",
+    "pay_alert_pay": "支付"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "继续即表示您同意 ${tap(@:about.termsAndConditions)}",

@@ -32,7 +32,15 @@
     "cancel": "Batal",
     "errorLoginTitle": "Kesalahan",
     "errorLogin": "Login atau kata sandi salah",
-    "inputLoginAndPassword": "Masukkan nama pengguna dan kata sandi Anda!"
+    "inputLoginAndPassword": "Masukkan nama pengguna dan kata sandi Anda!",
+    "title_alert_pay": "Pembayaran Langganan",
+    "content_alert_pay": "Langganan Anda akan segera berakhir. Perlu diperbarui.",
+    "pay_message_alert_pay": "Bayar dengan detail berikut:\n",
+    "number_alert_pay": "Nomor:",
+    "bank_alert_pay": "Bank:",
+    "recipient_alert_pay": "Penerima:",
+    "remind_later_alert_pay": "Ingatkan nanti",
+    "pay_alert_pay": "Bayar"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "lanjut berarti setuju dengan ${tap(@:about.termsAndConditions)}",

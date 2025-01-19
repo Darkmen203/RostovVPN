@@ -32,7 +32,15 @@
     "cancel": "Отмена",
     "errorLoginTitle": "Ошибка",
     "errorLogin": "Неверный логин или пароль",
-    "inputLoginAndPassword": "Введите логин и пароль!"
+    "inputLoginAndPassword": "Введите логин и пароль!",
+    "title_alert_pay": "Оплата подписки",
+    "content_alert_pay": "Подписка скоро закончится. Необходимо продлить.",
+    "pay_message_alert_pay": "Оплатите по реквизитам:\n",
+    "number_alert_pay": "Номер:",
+    "bank_alert_pay": "Банк:",
+    "recipient_alert_pay": "Получатель:",
+    "remind_later_alert_pay": "Напомнить позже",
+    "pay_alert_pay": "Оплатить"
   },
   "intro": {
     "termsAndPolicyCaution(rich)": "Продолжая, Вы соглашаетесь с ${tap(@:about.termsAndConditions)}",
