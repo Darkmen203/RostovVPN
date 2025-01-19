@@ -1,7 +1,9 @@
 // lib/features/update_subscription/data/data_expire_alert.dart
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/login/login_manager_provider.dart';
@@ -74,7 +76,7 @@ class _DataExpireAlertState extends ConsumerState<DataExpireAlert> {
     if (lastAlertTime != null) {
       lastCheck = DateTime.tryParse(lastAlertTime);
     }
-    if (lastCheck != null  && now.difference(lastCheck).inHours < 24) {
+    if (lastCheck != null && now.difference(lastCheck).inHours < 24) {
       return;
     }
 
@@ -99,7 +101,6 @@ class _DataExpireAlertState extends ConsumerState<DataExpireAlert> {
   }
 
   Widget _buildDialog(int daysLeft, BuildContext dialogContext) {
-
     final t = ref.watch(translationsProvider);
     return AlertDialog(
       title: Text(t.general.title_alert_pay),
@@ -109,10 +110,38 @@ class _DataExpireAlertState extends ConsumerState<DataExpireAlert> {
         children: [
           Text(t.general.content_alert_pay),
           const SizedBox(height: 8),
-          Text('${t.general.pay_message_alert_pay}'
-              '${t.general.number_alert_pay} +7 (908) 185-18-07\n'
-              '${t.general.bank_alert_pay} Альфа-банк\n'
-              '${t.general.recipient_alert_pay} Дмитрий П.'),
+          RichText(
+            text: TextSpan(
+              style: Theme.of(dialogContext).textTheme.bodyMedium,
+              children: [
+                TextSpan(text: t.general.pay_message_alert_pay),
+                TextSpan(
+                  text: '${t.general.number_alert_pay} +7 (996) 613-08-01\n',
+                  style: const TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      // Копируем в буфер
+                      await Clipboard.setData(
+                        const ClipboardData(text: '+7 (996) 613-08-01'),
+                      );
+                      // Покажем SnackBar «Скопировано»
+                      ScaffoldMessenger.of(dialogContext).showSnackBar(
+                        const SnackBar(content: Text('Номер скопирован')),
+                      );
+                    },
+                ),
+                TextSpan(text: '${t.general.bank_alert_pay} Альфа-банк\n'),
+                TextSpan(text: '${t.general.recipient_alert_pay} Дмитрий П.'),
+              ],
+            ),
+          ),
+          // Text('${t.general.pay_message_alert_pay}'
+          //     '${t.general.number_alert_pay} +7 (908) 185-18-07\n'
+          //     '${t.general.bank_alert_pay} Альфа-банк\n'
+          //     '${t.general.recipient_alert_pay} Дмитрий П.'),
         ],
       ),
       actions: [

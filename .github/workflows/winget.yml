@@ -1,17 +1,17 @@
-name: Publish to WinGet
-on:
-  release:
-    types: [released]
+# name: Publish to WinGet
+# on:
+#   release:
+#     types: [released]
 
-env:
-    IDENTIFIER: ${{ endsWith(github.event.release.tag_name, 'dev') && 'RostovVPN.Next.Beta' || 'RostovVPN.Next' }}
+# env:
+#     IDENTIFIER: ${{ endsWith(github.event.release.tag_name, 'dev') && 'RostovVPN.Beta' || 'RostovVPN' }}
 
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: vedantmgoyal9/winget-releaser@2
-        with:
-          identifier: ${{ env.IDENTIFIER }}
-          version: ${{ github.event.release.tag_name }}
-          token: ${{ secrets.WINGET_TOKEN }}
+# jobs:
+#   publish:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: vedantmgoyal9/winget-releaser@2
+#         with:
+#           identifier: ${{ env.IDENTIFIER }}
+#           version: ${{ github.event.release.tag_name }}
+#           token: ${{ secrets.WINGET_TOKEN }}

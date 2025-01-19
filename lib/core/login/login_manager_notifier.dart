@@ -305,7 +305,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
       // Если дата изменилась — сохраняем
       if (updatedExpire == "null") {
         final updatedState = state?.copyWith(
-            dataExpire: null, overrideDataExpire: true,);
+            dataExpire: "null", overrideDataExpire: true,);
         state = updatedState;
         if (updatedState != null) {
           await _saveLoginStateToFile(updatedState);
