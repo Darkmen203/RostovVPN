@@ -1,7 +1,15 @@
 # Changelog
 
 
-## 2.6.6 (2025-01-19)
+## 2.6.7 (2025-01-19)
+
+#### Other
+
+* Fix link on release_message. 
+
+
+
+## v2.6.6 (2025-01-19)
 
 #### Other
 
