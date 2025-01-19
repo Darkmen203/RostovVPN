@@ -314,7 +314,7 @@ jobs:
       - name: prepare_release_message
         run: |
           pip install gitchangelog pystache mustache markdown
-          prelease=$(curl --silent "https://api.github.com/repos/Darkmen203/RostovVPN/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+          prelease=$(curl --silent "https://api.github.com/repos/Darkmen203/RostovVPN/releases/latest" --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | grep -Po '"tag_name": "\K.*?(?=")')
           current="${{ github.ref_name }}"
           sed 's|RELEASE_TAG|${{ env.TAG_NAME }}|g' ./.github/release_message.md > release.md
           echo -e "\n\n<details markdown=1><summary>All changes from $current to the latest commit:</summary>\n\n">>release.md
