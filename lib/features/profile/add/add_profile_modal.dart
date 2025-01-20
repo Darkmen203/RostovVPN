@@ -276,7 +276,7 @@ class AddProfileModal extends HookConsumerWidget {
     if (region == "cn") {
       await profile.add("#profile-title: RostovVPN WARP\nwarp://p1@auto#National&&detour=warp://p2@auto#WoW"); //
     } else {
-      await profile.add("https://raw.githubusercontent.com/hiddify/hiddify-next/main/test.configs/warp"); //
+      await profile.add("https://raw.githubusercontent.com/Darkmen203/RostovVPN/main/test.configs/warp"); //
     }
   }
 }
