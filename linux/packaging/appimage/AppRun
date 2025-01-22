@@ -22,9 +22,9 @@ OPTIND=1
 # Resetting OPTIND is necessary if getopts was used previously in the script.
 # It is a good idea to make OPTIND local if you process options in a function.
 
-# if no arg is provided, execute rostovvpn app
+# if no arg is provided, execute rostovVPN app
 if [[ $# == 0 ]];then 
-    exec ./rostovvpn
+    exec ./RostovVPN
 else
 
 # processing arguments
