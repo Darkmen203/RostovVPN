@@ -1,7 +1,27 @@
 # Changelog
 
 
-## 2.7.1 (2025-01-22)
+## 2.7.2 (2025-01-23)
+
+#### Other
+
+* Fix names env. 
+
+* Fix loading on login page and makefile added new env. 
+
+* Change env. 
+
+* Fix name on linux icon. 
+
+* Replace position on icon. 
+
+* Added token and api url in env. 
+
+* Added icon for linux. 
+
+
+
+## v2.7.1 (2025-01-22)
 
 #### Other
 
