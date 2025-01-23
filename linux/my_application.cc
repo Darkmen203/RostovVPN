@@ -14,7 +14,7 @@ struct _MyApplication
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
-#define ICON_PATH "./rostovvpn.png"
+#define ICON_PATH "./rostov_vpn.png"
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication *application)
