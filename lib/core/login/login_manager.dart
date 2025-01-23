@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:rostov_vpn/core/login/login_state.dart';
 import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
 import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
@@ -59,6 +60,7 @@ class LoginManager {
   /// Инициализация при старте приложения
   Future<void> init() async {
     _cachedState = await _loadLoginStateFromFile();
+    await dotenv.load();
   }
 
   /// Локальный файл (DocumentsDirectory/loginState.json)
@@ -178,12 +180,11 @@ class LoginManager {
     String username,
     String plainPassword,
   ) async {
+    final apiUrl = dotenv.env['API_URL']; 
     final url = Uri.parse(
-      'http://88.218.66.251:1337/api/vpn-users?filters[username][\$eq]=$username',
+      '$apiUrl?filters[username][\$eq]=$username',
     );
-
-    const token =
-        'cc1c7a3f7dc62520422547f76d9913ddb8daac8ff64faeb4561fa3fb3944e38bc5fb634171ddb7589e9c21b2c0d8d79581859a2470eddcbfa56817d6bb577c1ea76321ae3f08e28562be86b589b2f1c92d10ad7f1ddef285de669076e330815425b4f74b1d195affe280b3d92a2d4430bbcef8ff3c3d4588f2361b1a94910ee8';
+    final token = dotenv.env['API_TOKEN'];
 
     http.Response response;
     try {

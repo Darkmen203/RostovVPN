@@ -46,8 +46,14 @@ jobs:
       - name: Install SQLite
         run: sudo apt-get install sqlite3 libsqlite3-dev
       - name: Prepare
+        env:
+            API_TOKEN: ${{ secrets.API_TOKEN }}
+            API_URL: ${{ secrets.API_URL }}
         run: make linux-prepare
       - name: Test
+        env:
+            API_TOKEN: ${{ secrets.API_TOKEN }}
+            API_URL: ${{ secrets.API_URL }}
         run: flutter test
 
       - name: make draftBuildCode
@@ -181,6 +187,8 @@ jobs:
           tree
       - name: Build ${{ matrix.platform }}
         env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          API_URL: ${{ secrets.API_URL }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
           make ${{ matrix.platform }}-release
