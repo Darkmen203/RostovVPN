@@ -5,6 +5,8 @@ enum Environment {
   dev;
 
   static const sentryDSN = String.fromEnvironment("sentry_dsn");
+  static const apiUrl = String.fromEnvironment("API_URL");
+  static const apiToken = String.fromEnvironment("API_TOKEN");
 }
 
 enum Release {
