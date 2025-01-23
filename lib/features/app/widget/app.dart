@@ -62,19 +62,6 @@ class App extends HookConsumerWidget with PresLogger {
                     final loginState = ref.watch(loginManagerProvider);
                     final isLoggedIn = loginState?.isLoggedIn ?? false;
 
-                    if (loginState == null) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    
-                    if (!_didCheck) {
-                      _didCheck = true;
-                      // Запускаем в microtask, чтобы не ломать текущий build
-                      Future.microtask(() {
-                        ref
-                            .read(loginManagerProvider.notifier)
-                            .checkSubscriptionExpiry();
-                      });
-                    }
                     // Если НЕ залогинен — показываем LoginPage, иначе — то, что было (child).
                     // Но надо иметь в виду, что при таком подходе GoRouter-страницы «спрячутся».
                     // Это будет работать, если логика GoRouter вам не важна ДО логина.
@@ -85,7 +72,19 @@ class App extends HookConsumerWidget with PresLogger {
                         ),
                       );
                     }
+                    if (loginState == null) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
+                    if (!_didCheck) {
+                      _didCheck = true;
+                      // Запускаем в microtask, чтобы не ломать текущий build
+                      Future.microtask(() {
+                        ref
+                            .read(loginManagerProvider.notifier)
+                            .checkSubscriptionExpiry();
+                      });
+                    }
                     child = DataExpireAlert(
                       navigatorKey: router.routerDelegate.navigatorKey,
                       child: UpgradeAlert(
