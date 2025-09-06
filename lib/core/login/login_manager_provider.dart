@@ -9,5 +9,6 @@ final loginManagerProvider =
   final notifier = LoginManagerNotifier(profileRepo);
   // при желании вызвать init
   notifier.init();
+  Future.microtask(() => notifier.refreshOnStartup());
   return notifier;
 });

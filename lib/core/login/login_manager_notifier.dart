@@ -80,7 +80,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
         : old.copyWith(isLoading: true);
 
     try {
-      final user = await _authenticateUserFromServer(username, password);
+      final user = await _authenticateWithRetry(username, password);
 
       // Пока что не сбрасываем isLoading, пусть оно остаётся true,
       // пока мы не закончим логику добавления профиля.
@@ -272,6 +272,68 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
     );
   }
 
+  /// Refreshes subscriptions and dataExpire on app startup.
+  /// - Always fetches latest data_expire from server and stores it in LoginState
+  /// - Tries to update remote subscription profile content (profile named 'my')
+  Future<void> refreshOnStartup() async {
+    final current = state;
+    if (current == null || !current.isLoggedIn) return;
+
+    // Update dataExpire regardless of lastCheckTime
+    try {
+      final updatedExpire =
+          await _fetchLatestDataExpireFromServer(current.username);
+      if (updatedExpire != null) {
+        final updatedState = current.copyWith(
+          dataExpire: updatedExpire == "null" ? "null" : updatedExpire,
+          overrideDataExpire: true,
+          lastCheckTime: DateTime.now().toIso8601String(),
+        );
+        state = updatedState;
+        await _saveLoginStateToFile(updatedState);
+      }
+    } catch (_) {}
+
+    // Update subscription profile if exists
+    try {
+      final profile = await _profileRepo.getByName('my');
+      if (profile is RemoteProfileEntity) {
+        await _profileRepo.updateSubscription(profile).run();
+      }
+    } catch (_) {}
+  }
+
+  Future<ServerUser> _authenticateWithRetry(
+    String username,
+    String password,
+  ) async {
+    final delays = <Duration>[
+      const Duration(milliseconds: 400),
+      const Duration(seconds: 1),
+      const Duration(seconds: 2),
+    ];
+    int attempt = 0;
+    while (true) {
+      attempt++;
+      try {
+        if (kDebugMode) {
+          print('[LOGIN] authenticate attempt ' + attempt.toString() + ' for ' + username);
+        }
+        final user = await _authenticateUserFromServer(username, password);
+        return user;
+      } on LoginException catch (e) {
+        if (e.type == LoginExceptionType.invalidCredentials ||
+            e.type == LoginExceptionType.unauthorized ||
+            e.type == LoginExceptionType.userNotFound) {
+          rethrow;
+        }
+        if (attempt >= 3) rethrow;
+        final delay = delays[(attempt - 1).clamp(0, delays.length - 1)];
+        await Future.delayed(delay);
+      }
+    }
+  }
+
   Future<void> checkSubscriptionExpiry() async {
     final current = state;
     if (current == null || !current.isLoggedIn) {
@@ -345,12 +407,68 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
       );
       const token = Environment.apiToken;
 
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ).timeout(const Duration(seconds: 10));
+      http.Response response;
+      int attempt = 0;
+      final delays = <Duration>[
+        const Duration(milliseconds: 400),
+        const Duration(seconds: 1),
+        const Duration(seconds: 2),
+      ];
+      while (true) {
+        attempt++;
+        try {
+          if (kDebugMode) {
+            print('[HTTP] dataExpire GET attempt ' + attempt.toString() + ' ' + url.toString());
+          }
+          response = await http
+              .get(
+                url,
+                headers: {
+                  'Authorization': 'Bearer $token',
+                },
+              )
+              .timeout(const Duration(seconds: 10));
+          if (kDebugMode) {
+            print('[HTTP] dataExpire <= ' + response.statusCode.toString());
+          }
+        } on SocketException catch (_) {
+          if (attempt >= 3) return null;
+          await Future.delayed(delays[(attempt - 1).clamp(0, delays.length - 1)]);
+          continue;
+        } on http.ClientException catch (_) {
+          if (attempt >= 3) return null;
+          await Future.delayed(delays[(attempt - 1).clamp(0, delays.length - 1)]);
+          continue;
+        } on TimeoutException catch (_) {
+          if (attempt >= 3) return null;
+          await Future.delayed(delays[(attempt - 1).clamp(0, delays.length - 1)]);
+          continue;
+        }
+        if (response.statusCode < 400) {
+          break;
+        }
+        if (response.statusCode == 401 ||
+            response.statusCode == 403 ||
+            response.statusCode == 404 ||
+            response.statusCode == 400) {
+          break;
+        }
+        if (attempt >= 3) {
+          break;
+        }
+        // 429: respect Retry-After if present
+        Duration delay = delays[(attempt - 1).clamp(0, delays.length - 1)];
+        if (response.statusCode == 429) {
+          final ra = response.headers['retry-after'];
+          final s = ra != null ? int.tryParse(ra) : null;
+          if (s != null) delay = Duration(seconds: s);
+        }
+        await Future.delayed(delay);
+      }
+      // If request didn't succeed with 200, proceed to return null below
+      if (response.statusCode != 200) {
+        return null;
+      }
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

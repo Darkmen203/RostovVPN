@@ -24,7 +24,7 @@ env:
   TARGET_NAME_rpm: "RostovVPN-rpm-x64"
   TARGET_NAME_apk: "RostovVPN-Android"
   TARGET_NAME_aab: "RostovVPN-Android"
-  #TARGET_NAME_exe: "RostovVPN-Windows-x64"
+  TARGET_NAME_exe: "RostovVPN-Windows-x64"
   TARGET_NAME_dmg: "RostovVPN-MacOS"
   TARGET_NAME_pkg: "RostovVPN-MacOS-Installer"
   TARGET_NAME_ipa: "RostovVPN-iOS"
@@ -77,7 +77,7 @@ jobs:
             targets: aab
 
           - platform: windows
-            os: windows-2019
+            os: windows-2022
             aarch: amd64
             targets: exe,msix
 
