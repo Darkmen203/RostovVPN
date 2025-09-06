@@ -1,7 +1,7 @@
 display_name: RostovVPN
 publisher_display_name: RostovVPN
 identity_name: RostovVPN.RostovVPNNext
-msix_version: 2.7.5.0
+msix_version: 2.7.4.0
 logo_path: windows\runner\resources\app_icon.ico
 capabilities: internetClient, internetClientServer, privateNetworkClientServer
 languages: en-us, zh-cn, zh-tw, tr-tr,fa-ir,ru-ru,pt-br,es-es

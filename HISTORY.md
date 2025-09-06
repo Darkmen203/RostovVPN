@@ -1,6 +1,16 @@
 # Changelog
 
 
+## 2.7.4 (2025-09-06)
+
+#### Other
+
+* Fix focus colors. 
+
+* Added focus on button, add retry for login and auto update subs, update build windows version. 
+
+
+
 ## v2.7.3 (2025-04-07)
 
 #### Other
