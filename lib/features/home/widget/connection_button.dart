@@ -256,8 +256,8 @@ class _ConnectionButton extends StatelessWidget {
                   shape: const CircleBorder(),
                   color: const Color.fromARGB(30, 204, 204, 204),
                   child: InkWell(
-                    hoverColor: buttonColor.withOpacity(0.10),
-                    focusColor: buttonColor.withOpacity(0.10),
+                    hoverColor: const Color.fromARGB(30, 63, 63, 63),
+                    focusColor: const Color.fromARGB(30, 63, 63, 63),
                     onTap: onTap,
                     child: TweenAnimationBuilder(
                       tween: ColorTween(end: buttonColor),

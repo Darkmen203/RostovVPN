@@ -136,7 +136,7 @@ Future<void> lazyBootstrap(
     await _safeInit(
       "system tray",
       () => container.read(systemTrayNotifierProvider.future),
-      timeout: 1000,
+      timeout: 5000,
     );
   }
 
