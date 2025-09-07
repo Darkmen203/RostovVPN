@@ -234,14 +234,17 @@ class _ConnectionButton extends StatelessWidget {
               _GlowCircle(color: buttonColor, delay: 1.seconds),
             ],
             // 2) Основная кнопка
-            Semantics(
-              button: true,
-              enabled: enabled,
-              label: label,
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
+            FocusableActionDetector(
+              autofocus: false,
+              onShowFocusHighlight: (_) {},
+              child: Semantics(
+                button: true,
+                enabled: enabled,
+                label: label,
+                child: Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                   // boxShadow: [
                   //   BoxShadow(
                   //     blurRadius: 16,
@@ -256,9 +259,11 @@ class _ConnectionButton extends StatelessWidget {
                   shape: const CircleBorder(),
                   color: const Color.fromARGB(30, 204, 204, 204),
                   child: InkWell(
-                    hoverColor: const Color.fromARGB(30, 63, 63, 63),
-                    focusColor: const Color.fromARGB(30, 63, 63, 63),
+                    canRequestFocus: true,
+                    hoverColor: const Color.fromARGB(100, 255, 255, 255),
+                    focusColor: const Color.fromARGB(100, 255, 255, 255),
                     onTap: onTap,
+                    autofocus: true,
                     child: TweenAnimationBuilder(
                       tween: ColorTween(end: buttonColor),
                       duration: const Duration(milliseconds: 250),
@@ -278,7 +283,7 @@ class _ConnectionButton extends StatelessWidget {
               )
                   .animate(target: enabled ? 0 : 1)
                   .scaleXY(end: .88, curve: Curves.easeIn),
-            ),
+            )),
           ],
         ),
         const Gap(16),
