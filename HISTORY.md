@@ -1,7 +1,31 @@
 # Changelog
 
 
-## 2.7.42 (2025-09-07)
+## 2.7.43 (2025-09-07)
+
+#### Other
+
+* Fix focus and hover effect and added autofocus. 
+
+* Merge branch 'main' of github.com:Darkmen203/RostovVPN libcore merge. 
+
+* Merge pull request #2 from Darkmen203/dependabot/submodules/libcore-23d35ae. 
+  _build(deps): bump libcore from `f993a57` to `23d35ae`_
+
+* Build(deps): bump libcore from `f993a57` to `23d35ae` 
+  _Bumps [libcore](https://github.com/Darkmen203/rostovvpn-core) from `f993a57` to `23d35ae`.
+- [Release notes](https://github.com/Darkmen203/rostovvpn-core/releases)
+- [Commits](https://github.com/Darkmen203/rostovvpn-core/compare/f993a57755c37e08b02042037cbbf508c66c51f9...23d35ae475ceb6528bf90dc6d626903edfd492e4)
+
+---
+updated-dependencies:
+- dependency-name: libcore
+  dependency-type: direct:production
+..._
+
+
+
+## v2.7.42 (2025-09-07)
 
 #### Other
 
