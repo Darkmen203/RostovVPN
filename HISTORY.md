@@ -1,7 +1,15 @@
 # Changelog
 
 
-## 2.7.43 (2025-09-07)
+## 2.7.44 (2025-09-07)
+
+#### Other
+
+* Fix build setup for windows. 
+
+
+
+## v2.7.43 (2025-09-07)
 
 #### Other
 
