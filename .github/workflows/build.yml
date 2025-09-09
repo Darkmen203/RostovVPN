@@ -154,6 +154,13 @@ jobs:
         run: |
           make ${{ matrix.platform }}-install-dependencies
 
+      - name: Install Inno Setup (for EXE maker)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          choco install innosetup --yes
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /? | Out-Null
+          Write-Host "Inno Setup installed."
 
       - name: Setup Android Signing Properties
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'android') }}
