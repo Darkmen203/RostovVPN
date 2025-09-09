@@ -81,8 +81,8 @@ protos:
 	protoc --dart_out=grpc:lib/singbox/generated --proto_path=libcore/protos libcore/protos/*.proto
 
 macos-install-dependencies:
-    brew install create-dmg tree 
-    npm install -g appdmg
+	brew install create-dmg tree 
+	npm install -g appdmg
 	dart pub global activate flutter_distributor
 
 ios-install-dependencies: 
@@ -102,9 +102,9 @@ ios-install-dependencies:
 		PKG_CONFIG_PATH=$(brew --prefix openssl@1.1)/lib/pkgconfig rvm install 2.7.5; \
 		sudo gem install cocoapods -V; \
 	fi
-    brew install create-dmg tree 
-    npm install -g appdmg
-    
+	brew install create-dmg tree 
+	npm install -g appdmg
+	
 	dart pub global activate flutter_distributor
 	
 
@@ -134,7 +134,7 @@ linux-install-dependencies:
 	chmod +x appimagetool
 	sudo mv appimagetool /usr/local/bin/
 
-    dart pub global activate --source git https://github.com/Darkmen203/flutter_distributor --git-path packages/flutter_distributor
+	dart pub global activate --source git  https://github.com/Darkmen203/flutter_distributor --git-path packages/flutter_distributor
 
 windows-install-dependencies:
 	dart pub global activate flutter_distributor
@@ -229,5 +229,3 @@ ios-temp-prepare:
 	flutter build ios-framework
 	cd ios
 	pod install
-	
-
