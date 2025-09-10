@@ -4,12 +4,33 @@ New-Item -ItemType Directory -Force -Name "out"
 # windows setup (robust name matching)
 # Try to find installer exe with flexible pattern across flutter_distributor versions
 $exeCandidates = Get-ChildItem -Recurse -File -Path "dist" -Include *.exe -ErrorAction SilentlyContinue
+
+function Pick-Installer([System.IO.FileInfo[]]$cands) {
+  # 1) из windows-setup_exe, не CLI
+  $exe = $cands |
+    Where-Object { $_.FullName -match 'windows-setup_exe' -and $_.Name -notmatch '(?i)cli' } |
+    Sort-Object Length -Descending | Select-Object -First 1
+  if ($exe) { return $exe }
+
+  # 2) любые setup/install/installer, не CLI
+  $exe = $cands |
+    Where-Object { $_.Name -match '(?i)(setup|install|installer).*\.exe$' -and $_.Name -notmatch '(?i)cli' } |
+    Sort-Object Length -Descending | Select-Object -First 1
+  if ($exe) { return $exe }
+
+  # 3) иначе — просто самый большой exe
+  return ($cands | Sort-Object Length -Descending | Select-Object -First 1)
+}
+
 if ($exeCandidates) {
-  $preferred = $exeCandidates | Where-Object { $_.Name -match '(?i)(setup|install|windows).*x64.*\.exe$' }
-  if (-not $preferred) { $preferred = $exeCandidates }
-  $exe = $preferred | Select-Object -First 1
-  Write-Host "Found Windows installer:" $exe.FullName
-  Copy-Item $exe.FullName -Destination "out\RostovVPN-Windows-Setup-x64.exe" -Force -ErrorAction SilentlyContinue
+  $installer = Pick-Installer $exeCandidates
+
+  if ($installer -and $installer.Length -ge 30MB) {
+    Write-Host "Found Windows installer:" $installer.FullName
+    Copy-Item $installer.FullName -Destination "out\RostovVPN-Windows-Setup-x64.exe" -Force
+  } else {
+    Write-Warning "Installer missing or too small (<30MB). Check the previous step that builds/fallbacks the installer."
+  }
 } else {
   Write-Host "No .exe installer found under dist/"
 }
