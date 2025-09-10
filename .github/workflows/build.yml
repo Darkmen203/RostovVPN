@@ -210,27 +210,30 @@ jobs:
           $ErrorActionPreference = "Stop"
 
           $releaseDir = "build\windows\x64\runner\Release"
+          if (-not (Test-Path $releaseDir)) { throw "Release dir not found: $releaseDir" }
+
+          # Абсолютный путь для ISCC
+          $releaseDirAbs = (Resolve-Path $releaseDir).ProviderPath
+          Write-Host "Resolved Release dir: $releaseDirAbs"
+          $fileCount = (Get-ChildItem -Path $releaseDirAbs -Recurse -File | Measure-Object).Count
+          Write-Host "Files under Release: $fileCount"
 
           function Get-ExeCandidates {
             Get-ChildItem -Recurse -File -Path "dist" -Include *.exe -ErrorAction SilentlyContinue
           }
 
           function Pick-Installer([System.IO.FileInfo[]]$cands) {
-            # 1) наш fallback-имя
             $exe = $cands | Where-Object { $_.Name -eq 'RostovVPN-Windows-Setup-x64.exe' } | Select-Object -First 1
             if ($exe) { return $exe }
 
-            # 2) то, что лежит в папке windows-setup_exe (целимся НЕ в CLI)
             $exe = $cands | Where-Object { $_.FullName -match 'windows-setup_exe' -and $_.Name -notmatch '(?i)cli' } |
-                           Sort-Object Length -Descending | Select-Object -First 1
+                          Sort-Object Length -Descending | Select-Object -First 1
             if ($exe) { return $exe }
 
-            # 3) любые "setup/install/installer" exe (но не CLI)
             $exe = $cands | Where-Object { $_.Name -match '(?i)(setup|install|installer).*\.exe$' -and $_.Name -notmatch '(?i)cli' } |
-                           Sort-Object Length -Descending | Select-Object -First 1
+                          Sort-Object Length -Descending | Select-Object -First 1
             if ($exe) { return $exe }
 
-            # 4) иначе просто самый большой exe
             return ($cands | Sort-Object Length -Descending | Select-Object -First 1)
           }
 
@@ -239,13 +242,10 @@ jobs:
           if ($exe) { Write-Host ("Candidate EXE: {0} ({1} MB)" -f $exe.FullName, [math]::Round($exe.Length/1MB,1)) }
           else { Write-Warning "No .exe found under dist/" }
 
-          # Требуем, чтобы setup-EXE был ≥ 30 MB
           $needFallback = $true
           if ($exe -and $exe.Length -ge 30MB) { $needFallback = $false }
 
           if ($needFallback) {
-            if (-not (Test-Path $releaseDir)) { throw "Release dir not found: $releaseDir" }
-
             $issPath = Join-Path $env:RUNNER_TEMP "RostovVPN_fallback.iss"
             $issLines = @(
               '[Setup]'
@@ -266,10 +266,10 @@ jobs:
             $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
             if (-not (Test-Path $iscc)) { throw "ISCC.exe not found at $iscc" }
 
-            & $iscc "/DSourceDir=$releaseDir" "/Odist" $issPath
+            # ВАЖНО: Абсолютный путь с кавычками
+            & $iscc "/DSourceDir=$releaseDirAbs" "/Odist" $issPath
             if ($LASTEXITCODE -ne 0) { throw "ISCC.exe failed with exit code $LASTEXITCODE" }
 
-            # Повторно ищем уже готовый инсталлятор
             $exe = Pick-Installer (Get-ExeCandidates)
             if (-not $exe -or $exe.Length -lt 30MB) {
               throw ("Installer is still too small: {0} bytes" -f ($exe?.Length))
