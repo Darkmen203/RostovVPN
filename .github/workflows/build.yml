@@ -203,6 +203,53 @@ jobs:
         run: |
           make ${{ matrix.platform }}-release
 
+      - name: Ensure non-empty Windows installer (fallback via Inno if needed)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          # Проверяем, что выдал flutter_distributor
+          $distExe = Get-ChildItem -Recurse -File dist -Include *.exe -ErrorAction SilentlyContinue |
+                     Sort-Object Length -Descending | Select-Object -First 1
+          if ($distExe) {
+            Write-Host ("Found dist EXE: {0} -> {1} bytes" -f $distExe.FullName, $distExe.Length)
+          } else {
+            Write-Warning "No .exe found under dist"
+          }
+
+          # Если .exe нет или он слишком мал — собираем установщик напрямую из build\windows\x64\runner\Release
+          if (-not $distExe -or $distExe.Length -lt 100KB) {
+            $releaseDir = "build\windows\x64\runner\Release"
+            if (-not (Test-Path $releaseDir)) { throw "Release dir not found: $releaseDir" }
+
+            $issPath = Join-Path $env:RUNNER_TEMP "RostovVPN_fallback.iss"
+            $issLines = @(
+              '[Setup]'
+              'AppName=RostovVPN'
+              "AppVersion=$env:TAG_NAME"
+              'DefaultDirName={autopf}\RostovVPN'
+              'OutputBaseFilename=RostovVPN-Windows-Setup-x64'
+              'Compression=lzma'
+              'SolidCompression=yes'
+              ''
+              '[Files]'
+              'Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs'
+            )
+            $issLines | Set-Content -Path $issPath -Encoding ascii
+
+            $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+            if (-not (Test-Path $iscc)) { throw "ISCC.exe not found at $iscc" }
+
+            & $iscc "/DSourceDir=$releaseDir" "/Odist" $issPath
+            if ($LASTEXITCODE -ne 0) { throw "ISCC.exe failed with exit code $LASTEXITCODE" }
+
+            $distExe = Get-ChildItem -Recurse -File dist -Include *.exe | Sort-Object Length -Descending | Select-Object -First 1
+            if (-not $distExe -or $distExe.Length -lt 100KB) { throw "Fallback EXE is still too small" }
+            Write-Host ("Fallback EXE OK: {0} -> {1} bytes" -f $distExe.FullName, $distExe.Length)
+          }
+
+
       - name: Code Sign
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
         uses: Darkmen203/signtool-code-sign-sha256@main
