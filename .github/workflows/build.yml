@@ -202,80 +202,70 @@ jobs:
 
           $releaseDir = "build\windows\x64\runner\Release"
           if (-not (Test-Path $releaseDir)) { throw "Release dir not found: $releaseDir" }
-
-          # Абсолютный путь для ISCC
           $releaseDirAbs = (Resolve-Path $releaseDir).ProviderPath
           Write-Host "Resolved Release dir: $releaseDirAbs"
-          $fileCount = (Get-ChildItem -Path $releaseDirAbs -Recurse -File | Measure-Object).Count
-          Write-Host "Files under Release: $fileCount"
-          Write-Host "Repo root (GITHUB_WORKSPACE): $env:GITHUB_WORKSPACE"
-          Write-Host ("Current directory: {0}" -f (Get-Location).Path)
+          Write-Host ("Files under Release: {0}" -f ((Get-ChildItem -Path $releaseDirAbs -Recurse -File | Measure-Object).Count))
 
           function Get-ExeCandidates {
-            Get-ChildItem -Recurse -File -Path "dist\*" -Include *.exe -ErrorAction SilentlyContinue
+            # Берём только .exe в dist, исключая исполняемые самого приложения
+            Get-ChildItem -Recurse -File -Path "dist" -Include *.exe -ErrorAction SilentlyContinue |
+              Where-Object {
+                $_.Name -notmatch '^(?i)RostovVPN(Cli)?\.exe$'
+              }
           }
 
           function Pick-Installer([System.IO.FileInfo[]]$cands) {
+            # 1) Ищем ожидаемое имя из fallback
             $exe = $cands | Where-Object { $_.Name -eq 'RostovVPN-Windows-Setup-x64.exe' } | Select-Object -First 1
             if ($exe) { return $exe }
-
-            $exe = $cands | Where-Object { $_.FullName -match 'windows-setup_exe' -and $_.Name -notmatch '(?i)cli' } |
-                          Sort-Object Length -Descending | Select-Object -First 1
+            # 2) Любой setup/installer по убыванию размера
+            $exe = $cands | Where-Object { $_.Name -match '(?i)(setup|install|installer).*\.exe$' } |
+                            Sort-Object Length -Descending | Select-Object -First 1
             if ($exe) { return $exe }
-
-            $exe = $cands | Where-Object { $_.Name -match '(?i)(setup|install|installer).*\.exe$' -and $_.Name -notmatch '(?i)cli' } |
-                          Sort-Object Length -Descending | Select-Object -First 1
-            if ($exe) { return $exe }
-
+            # 3) Самый большой .exe из dist (как крайняя мера)
             return ($cands | Sort-Object Length -Descending | Select-Object -First 1)
           }
 
           $cands = Get-ExeCandidates
-          $exe = Pick-Installer $cands
+          $exe = if ($cands) { Pick-Installer $cands } else { $null }
           if ($exe) { Write-Host ("Candidate EXE: {0} ({1} MB)" -f $exe.FullName, [math]::Round($exe.Length/1MB,1)) }
-          else { Write-Warning "No .exe found under dist/" }
+          else      { Write-Warning "No .exe found under dist/" }
 
-          $needFallback = -not $exe
+          $needFallback = $true
+          if ($exe -and $exe.Name -match '(?i)(setup|install|installer)' -and $exe.Length -ge 30MB) {
+            $needFallback = $false
+          }
+
           if ($needFallback) {
+            Write-Host "Generating installer via Inno Setup (fallback)…"
             $issPath = Join-Path $env:RUNNER_TEMP "RostovVPN_fallback.iss"
-            $issLines = @(
-              '[Setup]'
-              'AppName=RostovVPN'
-              "AppVersion=$env:TAG_NAME"
-              'DefaultDirName={autopf}\RostovVPN'
-              'OutputBaseFilename=RostovVPN-Windows-Setup-x64'
-              'Compression=lzma2'
-              'SolidCompression=yes'
-              'ArchitecturesAllowed=x64compatible'
-              'ArchitecturesInstallIn64BitMode=x64'
-              ''
-              '[Files]'
-              'Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs'
-            )
-            $issLines | Set-Content -Path $issPath -Encoding ascii
+            @'
+            [Setup]
+            AppName=RostovVPN
+            AppVersion={#AppVersion}
+            DefaultDirName={autopf}\RostovVPN
+            OutputBaseFilename=RostovVPN-Windows-Setup-x64
+            Compression=lzma2
+            SolidCompression=yes
+            ArchitecturesAllowed=x64compatible
+            ArchitecturesInstallIn64BitMode=x64
+
+            [Files]
+            Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs
+            '@ | Set-Content -Path $issPath -Encoding ascii
 
             $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
             if (-not (Test-Path $iscc)) { throw "ISCC.exe not found at $iscc" }
 
-            # ВАЖНО: Абсолютный путь с кавычками
-            & $iscc "/DSourceDir=$releaseDirAbs" "/Odist" $issPath
+            # Пробрасываем переменные препроцессора
+            & $iscc "/DSourceDir=$releaseDirAbs" "/DAppVersion=$env:TAG_NAME" "/Odist" $issPath
             if ($LASTEXITCODE -ne 0) { throw "ISCC.exe failed with exit code $LASTEXITCODE" }
 
-            # После компиляции сначала пробуем точный путь, затем — резервный поиск
-            $distRootExePath = Join-Path (Get-Location) 'dist\RostovVPN-Windows-Setup-x64.exe'
-            if (Test-Path $distRootExePath) {
-              $exe = Get-Item $distRootExePath
+            # Берём именно наш ожидаемый файл
+            $exe = Get-ChildItem -Path "dist" -Recurse -File -Filter "RostovVPN-Windows-Setup-x64.exe" | Select-Object -First 1
+            if (-not $exe -or $exe.Length -lt 30MB) {
+              throw ("Fallback installer looks invalid or too small: {0} bytes" -f ($exe?.Length))
             }
-            # Сначала пробуем ожидаемый путь от Inno
-            $fallbackOut = Join-Path (Get-Location) "dist\RostovVPN-Windows-Setup-x64.exe"
-            if (Test-Path $fallbackOut) {
-              $exe = Get-Item $fallbackOut
-            } else {
-              $exe = Pick-Installer (Get-ExeCandidates)
-            }
-
-            if (-not $exe) { throw "Installer not found under dist after ISCC run." }
-            if ($exe.Length -lt 1MB) { throw ("Installer looks empty: {0} bytes" -f $exe.Length) }
           }
 
           Write-Host ("Installer ready: {0} ({1} MB)" -f $exe.FullName, [math]::Round($exe.Length/1MB,1))
@@ -291,6 +281,15 @@ jobs:
           timestamp-server: "http://timestamp.digicert.com"
           recursive: true
           description: "RostovVPN"
+
+      - name: Ensure setup EXE is copied to out
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          $setup = Get-ChildItem -Path "dist" -Recurse -File -Filter "RostovVPN-Windows-Setup-x64.exe" | Select-Object -First 1
+          if (-not $setup) { throw "RostovVPN-Windows-Setup-x64.exe not found in dist after signing" }
+          Copy-Item $setup.FullName -Destination "out\" -Force
 
       - name: Copy to out Windows
         if: matrix.platform == 'windows'
