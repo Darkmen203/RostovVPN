@@ -197,7 +197,7 @@ jobs:
           make ${{ matrix.platform }}-prepare
           tree
 
-      - name: Fix exe make_config.yaml icon path (CI)
+      - name: Fix exe make_config.yaml icon path (CI, dedupe-safe)
         if: matrix.platform == 'windows'
         shell: pwsh
         run: |
@@ -207,16 +207,34 @@ jobs:
           $iconA = (Resolve-Path (Join-Path $env:GITHUB_WORKSPACE $iconR)).ProviderPath
           if (-not (Test-Path $iconA)) { throw "Icon not found: $iconA" }
 
-          # Заменяем setup_icon_file: ... на абсолютный путь
-          $rx = '^(?m)\s*setup_icon_file\s*:\s*.*$'
-          $new = "setup_icon_file: $iconA"
+          # 1) Читаем YAML как текст
           $txt = Get-Content $cfg -Raw
-          $txt2 = [regex]::Replace($txt, $rx, $new)
-          if ($txt2 -eq $txt) { Write-Host "setup_icon_file не найден — дописываю строку в конец"; $txt2 = "$txt`n$new`n" }
-          Set-Content $cfg -Value $txt2 -Encoding UTF8
 
-          Write-Host "Patched setup_icon_file -> $iconA"
-          Get-Content $cfg | Select-String -Pattern 'setup_icon_file' -SimpleMatch
+          # 2) Выпиливаем ВСЕ строки setup_icon_file: ... (на всякий случай)
+          $pattern = '(?ms)^\s*setup_icon_file\s*:\s*.*?\r?\n'
+          $txt = [regex]::Replace($txt, $pattern, '')
+
+          # 3) Вставляем новую строку после install_dir_name (если он есть), иначе — в конец
+          $newline = [Environment]::NewLine
+          $lineToAdd = "setup_icon_file: `"$iconA`""
+          if ($txt -match '^\s*install_dir_name\s*:\s*.*?\r?$', [System.Text.RegularExpressions.RegexOptions]::Multiline) {
+            $txt = [regex]::Replace(
+              $txt,
+              '(^\s*install_dir_name\s*:\s*.*?\r?$)',
+              "`$1$newline$lineToAdd",
+              [System.Text.RegularExpressions.RegexOptions]::Multiline
+            )
+          } else {
+            $txt = $txt.TrimEnd() + "$newline$lineToAdd$newline"
+          }
+
+          # 4) Сохраняем обратно
+          Set-Content $cfg -Value $txt -Encoding UTF8
+
+          # 5) Контрольный вывод
+          Write-Host "=== Grep make_config.yaml ==="
+          Select-String -Path $cfg -Pattern '^(setup_icon_file|install_dir_name)\s*:' -AllMatches | ForEach-Object { $_.Line }
+
 
       - name: Build ${{ matrix.platform }}
         env:
