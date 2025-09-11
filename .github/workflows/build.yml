@@ -204,6 +204,81 @@ jobs:
         run: |
           make ${{ matrix.platform }}-release
 
+      - name: Dump Inno .iss and validate icon/image paths
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $iss = Get-ChildItem -Recurse -File -Path "dist" -Filter "*windows-setup_exe.iss" | Select-Object -First 1
+          if (-not $iss) { throw "No *windows-setup_exe.iss found under dist/" }
+          Write-Host "ISS file: $($iss.FullName)"
+
+          # Печатаем .iss с номерами строк
+          $lines = Get-Content -LiteralPath $iss.FullName
+          $i=1
+          $lines | ForEach-Object { "{0,4}: {1}" -f $i++, $_ } | Out-Host
+
+          # Контекст вокруг 15-й строки (если есть)
+          if ($lines.Length -ge 15) {
+            $from = [Math]::Max(1, 15-5)
+            $to   = [Math]::Min($lines.Length, 15+5)
+            Write-Host "`n=== Context around line 15 ($from..$to) ==="
+            for ($j=$from; $j -le $to; $j++) { "{0,4}: {1}" -f $j, $lines[$j-1] | Out-Host }
+          }
+
+          function Test-InnoPath([string]$label, [string]$value, [string]$issDir) {
+            if (-not $value) { return }
+            $p = $value.Trim() -replace '^"+|"+$',''
+            if (-not $p) { return }
+            $asIs   = (Join-Path $issDir $p)
+            $atWs   = (Join-Path $env:GITHUB_WORKSPACE $p)
+            $existsAsIs = Test-Path -LiteralPath $asIs
+            $existsAtWs = Test-Path -LiteralPath $atWs
+            Write-Host "`n$label = $p"
+            Write-Host (" - as relative to ISS dir: {0} -> exists: {1}" -f $asIs, $existsAsIs)
+            Write-Host (" - relative to workspace  : {0} -> exists: {1}" -f $atWs, $existsAtWs)
+          }
+
+          # Достаём нужные строки
+          $kv = @{
+            SetupIconFile        = ($lines | Where-Object { $_ -match '^\s*SetupIconFile\s*=' } | Select-Object -First 1)
+            WizardImageFile      = ($lines | Where-Object { $_ -match '^\s*WizardImageFile\s*=' } | Select-Object -First 1)
+            WizardSmallImageFile = ($lines | Where-Object { $_ -match '^\s*WizardSmallImageFile\s*=' } | Select-Object -First 1)
+          }
+
+          $issDir = $iss.Directory.FullName
+          foreach ($k in $kv.Keys) {
+            if ($kv[$k]) {
+              $val = ($kv[$k] -split '=',2)[1]
+              Test-InnoPath $k $val $issDir
+            } else {
+              Write-Host "`n$k: <not present in .iss>"
+            }
+          }
+
+          # На всякий случай покажем путь к иконке из make_config.yaml, если он есть
+          $yaml = "windows\packaging\exe\make_config.yaml"
+          if (Test-Path $yaml) {
+            $yamlLine = Get-Content $yaml | Where-Object { $_ -match '^\s*setup_icon_file\s*:' } | Select-Object -First 1
+            if ($yamlLine) {
+              $yamlIcon = ($yamlLine -split ':',2)[1].Trim()
+              Write-Host "`nmake_config.yaml -> setup_icon_file: $yamlIcon"
+              $yamlAbs1 = Join-Path $issDir $yamlIcon
+              $yamlAbs2 = Join-Path $env:GITHUB_WORKSPACE $yamlIcon
+              Write-Host (" - as relative to ISS dir: {0} -> exists: {1}" -f $yamlAbs1, (Test-Path $yamlAbs1))
+              Write-Host (" - relative to workspace  : {0} -> exists: {1}" -f $yamlAbs2, (Test-Path $yamlAbs2))
+            }
+          }
+
+      - name: Upload ISS artifact
+        if: matrix.platform == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-iss
+          path: dist/**/*windows-setup_exe.iss
+          retention-days: 7
+
       - name: Code Sign
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
         uses: Darkmen203/signtool-code-sign-sha256@main
