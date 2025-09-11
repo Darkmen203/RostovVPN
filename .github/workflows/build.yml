@@ -15,7 +15,7 @@ on:
 env:
   IS_GITHUB_ACTIONS: 1
   CHANNEL: "${{ inputs.channel }}"
-  FLUTTER_VERSION: "3.24.0"
+  FLUTTER_VERSION: '3.24.0'
   NDK_VERSION: r26d
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   TAG_NAME: "${{ inputs.tag-name }}"
@@ -24,10 +24,11 @@ env:
   TARGET_NAME_rpm: "RostovVPN-rpm-x64"
   TARGET_NAME_apk: "RostovVPN-Android"
   TARGET_NAME_aab: "RostovVPN-Android"
-  # TARGET_NAME_exe: "RostovVPN-Windows-x64"
+  #TARGET_NAME_exe: "RostovVPN-Windows-x64"
   TARGET_NAME_dmg: "RostovVPN-MacOS"
   TARGET_NAME_pkg: "RostovVPN-MacOS-Installer"
   TARGET_NAME_ipa: "RostovVPN-iOS"
+  
 
 jobs:
   test:
@@ -39,25 +40,26 @@ jobs:
       - uses: subosito/flutter-action@v2.16.0 #issue with 2.13
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
+          channel: 'stable'
           cache: true
-
+          
       - name: Install SQLite
         run: sudo apt-get install sqlite3 libsqlite3-dev
       - name: Prepare
         env:
-          API_TOKEN: ${{ secrets.API_TOKEN }}
-          API_URL: ${{ secrets.API_URL }}
+            API_TOKEN: ${{ secrets.API_TOKEN }}
+            API_URL: ${{ secrets.API_URL }}
         run: make linux-prepare
       - name: Test
         env:
-          API_TOKEN: ${{ secrets.API_TOKEN }}
-          API_URL: ${{ secrets.API_URL }}
+            API_TOKEN: ${{ secrets.API_TOKEN }}
+            API_URL: ${{ secrets.API_URL }}
         run: flutter test
 
       - name: make draftBuildCode
         id: draftBuildCode
         run: echo "::set-output name=datetime::$(date +'%d.%H.%M')"
+
 
   build:
     needs: test
@@ -77,7 +79,8 @@ jobs:
           - platform: windows
             os: windows-2022
             aarch: amd64
-            targets: exe,msix
+            targets: exe
+            # targets: exe,msix # uncomment to build msix
 
           - platform: linux
             os: ubuntu-22.04
@@ -88,7 +91,7 @@ jobs:
             os: macos-13
             aarch: universal
             targets: dmg,pkg
-
+            
           # - platform: ios
           #   os: macos-14
           #   aarch: universal
@@ -102,7 +105,7 @@ jobs:
       # - name: Import Apple Codesign Certificates
       #   if: ${{ inputs.upload-artifact && startsWith(matrix.os,'macos') }}
       #   uses: apple-actions/import-codesign-certs@v3
-      #   with:
+      #   with: 
       #       p12-file-base64: "${{ secrets.APPLE_CERTIFICATE_P12 }}"
       #       p12-password: "${{ secrets.APPLE_CERTIFICATE_P12_PASSWORD }}"
 
@@ -115,20 +118,24 @@ jobs:
       #   #   ls ~/Library/MobileDevice/Provisioning\ Profiles
       #   #   echo "${{secrets.NEW_APPLE_MOBILE_PROVISIONING_PROFILES_TARXZ_BASE64}}"|base64 --decode | tar xJ -C ~/Library/MobileDevice/Provisioning\ Profiles
       #   #   # echo "${{secrets.NEW_APPLE_MOBILE_PROVISIONING_PROFILES_TARGZ_BASE64_2}}"|base64 --decode | tar xz -C ~/Library/MobileDevice/Provisioning\ Profiles
+          
 
+
+      
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.16.0 #issue with 2.13
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           # flutter-version-file: pubspec.yaml
-          channel: "stable"
+          channel: 'stable'
           cache: true
 
+      
       - name: Setup Java
         if: startsWith(matrix.platform,'android')
         uses: actions/setup-java@v4
         with:
-          distribution: "zulu"
+          distribution: 'zulu'
           java-version: 17
       - name: Setup NDK
         if: startsWith(matrix.platform,'android')
@@ -171,9 +178,9 @@ jobs:
       - name: Setup Windows Signing Properties
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
         run: |
-          [IO.File]::WriteAllBytes("windows\sign.pfx", [Convert]::FromBase64String("${{ secrets.WINDOWS_SIGNING_KEY }}"))
-          (Get-Content "windows\packaging\msix\make_config.yaml") -replace '^certificate_password:.*$', 'certificate_password: ${{ secrets.WINDOWS_SIGNING_PASSWORD }}' | Set-Content "windows\packaging\msix\make_config.yaml"
-
+            [IO.File]::WriteAllBytes("windows\sign.pfx", [Convert]::FromBase64String("${{ secrets.WINDOWS_SIGNING_KEY }}"))
+            (Get-Content "windows\packaging\msix\make_config.yaml") -replace '^certificate_password:.*$', 'certificate_password: ${{ secrets.WINDOWS_SIGNING_PASSWORD }}' | Set-Content "windows\packaging\msix\make_config.yaml"
+        
       # - name: Temporary disable Permission Handler for windows due to its issue in permission
       #   if: ${{ startsWith(matrix.platform,'windows') }}
       #   run: |
@@ -181,6 +188,9 @@ jobs:
       #     (Get-Content -Path "lib\features\profile\add\add_profile_modal.dart") -notmatch "qr_code_scanner_screen" | Set-Content -Path "lib\features\profile\add\add_profile_modal.dart"
       #     (Get-Content -Path lib\features\profile\add\add_profile_modal.dart) -replace 'await QRCodeScannerScreen\(\).open\(context\);', 'null;' | Set-Content -Path lib\features\profile\add\add_profile_modal.dart
       #     Remove-Item -Path "lib\features\common\qr_code_scanner_screen.dart"
+
+
+
 
       - name: Prepare for ${{ matrix.platform }}
         run: |
@@ -194,116 +204,25 @@ jobs:
         run: |
           make ${{ matrix.platform }}-release
 
-      - name: Ensure proper Windows installer (prefer setup EXE; fallback via Inno)
-        if: matrix.platform == 'windows'
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = "Stop"
-
-          $releaseDir = "build\windows\x64\runner\Release"
-          if (-not (Test-Path $releaseDir)) { throw "Release dir not found: $releaseDir" }
-          $releaseDirAbs = (Resolve-Path $releaseDir).ProviderPath
-          Write-Host "Resolved Release dir: $releaseDirAbs"
-          Write-Host ("Files under Release: {0}" -f ((Get-ChildItem -Path $releaseDirAbs -Recurse -File | Measure-Object).Count))
-
-          function Get-ExeCandidates {
-            # Берём только .exe в dist, исключая исполняемые самого приложения
-            Get-ChildItem -Recurse -File -Path "dist" -Include *.exe -ErrorAction SilentlyContinue |
-              Where-Object {
-                $_.Name -notmatch '^(?i)RostovVPN(Cli)?\.exe$'
-              }
-          }
-
-          function Pick-Installer([System.IO.FileInfo[]]$cands) {
-            # 1) Ищем ожидаемое имя из fallback
-            $exe = $cands | Where-Object { $_.Name -eq 'RostovVPN-Windows-Setup-x64.exe' } | Select-Object -First 1
-            if ($exe) { return $exe }
-            # 2) Любой setup/installer по убыванию размера
-            $exe = $cands | Where-Object { $_.Name -match '(?i)(setup|install|installer).*\.exe$' } |
-                            Sort-Object Length -Descending | Select-Object -First 1
-            if ($exe) { return $exe }
-            # 3) Самый большой .exe из dist (как крайняя мера)
-            return ($cands | Sort-Object Length -Descending | Select-Object -First 1)
-          }
-
-          $cands = Get-ExeCandidates
-          $exe = if ($cands) { Pick-Installer $cands } else { $null }
-          if ($exe) { Write-Host ("Candidate EXE: {0} ({1} MB)" -f $exe.FullName, [math]::Round($exe.Length/1MB,1)) }
-          else      { Write-Warning "No .exe found under dist/" }
-
-          $needFallback = $true
-          if ($exe -and $exe.Name -match '(?i)(setup|install|installer)' -and $exe.Length -ge 30MB) {
-            $needFallback = $false
-          }
-
-          if ($needFallback) {
-            Write-Host "Generating installer via Inno Setup (fallback)…"
-            $issPath = Join-Path $env:RUNNER_TEMP "RostovVPN_fallback.iss"
-          @'
-          [Setup]
-          AppName=RostovVPN
-          AppVersion={#AppVersion}
-          DefaultDirName={autopf}\RostovVPN
-          OutputBaseFilename=RostovVPN-Windows-Setup-x64
-          Compression=lzma2
-          SolidCompression=yes
-          ArchitecturesAllowed=x64compatible
-          ArchitecturesInstallIn64BitMode=x64
-
-          [Files]
-          Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs
-          '@ | Set-Content -Path $issPath -Encoding ascii
-
-            $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-            if (-not (Test-Path $iscc)) { throw "ISCC.exe not found at $iscc" }
-
-            # Пробрасываем переменные препроцессора
-            & $iscc "/DSourceDir=$releaseDirAbs" "/DAppVersion=$env:TAG_NAME" "/Odist" $issPath
-            if ($LASTEXITCODE -ne 0) { throw "ISCC.exe failed with exit code $LASTEXITCODE" }
-
-            # Берём именно наш ожидаемый файл
-            $exe = Get-ChildItem -Path "dist" -Recurse -File -Filter "RostovVPN-Windows-Setup-x64.exe" | Select-Object -First 1
-            if (-not $exe -or $exe.Length -lt 30MB) {
-              throw ("Fallback installer looks invalid or too small: {0} bytes" -f ($exe?.Length))
-            }
-          }
-
-          Write-Host ("Installer ready: {0} ({1} MB)" -f $exe.FullName, [math]::Round($exe.Length/1MB,1))
-
       - name: Code Sign
         if: ${{ inputs.upload-artifact && startsWith(matrix.platform,'windows') }}
         uses: Darkmen203/signtool-code-sign-sha256@main
         with:
-          certificate: "${{ secrets.WINDOWS_SIGNING_KEY }}"
-          cert-password: "${{ secrets.WINDOWS_SIGNING_PASSWORD }}"
-          cert-sha1: "${{ secrets.WINDOWS_SIGNING_SHA1 }}"
-          folder: "dist"
-          timestamp-server: "http://timestamp.digicert.com"
+          certificate: '${{ secrets.WINDOWS_SIGNING_KEY }}'
+          cert-password: '${{ secrets.WINDOWS_SIGNING_PASSWORD }}'
+          cert-sha1: '${{ secrets.WINDOWS_SIGNING_SHA1 }}'
+          folder: 'dist'
+          timestamp-server: 'http://timestamp.digicert.com'
           recursive: true
-          description: "RostovVPN"
-
-      - name: Ensure setup EXE is copied to out
-        if: matrix.platform == 'windows'
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path out | Out-Null
-          $cands = Get-ChildItem -Recurse -File -Path "dist" -Include `
-            "RostovVPN-Windows-Setup-x64.exe","*windows-setup*.exe","*installer*.exe","*setup*.exe" `
-            -ErrorAction SilentlyContinue | Where-Object { $_.Name -notmatch '(?i)cli' }
-          if ($cands) {
-            $setup = $cands | Sort-Object Length -Descending | Select-Object -First 1
-            Write-Host ("Installer candidate: {0} ({1} MB)" -f $setup.FullName, [math]::Round($setup.Length/1MB,1))
-            Copy-Item $setup.FullName -Destination "out\RostovVPN-Windows-Setup-x64.exe" -Force
-          } else {
-            Write-Warning "No installer exe found under dist; continuing — package_windows.ps1 will try to create/copy it."
-          }
+          description: 'RostovVPN'
 
       - name: Copy to out Windows
         if: matrix.platform == 'windows'
         run: |
           tree
           .\scripts\package_windows.ps1
-
+          
+          
       - name: Upload Debug Symbols
         if: ${{ inputs.upload-artifact && inputs.tag-name != 'draft' }}
         env:
@@ -313,8 +232,11 @@ jobs:
           SENTRY_DIST: ${{ matrix.platform == 'android-aab' && 'google-play' || 'general' }}
         run: |
           dart pub global activate sentry_dart_plugin
-          dart run sentry_dart_plugin
+          dart run sentry_dart_plugin 
+      
+      
 
+              
       - name: Copy to out Android APK
         if: matrix.platform == 'android-apk'
         run: |
@@ -338,7 +260,7 @@ jobs:
           ls -R dist/
           mkdir out
           mkdir tmp_out
-
+          
           for EXT in $(echo ${{ matrix.targets }} | tr ',' '\n'); do
             KEY=TARGET_NAME_${EXT}
             FILENAME=${!KEY}
@@ -395,6 +317,7 @@ jobs:
           merge-multiple: true
           pattern: "*"
           path: ./out/
+          
 
       - name: Display Files Structure
         run: ls -R
@@ -404,9 +327,9 @@ jobs:
         uses: 8Mi-Tech/delete-release-assets-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "draft"
+          tag: 'draft'
           deleteOnlyFromDrafts: false
-
+          
       - name: prepare_release_message
         run: |
           pip install gitchangelog pystache mustache markdown
@@ -422,9 +345,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: ./out/*
-          name: "draft"
-          tag_name: "draft"
-          body_path: "./release.md"
+          name: 'draft'
+          tag_name: 'draft'
+          body_path: './release.md'
           prerelease: true
   upload-release:
     permissions: write-all
@@ -462,7 +385,7 @@ jobs:
           # prerelease: ${{ env.CHANNEL == 'dev' }}
           prerelease: true
           tag_name: ${{ env.TAG_NAME }}
-          body_path: "./release.md"
+          body_path: './release.md'
           files: ./out/*
 
       - name: Create service_account.json
@@ -476,6 +399,7 @@ jobs:
       #     releaseName: ${{ env.TAG_NAME }}
       #     releaseFiles: ./rostovvpn-android-market.aab
       #     track: 'beta'
+
 
   # upload-to-testflight:
   #   needs: [build]
@@ -508,6 +432,8 @@ jobs:
   #         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
   #         api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
   #         api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+  
+
 
   #     - name: Import Apple Mobile Provisioning Profile
   #       run: |
@@ -517,7 +443,7 @@ jobs:
 
   #     - uses: Apple-Actions/upload-testflight-build@v1
   #       with:
-  #         app-path: 'out/RostovVPN-iOS.ipa'
+  #         app-path: 'out/RostovVPN-iOS.ipa' 
   #         issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
   #         api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
   #         api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
