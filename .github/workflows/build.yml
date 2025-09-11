@@ -216,7 +216,7 @@ jobs:
 
           # 3) Вставляем новую строку после install_dir_name (если он есть), иначе — в конец
           $newline = [Environment]::NewLine
-          $lineToAdd = "setup_icon_file: `"$iconA`""
+          $lineToAdd = "setup_icon_file: '$iconA'"
           if ($txt -match '^\s*install_dir_name\s*:\s*.*?\r?$', [System.Text.RegularExpressions.RegexOptions]::Multiline) {
             $txt = [regex]::Replace(
               $txt,
