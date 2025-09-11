@@ -79,8 +79,7 @@ jobs:
           - platform: windows
             os: windows-2022
             aarch: amd64
-            targets: exe
-            # targets: exe,msix # uncomment to build msix
+            targets: exe,msix # uncomment to build msix
 
           - platform: linux
             os: ubuntu-22.04
