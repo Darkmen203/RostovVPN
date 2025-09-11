@@ -1,12 +1,12 @@
-app_id: "5F733CFC-6834-4B37-86B1-D13A9f5C96A6"
-publisher: "RostovVPN"
-publisher_url: "https://rostovvpn.run.place"
-display_name: "RostovVPN"
-executable_name: "RostovVPN.exe"
-output_base_file_name: "RostovVPN-Windows-Setup-x64"
+app_id: 5F733CFC-6834-4B37-86B1-D13A9f5C96A6
+publisher: RostovVPN
+publisher_url: https://rostovvpn.run.place
+display_name: RostovVPN
+executable_name: RostovVPN.exe
+output_base_file_name: RostovVPN.exe
 create_desktop_icon: true
 install_dir_name: "{autopf64}\\RostovVPN"
-setup_icon_file: ..\..\windows\runner\resources\app_icon.ico
+setup_icon_file: windows\runner\resources\app_icon.ico
 locales:
   - ar
   - en
@@ -14,4 +14,4 @@ locales:
   - ru
   - pt
   - tr
-script_template: "inno_setup.sas"
+script_template: inno_setup.sas
