@@ -204,6 +204,28 @@ jobs:
         run: |
           make ${{ matrix.platform }}-release
 
+      - name: Fix exe make_config.yaml icon path (CI)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $cfg   = "windows\packaging\exe\make_config.yaml"
+          $iconR = "windows\runner\resources\app_icon.ico"
+          $iconA = (Resolve-Path (Join-Path $env:GITHUB_WORKSPACE $iconR)).ProviderPath
+          if (-not (Test-Path $iconA)) { throw "Icon not found: $iconA" }
+
+          # Заменяем setup_icon_file: ... на абсолютный путь
+          $rx = '^(?m)\s*setup_icon_file\s*:\s*.*$'
+          $new = "setup_icon_file: $iconA"
+          $txt = Get-Content $cfg -Raw
+          $txt2 = [regex]::Replace($txt, $rx, $new)
+          if ($txt2 -eq $txt) { Write-Host "setup_icon_file не найден — дописываю строку в конец"; $txt2 = "$txt`n$new`n" }
+          Set-Content $cfg -Value $txt2 -Encoding UTF8
+
+          Write-Host "Patched setup_icon_file -> $iconA"
+          Get-Content $cfg | Select-String -Pattern 'setup_icon_file' -SimpleMatch
+
+
       - name: Dump Inno .iss and validate icon/image paths
         if: always() && matrix.platform == 'windows'
         shell: pwsh
