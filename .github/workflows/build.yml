@@ -196,13 +196,6 @@ jobs:
         run: |
           make ${{ matrix.platform }}-prepare
           tree
-      - name: Build ${{ matrix.platform }}
-        env:
-          API_TOKEN: ${{ secrets.API_TOKEN }}
-          API_URL: ${{ secrets.API_URL }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        run: |
-          make ${{ matrix.platform }}-release
 
       - name: Fix exe make_config.yaml icon path (CI)
         if: matrix.platform == 'windows'
@@ -225,6 +218,13 @@ jobs:
           Write-Host "Patched setup_icon_file -> $iconA"
           Get-Content $cfg | Select-String -Pattern 'setup_icon_file' -SimpleMatch
 
+      - name: Build ${{ matrix.platform }}
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          API_URL: ${{ secrets.API_URL }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          make ${{ matrix.platform }}-release
 
       - name: Dump Inno .iss and validate icon/image paths
         if: always() && matrix.platform == 'windows'
