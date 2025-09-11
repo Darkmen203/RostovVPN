@@ -6,7 +6,7 @@ executable_name: RostovVPN.exe
 output_base_file_name: RostovVPN.exe
 create_desktop_icon: true
 install_dir_name: "{autopf64}\\RostovVPN"
-setup_icon_file: windows\runner\resources\app_icon.ico
+setup_icon_file: ..\..\windows\runner\resources\app_icon.ico
 locales:
   - ar
   - en

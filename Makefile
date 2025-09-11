@@ -83,8 +83,7 @@ protos:
 macos-install-dependencies:
 	brew install create-dmg tree 
 	npm install -g appdmg
-	dart pub global activate --source git  https://github.com/Darkmen203/flutter_distributor --git-path packages/flutter_distributor
-	flutter_distributor --version || true
+	dart pub global activate flutter_distributor
 
 ios-install-dependencies: 
 	if [ "$(flutter)" = "true" ]; then \
@@ -106,8 +105,7 @@ ios-install-dependencies:
 	brew install create-dmg tree 
 	npm install -g appdmg
 	
-	dart pub global activate --source git  https://github.com/Darkmen203/flutter_distributor --git-path packages/flutter_distributor
-	flutter_distributor --version || true
+	dart pub global activate flutter_distributor
 	
 
 android-install-dependencies: 
@@ -140,8 +138,7 @@ linux-install-dependencies:
 	flutter_distributor --version || true
 
 windows-install-dependencies:
-	dart pub global activate --source git  https://github.com/Darkmen203/flutter_distributor --git-path packages/flutter_distributor
-	flutter_distributor --version || true
+	dart pub global activate flutter_distributor
 
 gen_translations: #generating missing translations using google translate
 	cd .github && bash sync_translate.sh
