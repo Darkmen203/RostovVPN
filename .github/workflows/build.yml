@@ -239,20 +239,20 @@ jobs:
           if ($needFallback) {
             Write-Host "Generating installer via Inno Setup (fallback)…"
             $issPath = Join-Path $env:RUNNER_TEMP "RostovVPN_fallback.iss"
-            @'
-            [Setup]
-            AppName=RostovVPN
-            AppVersion={#AppVersion}
-            DefaultDirName={autopf}\RostovVPN
-            OutputBaseFilename=RostovVPN-Windows-Setup-x64
-            Compression=lzma2
-            SolidCompression=yes
-            ArchitecturesAllowed=x64compatible
-            ArchitecturesInstallIn64BitMode=x64
+          @'
+          [Setup]
+          AppName=RostovVPN
+          AppVersion={#AppVersion}
+          DefaultDirName={autopf}\RostovVPN
+          OutputBaseFilename=RostovVPN-Windows-Setup-x64
+          Compression=lzma2
+          SolidCompression=yes
+          ArchitecturesAllowed=x64compatible
+          ArchitecturesInstallIn64BitMode=x64
 
-            [Files]
-            Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs
-            '@ | Set-Content -Path $issPath -Encoding ascii
+          [Files]
+          Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs
+          '@ | Set-Content -Path $issPath -Encoding ascii
 
             $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
             if (-not (Test-Path $iscc)) { throw "ISCC.exe not found at $iscc" }
@@ -287,9 +287,16 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
-          $setup = Get-ChildItem -Path "dist" -Recurse -File -Filter "RostovVPN-Windows-Setup-x64.exe" | Select-Object -First 1
-          if (-not $setup) { throw "RostovVPN-Windows-Setup-x64.exe not found in dist after signing" }
-          Copy-Item $setup.FullName -Destination "out\" -Force
+          $cands = Get-ChildItem -Recurse -File -Path "dist" -Include `
+            "RostovVPN-Windows-Setup-x64.exe","*windows-setup*.exe","*installer*.exe","*setup*.exe" `
+            -ErrorAction SilentlyContinue | Where-Object { $_.Name -notmatch '(?i)cli' }
+          if ($cands) {
+            $setup = $cands | Sort-Object Length -Descending | Select-Object -First 1
+            Write-Host ("Installer candidate: {0} ({1} MB)" -f $setup.FullName, [math]::Round($setup.Length/1MB,1))
+            Copy-Item $setup.FullName -Destination "out\RostovVPN-Windows-Setup-x64.exe" -Force
+          } else {
+            Write-Warning "No installer exe found under dist; continuing — package_windows.ps1 will try to create/copy it."
+          }
 
       - name: Copy to out Windows
         if: matrix.platform == 'windows'
