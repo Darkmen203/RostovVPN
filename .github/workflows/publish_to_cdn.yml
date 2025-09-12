@@ -1,0 +1,104 @@
+name: Publish to CDN
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 2.7.44)"
+        required: true
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      S3_ENDPOINT: ${{ vars.S3_ENDPOINT }}
+      S3_BUCKET:   ${{ vars.S3_BUCKET }}
+      CDN_BASE:    ${{ vars.CDN_BASE }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Версия и тег
+      - name: Resolve version/tag
+        id: meta
+        shell: bash
+        run: |
+          if [[ -n "${{ github.event.release.tag_name }}" ]]; then
+            TAG="${{ github.event.release.tag_name }}"
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+            echo "version=${TAG#v}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=v${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          fi
+          echo "Resolved: tag=${{ steps.meta.outputs.tag }}, version=${{ steps.meta.outputs.version }}"
+
+      - name: Download release assets
+        uses: robinraju/release-downloader@v1.11
+        with:
+          repository: ${{ github.repository }}
+          tag: ${{ steps.meta.outputs.tag }}
+          out-file-path: artifacts/${{ steps.meta.outputs.version }}
+          fileName: "*"
+          tarBall: false
+          zipBall: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate latest.json + .sha256
+        run: |
+          node scripts/gen-latest.mjs "${{ steps.meta.outputs.version }}" "${{ env.CDN_BASE }}" "artifacts/${{ steps.meta.outputs.version }}"
+
+      - name: Install AWS CLI & jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli jq
+
+      - name: Upload versioned files (long cache)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ru-central1
+          AWS_EC2_METADATA_DISABLED: "true"
+        run: |
+          aws s3 cp "artifacts/${{ steps.meta.outputs.version }}/" "s3://${{ env.S3_BUCKET }}/releases/${{ steps.meta.outputs.version }}/" \
+            --recursive \
+            --exclude "Source code*" \
+            --endpoint-url "${{ env.S3_ENDPOINT }}" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Upload latest.json (short cache)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ru-central1
+          AWS_EC2_METADATA_DISABLED: "true"
+        run: |
+          aws s3 cp "artifacts/latest.json" "s3://${{ env.S3_BUCKET }}/releases/latest.json" \
+            --endpoint-url "${{ env.S3_ENDPOINT }}" \
+            --cache-control "public, max-age=60, s-maxage=300, must-revalidate"
+
+      # Purge CDN через сервисный аккаунт + yc CLI
+      - name: Purge CDN cache for latest.json (yc CLI)
+        env:
+          YC_SA_KEY_JSON:  ${{ secrets.YC_SA_KEY_JSON }}
+          YC_CLOUD_ID:     ${{ secrets.YC_CLOUD_ID }}
+          YC_FOLDER_ID:    ${{ secrets.YC_FOLDER_ID }}
+          CDN_RESOURCE_ID: ${{ secrets.CDN_RESOURCE_ID }}
+        shell: bash
+        run: |
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+          printf '%s' "$YC_SA_KEY_JSON" > sa.json
+          ~/yandex-cloud/bin/yc config set service-account-key sa.json
+          ~/yandex-cloud/bin/yc config set cloud-id  "$YC_CLOUD_ID"
+          ~/yandex-cloud/bin/yc config set folder-id "$YC_FOLDER_ID"
+          ~/yandex-cloud/bin/yc cdn cache purge --resource-id "$CDN_RESOURCE_ID" --paths "/releases/latest.json"

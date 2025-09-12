@@ -1,6 +1,7 @@
 abstract class Constants {
   static const appName = "RostovVPN";
-  static const githubUrl = "https://github.com/Darkmen203/RostovVPN";
+  static const websiteMain = "https://rostov.darkmen203.ru";
+  // TODO: replace links for cdn
   static const githubReleasesApiUrl =
       "https://api.github.com/repos/Darkmen203/RostovVPN/releases";
   static const githubLatestReleaseUrl =
@@ -8,8 +9,8 @@ abstract class Constants {
   static const appCastUrl =
       "https://raw.githubusercontent.com/Darkmen203/RostovVPN/main/appcast.xml";
   static const telegramChannelUrl = "https://t.me/rostovvpn";
-  static const privacyPolicyUrl = "https://hiddify.com/privacy-policy/";
-  static const termsAndConditionsUrl = "https://hiddify.com/terms/";
+  static const privacyPolicyUrl = "https://rostov.darkmen203.ru/privacy-policy/";
+  static const termsAndConditionsUrl = "https://rostov.darkmen203.ru/terms/";
   static const cfWarpPrivacyPolicy =
       "https://www.cloudflare.com/application/privacypolicy/";
   static const cfWarpTermsOfService =

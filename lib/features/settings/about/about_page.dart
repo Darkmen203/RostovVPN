@@ -131,11 +131,12 @@ class AboutPage extends HookConsumerWidget {
                 ...conditionalTiles,
                 if (conditionalTiles.isNotEmpty) const Divider(),
                 ListTile(
+                  // TODO: replace text
                   title: Text(t.about.sourceCode),
                   trailing: const Icon(FluentIcons.open_24_regular),
                   onTap: () async {
                     await UriUtils.tryLaunch(
-                      Uri.parse(Constants.githubUrl),
+                      Uri.parse(Constants.websiteMain),
                     );
                   },
                 ),
