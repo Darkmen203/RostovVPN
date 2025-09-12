@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
-import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/theme/theme_extensions.dart';
@@ -31,7 +30,6 @@ class ConnectionButton extends HookConsumerWidget {
 
     final requiresReconnect =
         ref.watch(configOptionNotifierProvider).valueOrNull;
-    final today = DateTime.now();
 
     ref.listen(
       connectionNotifierProvider,
@@ -104,98 +102,9 @@ class ConnectionButton extends HookConsumerWidget {
         AsyncData(value: _) => buttonTheme.idleColor!,
         _ => Colors.red,
       },
-      image: switch (connectionStatus) {
-        AsyncData(value: Connected()) when requiresReconnect == true =>
-          Assets.images.disconnectNorouz,
-        AsyncData(value: Connected()) => Assets.images.connectNorouz,
-        AsyncData(value: _) => Assets.images.disconnectNorouz,
-        _ => Assets.images.disconnectNorouz,
-        AsyncData(value: Disconnected()) ||
-        AsyncError() =>
-          Assets.images.disconnectNorouz,
-        AsyncData(value: Connected()) => Assets.images.connectNorouz,
-        _ => Assets.images.disconnectNorouz,
-      },
-      useImage: false,//today.day >= 19 && today.day <= 23 && today.month == 3,
     );
   }
 }
-
-// class _ConnectionButton extends StatelessWidget {
-//   const _ConnectionButton({
-//     required this.onTap,
-//     required this.enabled,
-//     required this.label,
-//     required this.buttonColor,
-//     required this.image,
-//     required this.useImage,
-//   });
-
-//   final VoidCallback onTap;
-//   final bool enabled;
-//   final String label;
-//   final Color buttonColor;
-//   final AssetGenImage image;
-//   final bool useImage;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Semantics(
-//           button: true,
-//           enabled: enabled,
-//           label: label,
-//           child: Container(
-//             clipBehavior: Clip.antiAlias,
-//             decoration: BoxDecoration(
-//               shape: BoxShape.circle,
-//               boxShadow: [
-//                 BoxShadow(
-//                   blurRadius: 16,
-//                   color: buttonColor.withAlpha(100),
-//                 ),
-//               ],
-//             ),
-//             width: 300,
-//             height: 300,
-//             child: Material(
-//               key: const ValueKey("home_connection_button"),
-//               shape: const CircleBorder(),
-//               color: const Color.fromARGB(30, 204, 204, 204),
-//               child: InkWell(
-//                 onTap: onTap,
-//                 child: TweenAnimationBuilder(
-//                   tween: ColorTween(end: buttonColor),
-//                   duration: const Duration(milliseconds: 250),
-//                   builder: (context, value, child) {
-//                     if (useImage) {
-//                       return image.image(filterQuality: FilterQuality.medium, fit: BoxFit.fill);
-//                     } else {
-//                       return Assets.images.logo.svg(
-//                         fit: BoxFit.cover
-//                       );
-//                     }
-//                   },
-//                 ),
-//               ),
-//             ).animate(target: enabled ? 0 : 1).blurXY(end: 1),
-//           )
-//               .animate(target: enabled ? 0 : 1)
-//               .scaleXY(end: .88, curve: Curves.easeIn),
-//         ),
-//         const Gap(16),
-//         ExcludeSemantics(
-//           child: AnimatedText(
-//             label,
-//             style: Theme.of(context).textTheme.titleMedium,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
 
 class _ConnectionButton extends StatelessWidget {
   const _ConnectionButton({
@@ -203,16 +112,12 @@ class _ConnectionButton extends StatelessWidget {
     required this.enabled,
     required this.label,
     required this.buttonColor,
-    required this.image,
-    required this.useImage,
   });
 
   final VoidCallback onTap;
   final bool enabled;
   final String label;
   final Color buttonColor;
-  final AssetGenImage image;
-  final bool useImage;
 
   @override
   Widget build(BuildContext context) {
@@ -235,55 +140,48 @@ class _ConnectionButton extends StatelessWidget {
             ],
             // 2) Основная кнопка
             FocusableActionDetector(
-              autofocus: false,
-              onShowFocusHighlight: (_) {},
-              child: Semantics(
-                button: true,
-                enabled: enabled,
-                label: label,
-                child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     blurRadius: 16,
-                  //     color: buttonColor.withAlpha(255),
-                  //   ),
-                  // ],
-                ),
-                width: 300,
-                height: 300,
-                child: Material(
-                  key: const ValueKey("home_connection_button"),
-                  shape: const CircleBorder(),
-                  color: const Color.fromARGB(30, 204, 204, 204),
-                  child: InkWell(
-                    canRequestFocus: true,
-                    hoverColor: const Color.fromARGB(100, 255, 255, 255),
-                    focusColor: const Color.fromARGB(100, 255, 255, 255),
-                    onTap: onTap,
-                    autofocus: true,
-                    child: TweenAnimationBuilder(
-                      tween: ColorTween(end: buttonColor),
-                      duration: const Duration(milliseconds: 250),
-                      builder: (context, value, child) {
-                        if (useImage) {
-                          return image.image(
-                            filterQuality: FilterQuality.medium,
-                            fit: BoxFit.fill,
-                          );
-                        } else {
-                          return Assets.images.logo.svg(fit: BoxFit.cover);
-                        }
-                      },
+                autofocus: false,
+                onShowFocusHighlight: (_) {},
+                child: Semantics(
+                  button: true,
+                  enabled: enabled,
+                  label: label,
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     blurRadius: 16,
+                      //     color: buttonColor.withAlpha(255),
+                      //   ),
+                      // ],
                     ),
-                  ),
-                ).animate(target: enabled ? 0 : 1).blurXY(end: 1),
-              )
-                  .animate(target: enabled ? 0 : 1)
-                  .scaleXY(end: .88, curve: Curves.easeIn),
-            )),
+                    width: 300,
+                    height: 300,
+                    child: Material(
+                      key: const ValueKey("home_connection_button"),
+                      shape: const CircleBorder(),
+                      color: const Color.fromARGB(30, 204, 204, 204),
+                      child: InkWell(
+                        canRequestFocus: true,
+                        hoverColor: const Color.fromARGB(100, 255, 255, 255),
+                        focusColor: const Color.fromARGB(100, 255, 255, 255),
+                        onTap: onTap,
+                        autofocus: true,
+                        child: TweenAnimationBuilder(
+                          tween: ColorTween(end: buttonColor),
+                          duration: const Duration(milliseconds: 250),
+                          builder: (context, value, child) {
+                            return Assets.images.logo.svg(fit: BoxFit.cover);
+                          },
+                        ),
+                      ),
+                    ).animate(target: enabled ? 0 : 1).blurXY(end: 1),
+                  )
+                      .animate(target: enabled ? 0 : 1)
+                      .scaleXY(end: .88, curve: Curves.easeIn),
+                )),
           ],
         ),
         const Gap(16),

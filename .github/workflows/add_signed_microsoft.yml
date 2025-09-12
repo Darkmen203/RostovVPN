@@ -18,7 +18,7 @@ jobs:
 
     steps:
     - name: Upload store MSIX to release
-      uses: rostovvpn/Upload-Microsoft-Store-MSIX-Package-to-GitHub-Release@develop
+      uses: Darkmen203/Upload-Microsoft-Store-MSIX-Package-to-GitHub-Release@main
       with:
         store-id: 9N9HX27F15C2
         token: ${{ secrets.GITHUB_TOKEN }}
