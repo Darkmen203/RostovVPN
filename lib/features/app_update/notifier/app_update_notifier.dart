@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
-import 'package:rostov_vpn/core/localization/locale_preferences.dart';
-import 'package:rostov_vpn/core/model/constants.dart';
 import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/core/utils/preferences_utils.dart';
 import 'package:rostov_vpn/features/app_update/data/app_update_data_providers.dart';
@@ -9,23 +8,9 @@ import 'package:rostov_vpn/features/app_update/model/app_update_failure.dart';
 import 'package:rostov_vpn/features/app_update/model/remote_version_entity.dart';
 import 'package:rostov_vpn/features/app_update/notifier/app_update_state.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:upgrader/upgrader.dart';
 import 'package:version/version.dart';
 
 part 'app_update_notifier.g.dart';
-
-const _debugUpgrader = true;
-
-@riverpod
-Upgrader upgrader(UpgraderRef ref) => Upgrader(
-      appcastConfig: AppcastConfiguration(url: Constants.appCastUrl),
-      debugLogging: _debugUpgrader && kDebugMode,
-      durationUntilAlertAgain: const Duration(hours: 12),
-      messages: UpgraderMessages(
-        code: ref.watch(localePreferencesProvider).languageCode,
-      ),
-    );
 
 @Riverpod(keepAlive: true)
 class AppUpdateNotifier extends _$AppUpdateNotifier with AppLogger {
