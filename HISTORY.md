@@ -1,7 +1,15 @@
 # Changelog
 
 
-## 2.7.7 (2025-09-13)
+## 2.7.8 (2025-09-13)
+
+#### Other
+
+* Edited publish to cdn for autorun and added loading when fetch data on load app. 
+
+
+
+## v2.7.7 (2025-09-13)
 
 #### Other
 

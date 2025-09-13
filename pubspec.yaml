@@ -1,7 +1,7 @@
 name: rostov_vpn
 description: Cross Platform Multi Protocol Proxy Frontend.
 publish_to: "none"
-version: 2.7.7+20707
+version: 2.7.8+20708
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
