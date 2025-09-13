@@ -1,7 +1,33 @@
 # Changelog
 
 
-## 2.7.6 (2025-09-12)
+## 2.7.7 (2025-09-13)
+
+#### Other
+
+* Update constants, new update dialog system. 
+
+* Fix gem for deb and rpm. 
+
+* Fix purge cache. 
+
+* Fix gen-latest content. 
+
+* Added logs in publish_to_cdn. 
+
+* Fix publish_to_cdn.ym; 
+
+* Replace install aws on check. 
+
+* Fix aws install. 
+
+* Fix aws install. 
+
+* Fix tag, fix path. 
+
+
+
+## v2.7.6 (2025-09-12)
 
 #### Other
 
