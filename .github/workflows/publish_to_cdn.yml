@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       S3_ENDPOINT: ${{ vars.S3_ENDPOINT }}
-      S3_BUCKET:   ${{ vars.S3_BUCKET }}
-      CDN_BASE:    ${{ vars.CDN_BASE }}
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
+      CDN_BASE: ${{ vars.CDN_BASE }}
 
     steps:
       - uses: actions/checkout@v4
@@ -58,10 +58,10 @@ jobs:
         run: |
           node scripts/gen-latest.mjs "${{ steps.meta.outputs.version }}" "${{ env.CDN_BASE }}" "artifacts/${{ steps.meta.outputs.version }}"
 
-      - name: Install AWS CLI & jq
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli jq
+      - name: Setup AWS CLI v2
+        uses: aws-actions/setup-aws-cli@v2
+        with:
+          version: "2.x"
 
       - name: Upload versioned files (long cache)
         env:
@@ -90,9 +90,9 @@ jobs:
       # Purge CDN через сервисный аккаунт + yc CLI
       - name: Purge CDN cache for latest.json (yc CLI)
         env:
-          YC_SA_KEY_JSON:  ${{ secrets.YC_SA_KEY_JSON }}
-          YC_CLOUD_ID:     ${{ secrets.YC_CLOUD_ID }}
-          YC_FOLDER_ID:    ${{ secrets.YC_FOLDER_ID }}
+          YC_SA_KEY_JSON: ${{ secrets.YC_SA_KEY_JSON }}
+          YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
+          YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
           CDN_RESOURCE_ID: ${{ secrets.CDN_RESOURCE_ID }}
         shell: bash
         run: |
