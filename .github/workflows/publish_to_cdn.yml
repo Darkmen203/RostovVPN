@@ -58,14 +58,8 @@ jobs:
         run: |
           node scripts/gen-latest.mjs "${{ steps.meta.outputs.version }}" "${{ env.CDN_BASE }}" "artifacts/${{ steps.meta.outputs.version }}"
 
-      - name: Install AWS CLI v2 (manual)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip
-          curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
-          unzip -q awscliv2.zip
-          sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli
-          aws --version
+      - name: Check AWS CLI
+        run: aws --version
 
       - name: Upload versioned files (long cache)
         env:
