@@ -7,7 +7,7 @@ on:
         description: "Release version (e.g. 2.7.44)"
         required: true
   release:
-    types: [released]
+    types: [published]
 
 permissions:
   contents: read
@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       S3_ENDPOINT: ${{ vars.S3_ENDPOINT }}
-      S3_BUCKET: ${{ vars.S3_BUCKET }}
-      CDN_BASE: ${{ vars.CDN_BASE }}
+      S3_BUCKET:   ${{ vars.S3_BUCKET }}
+      CDN_BASE:    ${{ vars.CDN_BASE }}
 
     steps:
       - uses: actions/checkout@v4
@@ -30,13 +30,13 @@ jobs:
         run: |
           if [[ -n "${{ github.event.release.tag_name }}" ]]; then
             TAG="${{ github.event.release.tag_name }}"
-            echo "tag=$TAG" >> $GITHUB_OUTPUT
-            echo "version=${TAG#v}" >> $GITHUB_OUTPUT
           else
-            echo "tag=v${{ inputs.version }}" >> $GITHUB_OUTPUT
-            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            TAG="v${{ inputs.version }}"
           fi
-          echo "Resolved: tag=${{ steps.meta.outputs.tag }}, version=${{ steps.meta.outputs.version }}"
+          VERSION="${TAG#v}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved: tag=$TAG, version=$VERSION"
 
       - name: Download release assets
         uses: robinraju/release-downloader@v1.11
@@ -57,6 +57,22 @@ jobs:
       - name: Generate latest.json + .sha256
         run: |
           node scripts/gen-latest.mjs "${{ steps.meta.outputs.version }}" "${{ env.CDN_BASE }}" "artifacts/${{ steps.meta.outputs.version }}"
+
+      - name: Ensure latest.json exists at artifacts/
+        shell: bash
+        run: |
+          set -e
+          if [[ -f "artifacts/latest.json" ]]; then
+            echo "latest.json already in artifacts/"
+          elif [[ -f "artifacts/${{ steps.meta.outputs.version }}/latest.json" ]]; then
+            mv "artifacts/${{ steps.meta.outputs.version }}/latest.json" "artifacts/latest.json"
+            echo "Moved latest.json to artifacts/"
+          else
+            echo "ERROR: latest.json not found after generation"
+            ls -la artifacts || true
+            ls -la "artifacts/${{ steps.meta.outputs.version }}" || true
+            exit 1
+          fi
 
       - name: Check AWS CLI
         run: aws --version
@@ -94,6 +110,7 @@ jobs:
           CDN_RESOURCE_ID: ${{ secrets.CDN_RESOURCE_ID }}
         shell: bash
         run: |
+          set -e
           curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
           printf '%s' "$YC_SA_KEY_JSON" > sa.json
           ~/yandex-cloud/bin/yc config set service-account-key sa.json
