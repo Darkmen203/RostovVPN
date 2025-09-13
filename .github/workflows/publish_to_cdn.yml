@@ -168,4 +168,4 @@ jobs:
           ~/yandex-cloud/bin/yc config set cloud-id  "$YC_CLOUD_ID"
           ~/yandex-cloud/bin/yc config set folder-id "$YC_FOLDER_ID"
           echo "Purging CDN path: /releases/latest.json"
-          ~/yandex-cloud/bin/yc cdn cache purge --resource-id "$CDN_RESOURCE_ID" --paths "/releases/latest.json"
+          ~/yandex-cloud/bin/yc cdn cache purge --resource-id "$CDN_RESOURCE_ID" --path "/releases/latest.json"
