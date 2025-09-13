@@ -7,13 +7,17 @@ on:
         description: "Release version (e.g. 2.7.44)"
         required: true
   release:
-    types: [published]
+    types: [published, prereleased, edited]
 
 permissions:
   contents: read
 
 jobs:
   publish:
+    # Запускаем вручную или для релиза, который НЕ draft и НЕ prerelease
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'release' && !github.event.release.draft && !github.event.release.prerelease)
     runs-on: ubuntu-latest
     env:
       S3_ENDPOINT: ${{ vars.S3_ENDPOINT }}

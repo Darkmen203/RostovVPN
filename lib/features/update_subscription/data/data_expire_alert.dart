@@ -138,10 +138,6 @@ class _DataExpireAlertState extends ConsumerState<DataExpireAlert> {
               ],
             ),
           ),
-          // Text('${t.general.pay_message_alert_pay}'
-          //     '${t.general.number_alert_pay} +7 (908) 185-18-07\n'
-          //     '${t.general.bank_alert_pay} Альфа-банк\n'
-          //     '${t.general.recipient_alert_pay} Дмитрий П.'),
         ],
       ),
       actions: [

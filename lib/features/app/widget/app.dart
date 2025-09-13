@@ -3,6 +3,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
@@ -33,6 +34,7 @@ class App extends HookConsumerWidget with PresLogger {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final preChecksLoading = useState(false);
     final router = ref.watch(routerProvider);
     final locale = ref.watch(localePreferencesProvider);
     final themeMode = ref.watch(themePreferencesProvider);
@@ -83,28 +85,32 @@ class App extends HookConsumerWidget with PresLogger {
                     if (!_didCheck && appInfoAsync.hasValue) {
                       _didCheck = true;
                       WidgetsBinding.instance.addPostFrameCallback((_) async {
-                        await ref
-                            .read(loginManagerProvider.notifier)
-                            .checkSubscriptionExpiry();
+                        preChecksLoading.value = true;
+                        try {
+                          await ref
+                              .read(loginManagerProvider.notifier)
+                              .checkSubscriptionExpiry();
 
-                        final state = await ref
-                            .read(appUpdateNotifierProvider.notifier)
-                            .check();
-                        state.maybeWhen(
-                          available: (remote) {
-                            final ctx = router.routerDelegate.navigatorKey
-                                    .currentContext ??
-                                context;
-                            final appInfo =
-                                appInfoAsync.requireValue;
-                            showUpdateDialog(
-                              ctx,
-                              remote,
-                              currentVersion: appInfo.presentVersion,
-                            );
-                          },
-                          orElse: () {},
-                        );
+                          final state = await ref
+                              .read(appUpdateNotifierProvider.notifier)
+                              .check();
+                          state.maybeWhen(
+                            available: (remote) {
+                              final ctx = router.routerDelegate.navigatorKey
+                                      .currentContext ??
+                                  context;
+                              final appInfo = appInfoAsync.requireValue;
+                              showUpdateDialog(
+                                ctx,
+                                remote,
+                                currentVersion: appInfo.presentVersion,
+                              );
+                            },
+                            orElse: () {},
+                          );
+                        } finally {
+                          preChecksLoading.value = false;
+                        }
                       });
                     }
                     child = DataExpireAlert(
@@ -119,7 +125,21 @@ class App extends HookConsumerWidget with PresLogger {
                         child: child,
                       );
                     }
-                    return child;
+                    // Показать оверлей загрузки, пока выполняются стартовые проверки
+                    return Stack(
+                      children: [
+                        child,
+                        if (preChecksLoading.value)
+                          const Positioned.fill(
+                            child: ColoredBox(
+                              color: Colors.black54,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
                   },
                 );
               },
