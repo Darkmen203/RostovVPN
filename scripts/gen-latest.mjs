@@ -1,82 +1,170 @@
-// node scripts/gen-latest.mjs <VERSION> <CDN_BASE> [assetsDir]
-import { createHash } from "crypto";
-import { promises as fs } from "fs";
+#!/usr/bin/env node
+// scripts/gen-latest.mjs
+import fs from "fs";
 import path from "path";
+import { createHash } from "crypto";
 
-const [,, VERSION, CDN_BASE_INPUT, ASSETS_DIR_INPUT] = process.argv;
-const CDN_BASE = (CDN_BASE_INPUT || "").replace(/\/+$/,"");
-if (!VERSION || !CDN_BASE) {
-  console.error("Usage: node scripts/gen-latest.mjs <VERSION> <CDN_BASE> [assetsDir]");
-  process.exit(1);
-}
-const assetsDir = path.resolve(ASSETS_DIR_INPUT || `artifacts/${VERSION}`);
+const [,, versionArg, cdnBaseArg, artifactsDirArg] = process.argv;
 
-const detect = (filename) => {
-  const f = filename.toLowerCase();
-  if (f.includes("windows")) {
-    return { platform: "Windows",
-      type: f.endsWith(".msix") ? "MSIX" : f.endsWith(".zip") ? "Portable" : "Setup",
-      arch: f.includes("x64") ? "x64" : (f.includes("arm64") ? "arm64" : "")
-    };
-  }
-  if (f.includes("macos")) {
-    return { platform: "macOS",
-      type: f.endsWith(".dmg") ? "DMG" : "Installer",
-      arch: "universal"
-    };
-  }
-  if (f.includes("linux")) {
-    return { platform: "Linux",
-      type: f.endsWith(".appimage") ? "AppImage" : (f.endsWith(".deb") ? "DEB" : "RPM"),
-      arch: f.includes("x64") ? "x64" : ""
-    };
-  }
-  if (f.includes("android")) {
-    return { platform: "Android",
-      type: f.endsWith(".aab") ? ".aab" : "APK",
-      arch: f.includes("arm64") ? "arm64" : (f.includes("arm7") ? "arm7" :
-            (f.includes("x86_64") ? "x86_64" : "universal"))
-    };
-  }
-  return { platform: "Unknown", type: "", arch: "" };
-};
-
-const files = (await fs.readdir(assetsDir))
-  .filter(f => !f.endsWith(".sha256") && !f.startsWith("Source code"));
-if (!files.length) {
-  console.error(`No files in ${assetsDir}`);
-  process.exit(1);
+if (!versionArg || !cdnBaseArg || !artifactsDirArg) {
+  console.error("Usage: node scripts/gen-latest.mjs <version> <cdnBase> <artifactsDir>");
+  process.exit(2);
 }
 
-const assets = [];
-for (const f of files) {
-  const full = path.join(assetsDir, f);
-  const buf = await fs.readFile(full);
-  const sha = createHash("sha256").update(buf).digest("hex");
-  const { size } = await fs.stat(full);
-  await fs.writeFile(path.join(assetsDir, f + ".sha256"), `${sha}  ${f}\n`);
+const version = String(versionArg).trim().replace(/^v/, "");
+const cdnBase = String(cdnBaseArg).replace(/\/+$/,"");
+const dir = path.resolve(artifactsDirArg);
 
-  const meta = detect(f);
-  assets.push({
-    platform: meta.platform,
-    arch: meta.arch,
-    type: meta.type,
-    filename: f,
-    url: `${CDN_BASE}/releases/${encodeURIComponent(VERSION)}/${encodeURIComponent(f)}`,
-    size,
-    sha256: sha
+const PRODUCT = "RostovVPN";
+
+// -------- helpers --------
+function sha256File(file) {
+  return new Promise((resolve, reject) => {
+    const h = createHash("sha256");
+    const s = fs.createReadStream(file);
+    s.on("error", reject);
+    s.on("data", (chunk) => h.update(chunk));
+    s.on("end", () => resolve(h.digest("hex")));
   });
 }
 
-const latest = {
-  version: VERSION,
-  releasedAt: new Date().toISOString(),
-  telegramChannelUrl: "https://t.me/rostovvpn",
-  telegramFaqUrl: "https://t.me/rostovvpn_faq",
-  microsoftStoreUrl: "https://apps.microsoft.com/store/detail/placeholder",
-  assets
-};
+function detectMeta(filename) {
+  const f = filename;
+  const lower = f.toLowerCase();
 
-await fs.mkdir("artifacts", { recursive: true });
-await fs.writeFile("artifacts/latest.json", JSON.stringify(latest, null, 2));
-console.log(`latest.json generated with ${assets.length} assets`);
+  const has = (needle) => lower.includes(needle);
+  const ends = (ext) => lower.endsWith(ext);
+
+  // Defaults
+  let platform = "Unknown";
+  let type = "";
+  let arch = "";
+
+  // --- ANDROID ---
+  if (ends(".apk") || has("android")) {
+    platform = "Android";
+    type = "APK";
+    if (has("universal")) arch = "universal";
+    else if (has("arm64") || has("aarch64")) arch = "arm64";
+    else if (has("arm7") || has("armv7")) arch = "arm7";
+    else if (has("x86_64") || has("x64")) arch = "x86_64";
+  }
+  if (ends(".aab")) {
+    platform = "Android";
+    type = ".aab";
+    if (!arch) arch = "market";
+  }
+
+  // --- WINDOWS ---
+  if (ends(".exe")) {
+    platform = "Windows";
+    type = "Setup";
+    if (has("x64") || has("amd64")) arch = "x64";
+  } else if (ends(".msix")) {
+    platform = "Windows";
+    type = "MSIX";
+    if (has("x64") || has("amd64")) arch = "x64";
+  } else if (ends(".zip") && (has("windows") || has("portable"))) {
+    platform = "Windows";
+    type = "Portable";
+    if (has("x64") || has("amd64")) arch = "x64";
+  }
+
+  // --- macOS ---
+  if (ends(".dmg")) {
+    platform = "macOS";
+    type = "DMG";
+    if (!arch) arch = "universal";
+  } else if (ends(".pkg")) {
+    platform = "macOS";
+    type = "Installer";
+    if (!arch) arch = "universal";
+  }
+
+  // --- Linux ---
+  if (ends(".appimage")) {
+    platform = "Linux";
+    type = "AppImage";
+    if (has("x64") || has("amd64")) arch = "x64";
+  } else if (ends(".deb")) {
+    platform = "Linux";
+    type = "DEB";
+    if (has("x64") || has("amd64")) arch = "x64";
+  } else if (ends(".rpm")) {
+    platform = "Linux";
+    type = "RPM";
+    if (has("x64") || has("amd64")) arch = "x64";
+  }
+
+  // Fallbacks for names that include the platform word
+  if (platform === "Unknown") {
+    if (has("linux")) platform = "Linux";
+    if (has("windows")) platform = "Windows";
+    if (has("macos") || has("darwin") || has("osx")) platform = "macOS";
+    if (has("android")) platform = "Android";
+  }
+
+  return { platform, type, arch };
+}
+
+// -------- main --------
+async function main() {
+  const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+
+  // Фильтруем только обычные файлы-артефакты
+  const files = entries
+    .filter(e => e.isFile())
+    .map(e => e.name)
+    .filter(n => !/^Source code/i.test(n));
+
+  const assets = [];
+  for (const name of files) {
+    const filePath = path.join(dir, name);
+    const st = await fs.promises.stat(filePath);
+    const { platform, type, arch } = detectMeta(name);
+    const url = `${cdnBase}/releases/${version}/${encodeURIComponent(name)}`;
+    const sha256 = await sha256File(filePath);
+
+    assets.push({
+      platform,
+      arch,
+      type,
+      filename: name,
+      url,
+      size: st.size,
+      sha256
+    });
+  }
+
+  // Сортировка стабильная: сперва Android/Windows/macOS/Linux, затем по имени
+  const order = { Android: 0, Windows: 1, macOS: 2, Linux: 3, Unknown: 9 };
+  assets.sort((a, b) =>
+    (order[a.platform] ?? 9) - (order[b.platform] ?? 9) ||
+    String(a.filename).localeCompare(String(b.filename))
+  );
+
+  const out = {
+    version,
+    releasedAt: new Date().toISOString(),
+    telegramChannelUrl: "https://t.me/rostovvpn",
+    telegramFaqUrl: "https://t.me/rostovvpn_faq",
+    microsoftStoreUrl: "https://apps.microsoft.com/detail/9N9HX27F15C2",
+    assets
+  };
+
+  const outDir = dir; // кладём рядом с артефактами конкретной версии
+  const latestPath = path.join(outDir, "latest.json");
+  await fs.promises.writeFile(latestPath, JSON.stringify(out, null, 4));
+  console.log("Wrote:", latestPath);
+
+  // Дублируем в artifacts/latest.json (чтобы следующий шаг мог подобрать)
+  const artifactsRoot = path.resolve(dir, "..");
+  const topLatest = path.join(artifactsRoot, "latest.json");
+  await fs.promises.writeFile(topLatest, JSON.stringify(out, null, 4));
+  console.log("Wrote:", topLatest);
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
