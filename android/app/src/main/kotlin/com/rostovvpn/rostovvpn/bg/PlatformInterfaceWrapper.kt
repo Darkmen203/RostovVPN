@@ -1,6 +1,5 @@
 package com.rostovvpn.rostovvpn.bg
 
-import android.app.Notification
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Process
@@ -21,7 +20,7 @@ import io.nekohasekai.libbox.NetworkInterface as LibboxNetworkInterface
 
 /**
  * Дефолтные реализации под Android для методов PlatformInterface.
- * В ЭТОЙ версии libbox не используем LocalDNSTransport и новый StringIterator.
+ * Без LocalDNSTransport и без sendNotification (в этой версии libbox их нет).
  */
 interface PlatformInterfaceWrapper : PlatformInterface {
 
@@ -95,36 +94,20 @@ interface PlatformInterfaceWrapper : PlatformInterface {
 
     // --- Прочее ---
 
-    override fun underNetworkExtension(): Boolean {
-        return false
-    }
+    override fun underNetworkExtension(): Boolean = false
 
-    override fun includeAllNetworks(): Boolean {
-        return false
-    }
+    override fun includeAllNetworks(): Boolean = false
 
-    override fun clearDNSCache() {
-        // no-op
-    }
+    override fun clearDNSCache() { /* no-op */ }
 
-    override fun readWIFIState(): WIFIState? {
-        return null
-    }
-
-    // В ЭТОЙ версии интерфейс требует уведомления — дадим дефолтную no-op реализацию,
-    // чтобы сервисы не обязаны были реализовывать.
-    override fun sendNotification(notification: Notification) {
-        // no-op, для VPN/Proxy сервисов можно показывать нотификацию в BoxService
-    }
+    override fun readWIFIState(): WIFIState? = null
 
     // === Вспомогательные адаптеры ===
 
     private class InterfaceArray(private val iterator: Enumeration<NetworkInterface>) :
         NetworkInterfaceIterator {
 
-        override fun hasNext(): Boolean {
-            return iterator.hasMoreElements()
-        }
+        override fun hasNext(): Boolean = iterator.hasMoreElements()
 
         override fun next(): LibboxNetworkInterface {
             val element = iterator.nextElement()
@@ -133,7 +116,8 @@ interface PlatformInterfaceWrapper : PlatformInterface {
                 name = element.name
                 index = element.index
                 runCatching { mtu = element.mtu }
-                addresses = StringArray(prefixes.iterator())
+                // StringIterator новой формы: дадим и len(), и старый hasNext()/next()
+                addresses = StringArray(prefixes)
             }
         }
 
@@ -147,10 +131,16 @@ interface PlatformInterfaceWrapper : PlatformInterface {
     }
 
     /**
-     * Старый StringIterator (hasNext/next).
+     * Совместимая реализация StringIterator:
+     * - поддерживает новую форму (len())
+     * - и старую форму (hasNext()/next())
      */
-    private class StringArray(private val iterator: Iterator<String>) : StringIterator {
-        override fun hasNext(): Boolean = iterator.hasNext()
-        override fun next(): String = iterator.next()
+    private class StringArray(private val data: List<String>) : StringIterator {
+        private var idx = 0
+        // новая форма
+        override fun len(): Int = data.size
+        // старая форма
+        override fun hasNext(): Boolean = idx < data.size
+        override fun next(): String = data[idx++]
     }
 }

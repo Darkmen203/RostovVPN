@@ -1,6 +1,5 @@
 package com.rostovvpn.rostovvpn.utils
 
-import com.rostovvpn.rostovvpn.ktx.toList
 import go.Seq
 import io.nekohasekai.libbox.CommandClient as LibboxCommandClient
 import io.nekohasekai.libbox.CommandClientHandler
@@ -11,68 +10,51 @@ import io.nekohasekai.libbox.OutboundGroup
 import io.nekohasekai.libbox.OutboundGroupIterator
 import io.nekohasekai.libbox.StatusMessage
 import io.nekohasekai.libbox.StringIterator
+import com.rostovvpn.rostovvpn.ktx.toList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-/** Обёртка над io.nekohasekai.libbox.CommandClient без конфликта имён. */
-open class RvpnCommandClient(
-        private val scope: CoroutineScope,
-        private val connectionType: ConnectionType,
-        private val handler: Handler
+open class CommandClient(
+    private val scope: CoroutineScope,
+    private val connectionType: ConnectionType,
+    private val handler: Handler
 ) {
 
     enum class ConnectionType {
-        Status,
-        Groups,
-        Log,
-        ClashMode,
-        GroupOnly
+        Status, Groups, Log, ClashMode, GroupOnly
     }
 
     interface Handler {
         fun onConnected() {}
         fun onDisconnected() {}
-
         fun updateStatus(status: StatusMessage) {}
         fun updateGroups(groups: List<OutboundGroup>) {}
-
-        // Оставляем твоё API как есть
         fun clearLog() {}
         fun appendLog(message: String) {}
-
         fun initializeClashMode(modeList: List<String>, currentMode: String) {}
         fun updateClashMode(newMode: String) {}
     }
 
-    private var commandClient: LibboxCommandClient? = null
+    private var client: LibboxCommandClient? = null
     private val clientHandler = ClientHandler()
 
     fun connect() {
         disconnect()
-
-        val options =
-                CommandClientOptions().apply {
-                    command =
-                            when (connectionType) {
-                                ConnectionType.Status -> Libbox.CommandStatus
-                                ConnectionType.Groups -> Libbox.CommandGroup
-                                ConnectionType.Log -> Libbox.CommandLog
-                                ConnectionType.ClashMode -> Libbox.CommandClashMode
-                                ConnectionType.GroupOnly -> {
-                                    // В некоторых версиях CommandGroupInfoOnly отсутствует.
-                                    // Самый надёжный фоллбек — обычная группа.
-                                    Libbox.CommandGroup
-                                }
-                            }
-                    // нс (наносекунды), как у тебя было
-                    statusInterval = 2 * 1000 * 1000 * 1000
-                }
+        val options = CommandClientOptions().apply {
+            command = when (connectionType) {
+                ConnectionType.Status -> Libbox.CommandStatus
+                ConnectionType.Groups -> Libbox.CommandGroup
+                ConnectionType.Log -> Libbox.CommandLog
+                ConnectionType.ClashMode -> Libbox.CommandClashMode
+                ConnectionType.GroupOnly -> Libbox.CommandGroup // fallback вместо CommandGroupInfoOnly
+            }
+            statusInterval = 2 * 1000 * 1000 * 1000 // ns
+        }
 
         val libboxClient = LibboxCommandClient(clientHandler, options)
-
         scope.launch(Dispatchers.IO) {
             for (i in 1..10) {
                 delay(100 + i.toLong() * 50)
@@ -85,7 +67,7 @@ open class RvpnCommandClient(
                     runCatching { libboxClient.disconnect() }
                     return@launch
                 }
-                this@RvpnCommandClient.commandClient = libboxClient
+                this@CommandClient.client = libboxClient
                 return@launch
             }
             runCatching { libboxClient.disconnect() }
@@ -93,11 +75,11 @@ open class RvpnCommandClient(
     }
 
     fun disconnect() {
-        commandClient?.apply {
+        client?.apply {
             runCatching { disconnect() }
             Seq.destroyRef(refnum)
         }
-        commandClient = null
+        client = null
     }
 
     private inner class ClientHandler : CommandClientHandler {
@@ -119,20 +101,13 @@ open class RvpnCommandClient(
             handler.updateGroups(groups)
         }
 
-        // В новых API обычно clearLogs(), а не clearLog()
-        // Делаем адаптацию к твоему интерфейсу:
-        override fun clearLogs() {
+        override fun clearLog() {
             handler.clearLog()
         }
 
-        // override fun writeConnections(message: Connections) {
-        //     // Если нужно — прокинь в UI. Пока no-op.
-        // }
-        // Сообщение — не nullable по новому API
-        override fun writeLog(message: String?) {
-            if (message != null) {
-                handler.appendLog(message)
-            }
+        // В этой версии — non-null String
+        override fun writeLog(message: String) {
+            handler.appendLog(message)
         }
 
         override fun writeStatus(message: StatusMessage?) {
@@ -147,6 +122,10 @@ open class RvpnCommandClient(
         override fun updateClashMode(newMode: String) {
             handler.updateClashMode(newMode)
         }
+
+        // Новое требование интерфейса в твоём логе
+        override fun writeConnections(message: Connections) {
+            // Если нужно — прокинь дальше; пока no-op
+        }
     }
-}
 }

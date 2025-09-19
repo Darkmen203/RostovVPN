@@ -15,8 +15,6 @@ class ProxyService : Service(), PlatformInterfaceWrapper {
 
     override fun writeLog(message: String) = service.writeLog(message)
 
-    // Требуется интерфейсом PlatformInterfaceWrapper; для Proxy no-op
-    override fun autoDetectInterfaceControl(fd: Int) {
-        // Ничего не делаем: это актуально только для VPNService (protect(fd))
-    }
+    // Требуется интерфейсом PlatformInterface (для VPN релевантно, здесь — no-op)
+    override fun autoDetectInterfaceControl(fd: Int) { /* no-op */ }
 }
