@@ -7,11 +7,11 @@ import io.nekohasekai.libbox.RoutePrefix
 import io.nekohasekai.libbox.StringIterator
 import java.net.InetAddress
 
-/** В ЭТОЙ версии libbox StringIterator — со старыми методами hasNext()/next(). */
+/** Эта ревизия libbox: StringIterator -> hasNext()/next() */
 fun StringIterator.toList(): List<String> {
-    val out = ArrayList<String>(len())
-    for (i in 0 until len()) {
-        out.add(get(i))
+    val out = mutableListOf<String>()
+    while (hasNext()) {
+        out.add(next())
     }
     return out
 }

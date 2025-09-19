@@ -45,20 +45,20 @@ class StatsChannel(private val scope: CoroutineScope) : FlutterPlugin, CommandCl
             override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
                 statsEvent = events
                 Log.d(TAG, "connecting stats command client")
-                CommandClient.connect()
+                commandClient.connect()
             }
 
             override fun onCancel(arguments: Any?) {
                 statsEvent = null
                 Log.d(TAG, "disconnecting stats command client")
-                CommandClient.disconnect()
+                commandClient.disconnect()
             }
         })
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         statsEvent = null
-        CommandClient.disconnect()
+        commandClient.disconnect()
         statsChannel?.setStreamHandler(null)
     }
 }

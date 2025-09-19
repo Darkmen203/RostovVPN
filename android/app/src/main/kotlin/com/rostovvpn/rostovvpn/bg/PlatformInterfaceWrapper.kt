@@ -1,13 +1,12 @@
 package com.rostovvpn.rostovvpn.bg
 
+import android.app.Notification
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Process
 import androidx.annotation.RequiresApi
 import com.rostovvpn.rostovvpn.Application
 import io.nekohasekai.libbox.InterfaceUpdateListener
-import io.nekohasekai.libbox.LocalDNSTransport
-import io.nekohasekai.libbox.NetworkInterface as LibboxNetworkInterface
 import io.nekohasekai.libbox.NetworkInterfaceIterator
 import io.nekohasekai.libbox.PlatformInterface
 import io.nekohasekai.libbox.StringIterator
@@ -18,14 +17,13 @@ import java.net.InetSocketAddress
 import java.net.InterfaceAddress
 import java.net.NetworkInterface
 import java.util.Enumeration
+import io.nekohasekai.libbox.NetworkInterface as LibboxNetworkInterface
 
 /**
- * Дефолтные реализации под Android для методов PlatformInterface. Требуемый localDNSTransport()
- * есть; sendNotification в этой ветке API отсутствует.
+ * Дефолтные реализации под Android для методов PlatformInterface.
+ * (эта ревизия libbox требует sendNotification и старый StringIterator)
  */
 interface PlatformInterfaceWrapper : PlatformInterface {
-
-    // --- Управление TUN/интерфейсами ---
 
     override fun openTun(options: TunOptions): Int {
         error("invalid argument")
@@ -35,25 +33,19 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
     }
 
-    // Требуется текущей версией интерфейса
-    override fun localDNSTransport(): LocalDNSTransport = LocalDNSTransport.SYSTEM
-
-    // --- Идентификация владельцев соединений/пакетов ---
-
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun findConnectionOwner(
-            ipProtocol: Int,
-            sourceAddress: String,
-            sourcePort: Int,
-            destinationAddress: String,
-            destinationPort: Int
+        ipProtocol: Int,
+        sourceAddress: String,
+        sourcePort: Int,
+        destinationAddress: String,
+        destinationPort: Int
     ): Int {
-        val uid =
-                Application.connectivity.getConnectionOwnerUid(
-                        ipProtocol,
-                        InetSocketAddress(sourceAddress, sourcePort),
-                        InetSocketAddress(destinationAddress, destinationPort)
-                )
+        val uid = Application.connectivity.getConnectionOwnerUid(
+            ipProtocol,
+            InetSocketAddress(sourceAddress, sourcePort),
+            InetSocketAddress(destinationAddress, destinationPort)
+        )
         if (uid == Process.INVALID_UID) error("android: connection owner not found")
         return uid
     }
@@ -69,8 +61,7 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 Application.packageManager.getPackageUid(
-                        packageName,
-                        PackageManager.PackageInfoFlags.of(0)
+                    packageName, PackageManager.PackageInfoFlags.of(0)
                 )
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Application.packageManager.getPackageUid(packageName, 0)
@@ -82,8 +73,6 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         }
     }
 
-    // --- Мониторинг дефолтного интерфейса ---
-
     override fun startDefaultInterfaceMonitor(listener: InterfaceUpdateListener) {
         DefaultNetworkMonitor.setListener(listener)
     }
@@ -92,40 +81,36 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         DefaultNetworkMonitor.setListener(null)
     }
 
-    // --- Перечень интерфейсов ---
-
     override fun getInterfaces(): NetworkInterfaceIterator {
         return InterfaceArray(NetworkInterface.getNetworkInterfaces())
     }
-
-    // --- Прочее ---
 
     override fun underNetworkExtension(): Boolean = false
 
     override fun includeAllNetworks(): Boolean = false
 
-    override fun clearDNSCache() {
-        /* no-op */
-    }
+    override fun clearDNSCache() { /* no-op */ }
 
     override fun readWIFIState(): WIFIState? = null
 
-    // === Вспомогательные адаптеры ===
+    // ЭТА ВЕТКА API ТРЕБУЕТ sendNotification
+    override fun sendNotification(notification: Notification) {
+        // no-op; уведомления ведём через ServiceNotification
+    }
 
     private class InterfaceArray(private val iterator: Enumeration<NetworkInterface>) :
-            NetworkInterfaceIterator {
+        NetworkInterfaceIterator {
 
         override fun hasNext(): Boolean = iterator.hasMoreElements()
 
         override fun next(): LibboxNetworkInterface {
             val element = iterator.nextElement()
-            val prefixes: List<String> = element.interfaceAddresses.map { it.toPrefix() }
+            val prefixes = element.interfaceAddresses.map { it.toPrefix() }
             return LibboxNetworkInterface().apply {
                 name = element.name
                 index = element.index
                 runCatching { mtu = element.mtu }
-                // Эта ревизия libbox ждёт StringIterator с len()/get(i)
-                addresses = StringArray(prefixes)
+                addresses = StringArray(prefixes.iterator())
             }
         }
 
@@ -138,9 +123,9 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         }
     }
 
-    /** Совместимая реализация StringIterator (новая форма). */
-    private class StringArray(private val data: List<String>) : StringIterator {
-        override fun len(): Int = data.size
-        override fun get(i: Int): String = data[i]
+    /** Старый итератор строк (hasNext/next). */
+    private class StringArray(private val it: Iterator<String>) : StringIterator {
+        override fun hasNext(): Boolean = it.hasNext()
+        override fun next(): String = it.next()
     }
 }
