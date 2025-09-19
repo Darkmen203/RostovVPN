@@ -8,14 +8,12 @@ import io.nekohasekai.libbox.StringIterator
 import java.net.InetAddress
 
 /**
- * Новый формат StringIterator: массивоподобный доступ.
- * Конвертируем в List<String> через len() и индекс.
+ * В ЭТОЙ версии libbox StringIterator — со старыми методами hasNext()/next().
  */
 fun StringIterator.toList(): List<String> {
-    val out = ArrayList<String>(len())
-    for (i in 0 until len()) {
-        // В наших адаптерах доступ по индексу называется get(i)
-        out.add(get(i))
+    val out = mutableListOf<String>()
+    while (hasNext()) {
+        out.add(next())
     }
     return out
 }

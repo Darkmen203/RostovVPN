@@ -1,17 +1,16 @@
 package com.rostovvpn.rostovvpn.bg
 
-import android.util.Log
-import com.rostovvpn.rostovvpn.Settings
 import android.content.Intent
 import android.content.pm.PackageManager.NameNotFoundException
 import android.net.ProxyInfo
 import android.net.VpnService
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
+import com.rostovvpn.rostovvpn.Settings
 import com.rostovvpn.rostovvpn.constant.PerAppProxyMode
 import com.rostovvpn.rostovvpn.ktx.toIpPrefix
 import io.nekohasekai.libbox.TunOptions
-import io.nekohasekai.libbox.LocalDNSTransport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -25,7 +24,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
     private val service = BoxService(this, this)
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int) =
-        service.onStartCommand(intent, flags, startId)
+            service.onStartCommand(intent, flags, startId)
 
     override fun onBind(intent: Intent): IBinder {
         val binder = super.onBind(intent)
@@ -38,11 +37,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
     }
 
     override fun onRevoke() {
-        runBlocking {
-            withContext(Dispatchers.Main) {
-                service.onRevoke()
-            }
-        }
+        runBlocking { withContext(Dispatchers.Main) { service.onRevoke() } }
     }
 
     // авто-детект интерфейса через protect(fd) — как и было
@@ -64,24 +59,20 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         try {
             Log.d(TAG, "Including $packageName")
             builder.addAllowedApplication(packageName)
-        } catch (_: NameNotFoundException) {
-        }
+        } catch (_: NameNotFoundException) {}
     }
 
     fun addExcludePackage(builder: Builder, packageName: String) {
         try {
             Log.d(TAG, "Excluding $packageName")
             builder.addDisallowedApplication(packageName)
-        } catch (_: NameNotFoundException) {
-        }
+        } catch (_: NameNotFoundException) {}
     }
 
     override fun openTun(options: TunOptions): Int {
         if (prepare(this) != null) error("android: missing vpn permission")
 
-        val builder = Builder()
-            .setSession("sing-box")
-            .setMtu(options.mtu)
+        val builder = Builder().setSession("sing-box").setMtu(options.mtu)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             builder.setMetered(false)
@@ -100,13 +91,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         }
 
         if (options.autoRoute) {
-            // DNS: подстрахуемся от null/пустого (в некоторых биндингах возможно)
-            runCatching {
-                val dns = options.dnsServerAddress
-                if (dns != null && dns.isNotEmpty()) {
-                    builder.addDnsServer(dns) // String перегрузка работает на всех API >= 21
-                }
-            }
+            builder.addDnsServer(options.dnsServerAddress)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 val inet4RouteAddress = options.inet4RouteAddress
@@ -187,10 +172,10 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
             systemProxyEnabled = Settings.systemProxyEnabled
             if (systemProxyEnabled) {
                 builder.setHttpProxy(
-                    ProxyInfo.buildDirectProxy(
-                        options.httpProxyServer,
-                        options.httpProxyServerPort
-                    )
+                        ProxyInfo.buildDirectProxy(
+                                options.httpProxyServer,
+                                options.httpProxyServerPort
+                        )
                 )
             }
         } else {
@@ -198,8 +183,9 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
             systemProxyEnabled = false
         }
 
-        val pfd = builder.establish()
-            ?: error("android: the application is not prepared or is revoked")
+        val pfd =
+                builder.establish()
+                        ?: error("android: the application is not prepared or is revoked")
         service.fileDescriptor = pfd
         return pfd.fd
     }

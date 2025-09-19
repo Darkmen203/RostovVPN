@@ -1,13 +1,12 @@
 package com.rostovvpn.rostovvpn.bg
 
+import android.app.Notification
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Process
 import androidx.annotation.RequiresApi
 import com.rostovvpn.rostovvpn.Application
 import io.nekohasekai.libbox.InterfaceUpdateListener
-import io.nekohasekai.libbox.LocalDNSTransport
-import io.nekohasekai.libbox.NetworkInterface as LibboxNetworkInterface
 import io.nekohasekai.libbox.NetworkInterfaceIterator
 import io.nekohasekai.libbox.PlatformInterface
 import io.nekohasekai.libbox.StringIterator
@@ -18,10 +17,11 @@ import java.net.InetSocketAddress
 import java.net.InterfaceAddress
 import java.net.NetworkInterface
 import java.util.Enumeration
+import io.nekohasekai.libbox.NetworkInterface as LibboxNetworkInterface
 
 /**
- * Даёт дефолтные реализации под Android для методов PlatformInterface. Убраны overrides с методов,
- * которых уже нет в новой версии libbox.
+ * Дефолтные реализации под Android для методов PlatformInterface.
+ * В ЭТОЙ версии libbox не используем LocalDNSTransport и новый StringIterator.
  */
 interface PlatformInterfaceWrapper : PlatformInterface {
 
@@ -35,27 +35,21 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
     }
 
-    // localDNSTransport в новых версиях обязателен
-    override fun localDNSTransport(): LocalDNSTransport {
-        return LocalDNSTransport.SYSTEM
-    }
-
     // --- Идентификация владельцев соединений/пакетов ---
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun findConnectionOwner(
-            ipProtocol: Int,
-            sourceAddress: String,
-            sourcePort: Int,
-            destinationAddress: String,
-            destinationPort: Int
+        ipProtocol: Int,
+        sourceAddress: String,
+        sourcePort: Int,
+        destinationAddress: String,
+        destinationPort: Int
     ): Int {
-        val uid =
-                Application.connectivity.getConnectionOwnerUid(
-                        ipProtocol,
-                        InetSocketAddress(sourceAddress, sourcePort),
-                        InetSocketAddress(destinationAddress, destinationPort)
-                )
+        val uid = Application.connectivity.getConnectionOwnerUid(
+            ipProtocol,
+            InetSocketAddress(sourceAddress, sourcePort),
+            InetSocketAddress(destinationAddress, destinationPort)
+        )
         if (uid == Process.INVALID_UID) error("android: connection owner not found")
         return uid
     }
@@ -71,8 +65,7 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 Application.packageManager.getPackageUid(
-                        packageName,
-                        PackageManager.PackageInfoFlags.of(0)
+                    packageName, PackageManager.PackageInfoFlags.of(0)
                 )
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Application.packageManager.getPackageUid(packageName, 0)
@@ -118,10 +111,16 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         return null
     }
 
+    // В ЭТОЙ версии интерфейс требует уведомления — дадим дефолтную no-op реализацию,
+    // чтобы сервисы не обязаны были реализовывать.
+    override fun sendNotification(notification: Notification) {
+        // no-op, для VPN/Proxy сервисов можно показывать нотификацию в BoxService
+    }
+
     // === Вспомогательные адаптеры ===
 
     private class InterfaceArray(private val iterator: Enumeration<NetworkInterface>) :
-            NetworkInterfaceIterator {
+        NetworkInterfaceIterator {
 
         override fun hasNext(): Boolean {
             return iterator.hasMoreElements()
@@ -129,13 +128,12 @@ interface PlatformInterfaceWrapper : PlatformInterface {
 
         override fun next(): LibboxNetworkInterface {
             val element = iterator.nextElement()
-            val prefixes: List<String> = element.interfaceAddresses.map { it.toPrefix() }
-
+            val prefixes = element.interfaceAddresses.map { it.toPrefix() }
             return LibboxNetworkInterface().apply {
                 name = element.name
                 index = element.index
                 runCatching { mtu = element.mtu }
-                addresses = StringArray(prefixes)
+                addresses = StringArray(prefixes.iterator())
             }
         }
 
@@ -148,9 +146,11 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         }
     }
 
-    /** Новая форма StringIterator: массивоподобный интерфейс. Даём доступ по индексу и длину. */
-    private class StringArray(private val data: List<String>) : StringIterator {
-        override fun len(): Int = data.size
-        fun get(i: Int): String = data[i]
+    /**
+     * Старый StringIterator (hasNext/next).
+     */
+    private class StringArray(private val iterator: Iterator<String>) : StringIterator {
+        override fun hasNext(): Boolean = iterator.hasNext()
+        override fun next(): String = iterator.next()
     }
 }

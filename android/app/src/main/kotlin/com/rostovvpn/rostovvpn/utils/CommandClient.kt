@@ -5,6 +5,7 @@ import go.Seq
 import io.nekohasekai.libbox.CommandClient as LibboxCommandClient
 import io.nekohasekai.libbox.CommandClientHandler
 import io.nekohasekai.libbox.CommandClientOptions
+import io.nekohasekai.libbox.Connections
 import io.nekohasekai.libbox.Libbox
 import io.nekohasekai.libbox.OutboundGroup
 import io.nekohasekai.libbox.OutboundGroupIterator
@@ -124,9 +125,14 @@ open class RvpnCommandClient(
             handler.clearLog()
         }
 
+        // override fun writeConnections(message: Connections) {
+        //     // Если нужно — прокинь в UI. Пока no-op.
+        // }
         // Сообщение — не nullable по новому API
-        override fun writeLog(message: String) {
-            handler.appendLog(message)
+        override fun writeLog(message: String?) {
+            if (message != null) {
+                handler.appendLog(message)
+            }
         }
 
         override fun writeStatus(message: StatusMessage?) {
@@ -142,4 +148,5 @@ open class RvpnCommandClient(
             handler.updateClashMode(newMode)
         }
     }
+}
 }

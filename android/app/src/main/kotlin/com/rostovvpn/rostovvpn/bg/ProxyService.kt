@@ -2,7 +2,6 @@ package com.rostovvpn.rostovvpn.bg
 
 import android.app.Service
 import android.content.Intent
-import io.nekohasekai.libbox.LocalDNSTransport
 
 class ProxyService : Service(), PlatformInterfaceWrapper {
 
@@ -16,6 +15,8 @@ class ProxyService : Service(), PlatformInterfaceWrapper {
 
     override fun writeLog(message: String) = service.writeLog(message)
 
-    // На случай, если твоя версия PlatformInterface требует явной реализации
-    override fun localDNSTransport(): LocalDNSTransport = LocalDNSTransport.SYSTEM
+    // Требуется интерфейсом PlatformInterfaceWrapper; для Proxy no-op
+    override fun autoDetectInterfaceControl(fd: Int) {
+        // Ничего не делаем: это актуально только для VPNService (protect(fd))
+    }
 }
