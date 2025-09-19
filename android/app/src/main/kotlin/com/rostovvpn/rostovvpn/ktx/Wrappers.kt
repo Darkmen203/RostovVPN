@@ -7,12 +7,17 @@ import io.nekohasekai.libbox.RoutePrefix
 import io.nekohasekai.libbox.StringIterator
 import java.net.InetAddress
 
+/**
+ * Новый формат StringIterator: массивоподобный доступ.
+ * Конвертируем в List<String> через len() и индекс.
+ */
 fun StringIterator.toList(): List<String> {
-    return mutableListOf<String>().apply {
-        while (hasNext()) {
-            add(next())
-        }
+    val out = ArrayList<String>(len())
+    for (i in 0 until len()) {
+        // В наших адаптерах доступ по индексу называется get(i)
+        out.add(get(i))
     }
+    return out
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)

@@ -1,6 +1,6 @@
 package com.rostovvpn.rostovvpn.bg
-import android.util.Log
 
+import android.util.Log
 import com.rostovvpn.rostovvpn.Settings
 import android.content.Intent
 import android.content.pm.PackageManager.NameNotFoundException
@@ -11,6 +11,7 @@ import android.os.IBinder
 import com.rostovvpn.rostovvpn.constant.PerAppProxyMode
 import com.rostovvpn.rostovvpn.ktx.toIpPrefix
 import io.nekohasekai.libbox.TunOptions
+import io.nekohasekai.libbox.LocalDNSTransport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -28,9 +29,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
 
     override fun onBind(intent: Intent): IBinder {
         val binder = super.onBind(intent)
-        if (binder != null) {
-            return binder
-        }
+        if (binder != null) return binder
         return service.onBind(intent)
     }
 
@@ -46,29 +45,34 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         }
     }
 
+    // авто-детект интерфейса через protect(fd) — как и было
     override fun autoDetectInterfaceControl(fd: Int) {
         protect(fd)
     }
 
+    // На случай, если твоя версия PlatformInterface требует явной реализации
+    override fun localDNSTransport(): LocalDNSTransport = LocalDNSTransport.SYSTEM
+
     var systemProxyAvailable = false
     var systemProxyEnabled = false
+
     fun addIncludePackage(builder: Builder, packageName: String) {
-        if (packageName == this.packageName) { 
-            Log.d("VpnService","Cannot include myself: $packageName")
+        if (packageName == this.packageName) {
+            Log.d(TAG, "Cannot include myself: $packageName")
             return
         }
-        try {     
-            Log.d("VpnService","Including $packageName")
+        try {
+            Log.d(TAG, "Including $packageName")
             builder.addAllowedApplication(packageName)
-        } catch (e: NameNotFoundException) {
+        } catch (_: NameNotFoundException) {
         }
     }
 
     fun addExcludePackage(builder: Builder, packageName: String) {
-        try {     
-            Log.d("VpnService","Excluding $packageName")
+        try {
+            Log.d(TAG, "Excluding $packageName")
             builder.addDisallowedApplication(packageName)
-        } catch (e: NameNotFoundException) {
+        } catch (_: NameNotFoundException) {
         }
     }
 
@@ -96,7 +100,13 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         }
 
         if (options.autoRoute) {
-            builder.addDnsServer(options.dnsServerAddress)
+            // DNS: подстрахуемся от null/пустого (в некоторых биндингах возможно)
+            runCatching {
+                val dns = options.dnsServerAddress
+                if (dns != null && dns.isNotEmpty()) {
+                    builder.addDnsServer(dns) // String перегрузка работает на всех API >= 21
+                }
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 val inet4RouteAddress = options.inet4RouteAddress
@@ -147,53 +157,52 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
             if (Settings.perAppProxyEnabled) {
                 val appList = Settings.perAppProxyList
                 if (Settings.perAppProxyMode == PerAppProxyMode.INCLUDE) {
-                    appList.forEach {
-                        addIncludePackage(builder,it)
-                    }
-                    addIncludePackage(builder,packageName)
+                    appList.forEach { addIncludePackage(builder, it) }
+                    addIncludePackage(builder, packageName)
                 } else {
-                    appList.forEach {
-                        addExcludePackage(builder,it)
-                    }
-                    //addExcludePackage(builder,packageName)
+                    appList.forEach { addExcludePackage(builder, it) }
+                    // Если нужно исключить сам app — раскомментируй:
+                    // addExcludePackage(builder, packageName)
                 }
             } else {
                 val includePackage = options.includePackage
                 if (includePackage.hasNext()) {
                     while (includePackage.hasNext()) {
-                        addIncludePackage(builder,includePackage.next())
+                        addIncludePackage(builder, includePackage.next())
                     }
                 }
                 val excludePackage = options.excludePackage
                 if (excludePackage.hasNext()) {
                     while (excludePackage.hasNext()) {
-                        addExcludePackage(builder,excludePackage.next())
+                        addExcludePackage(builder, excludePackage.next())
                     }
                 }
-                //addExcludePackage(builder,packageName)
-                
+                // По желанию:
+                // addExcludePackage(builder, packageName)
             }
         }
 
         if (options.isHTTPProxyEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             systemProxyAvailable = true
             systemProxyEnabled = Settings.systemProxyEnabled
-            if (systemProxyEnabled) builder.setHttpProxy(
-                ProxyInfo.buildDirectProxy(
-                    options.httpProxyServer, options.httpProxyServerPort
+            if (systemProxyEnabled) {
+                builder.setHttpProxy(
+                    ProxyInfo.buildDirectProxy(
+                        options.httpProxyServer,
+                        options.httpProxyServerPort
+                    )
                 )
-            )
+            }
         } else {
             systemProxyAvailable = false
             systemProxyEnabled = false
         }
 
-        val pfd =
-            builder.establish() ?: error("android: the application is not prepared or is revoked")
+        val pfd = builder.establish()
+            ?: error("android: the application is not prepared or is revoked")
         service.fileDescriptor = pfd
         return pfd.fd
     }
 
     override fun writeLog(message: String) = service.writeLog(message)
-
 }

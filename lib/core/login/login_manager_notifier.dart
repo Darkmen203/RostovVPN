@@ -29,7 +29,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
   String get username => state?.username ?? 'войдите';
 
   Future<File> _getLoginFile() async {
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await getApplicationSupportDirectory();
     return File('${dir.path}/loginState.json');
   }
 
@@ -296,11 +296,33 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
 
     // Update subscription profile if exists
     try {
-      final profile = await _profileRepo.getByName('my');
-      if (profile is RemoteProfileEntity) {
-        await _profileRepo.updateSubscription(profile).run();
+      if (state?.subscriptionLink?.isNotEmpty == true) {
+        final existing = await _profileRepo.getByName('my');
+        if (existing is RemoteProfileEntity) {
+          // Обновляем URL и качаем свежий профиль
+          await _profileRepo
+              .updateSubscription(
+                existing.copyWith(url: state!.subscriptionLink!),
+                patchBaseProfile: true,
+              )
+              .run();
+        } else {
+          // Создаём новый удалённый профиль c именем "my"
+          final newProfile = RemoteProfileEntity(
+            id: const Uuid().v4(),
+            active: true,
+            name: 'my', // как вы хотели
+            url: state!.subscriptionLink!,
+            lastUpdate: DateTime.now(),
+          );
+          await _profileRepo.add(newProfile).run();
+        }
       }
-    } catch (_) {}
+    } catch (e, st) {
+      if (kDebugMode) {
+        print('Subscription sync failed: $e\n$st');
+      }
+    }
   }
 
   Future<ServerUser> _authenticateWithRetry(
@@ -317,7 +339,10 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
       attempt++;
       try {
         if (kDebugMode) {
-          print('[LOGIN] authenticate attempt ' + attempt.toString() + ' for ' + username);
+          print('[LOGIN] authenticate attempt ' +
+              attempt.toString() +
+              ' for ' +
+              username);
         }
         final user = await _authenticateUserFromServer(username, password);
         return user;
@@ -418,30 +443,34 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
         attempt++;
         try {
           if (kDebugMode) {
-            print('[HTTP] dataExpire GET attempt ' + attempt.toString() + ' ' + url.toString());
+            print('[HTTP] dataExpire GET attempt ' +
+                attempt.toString() +
+                ' ' +
+                url.toString());
           }
-          response = await http
-              .get(
-                url,
-                headers: {
-                  'Authorization': 'Bearer $token',
-                },
-              )
-              .timeout(const Duration(seconds: 10));
+          response = await http.get(
+            url,
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ).timeout(const Duration(seconds: 10));
           if (kDebugMode) {
             print('[HTTP] dataExpire <= ' + response.statusCode.toString());
           }
         } on SocketException catch (_) {
           if (attempt >= 3) return null;
-          await Future.delayed(delays[(attempt - 1).clamp(0, delays.length - 1)]);
+          await Future.delayed(
+              delays[(attempt - 1).clamp(0, delays.length - 1)]);
           continue;
         } on http.ClientException catch (_) {
           if (attempt >= 3) return null;
-          await Future.delayed(delays[(attempt - 1).clamp(0, delays.length - 1)]);
+          await Future.delayed(
+              delays[(attempt - 1).clamp(0, delays.length - 1)]);
           continue;
         } on TimeoutException catch (_) {
           if (attempt >= 3) return null;
-          await Future.delayed(delays[(attempt - 1).clamp(0, delays.length - 1)]);
+          await Future.delayed(
+              delays[(attempt - 1).clamp(0, delays.length - 1)]);
           continue;
         }
         if (response.statusCode < 400) {

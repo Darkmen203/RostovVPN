@@ -19,14 +19,14 @@ import com.rostovvpn.rostovvpn.R
 import com.rostovvpn.rostovvpn.Settings
 import com.rostovvpn.rostovvpn.constant.Action
 import com.rostovvpn.rostovvpn.constant.Status
-import com.rostovvpn.rostovvpn.utils.CommandClient
+import com.rostovvpn.rostovvpn.utils.RvpnCommandClient
 import io.nekohasekai.libbox.Libbox
 import io.nekohasekai.libbox.StatusMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.withContext
 
-class ServiceNotification(private val status: MutableLiveData<Status>, private val service: Service) : BroadcastReceiver(), CommandClient.Handler {
+class ServiceNotification(private val status: MutableLiveData<Status>, private val service: Service) : BroadcastReceiver(), RvpnCommandClient.Handler {
     companion object {
         private const val notificationId = 1
         private const val notificationChannel = "service"
@@ -42,8 +42,8 @@ class ServiceNotification(private val status: MutableLiveData<Status>, private v
     }
 
 
-    private val commandClient =
-            CommandClient(GlobalScope, CommandClient.ConnectionType.Status, this)
+    private val rvpnCommandClient =
+            RvpnCommandClient(GlobalScope, RvpnCommandClient.ConnectionType.Status, this)
     private var receiverRegistered = false
 
 
@@ -98,7 +98,7 @@ class ServiceNotification(private val status: MutableLiveData<Status>, private v
 
     suspend fun start() {
         if (Settings.dynamicNotification) {
-            commandClient.connect()
+            rvpnCommandClient.connect()
             withContext(Dispatchers.Main) {
                 registerReceiver()
             }
@@ -125,17 +125,17 @@ class ServiceNotification(private val status: MutableLiveData<Status>, private v
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             Intent.ACTION_SCREEN_ON -> {
-                commandClient.connect()
+                rvpnCommandClient.connect()
             }
 
             Intent.ACTION_SCREEN_OFF -> {
-                commandClient.disconnect()
+                rvpnCommandClient.disconnect()
             }
         }
     }
 
     fun close() {
-        commandClient.disconnect()
+        rvpnCommandClient.disconnect()
         ServiceCompat.stopForeground(service, ServiceCompat.STOP_FOREGROUND_REMOVE)
         if (receiverRegistered) {
             service.unregisterReceiver(this)
