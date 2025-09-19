@@ -49,9 +49,9 @@ open class CommandClient(
                 ConnectionType.Groups -> Libbox.CommandGroup
                 ConnectionType.Log -> Libbox.CommandLog
                 ConnectionType.ClashMode -> Libbox.CommandClashMode
-                ConnectionType.GroupOnly -> Libbox.CommandGroup // fallback вместо CommandGroupInfoOnly
+                ConnectionType.GroupOnly -> Libbox.CommandGroup // вместо CommandGroupInfoOnly
             }
-            statusInterval = 2 * 1000 * 1000 * 1000 // ns
+            statusInterval = 2 * 1_000_000_000 // ns
         }
 
         val libboxClient = LibboxCommandClient(clientHandler, options)
@@ -101,13 +101,14 @@ open class CommandClient(
             handler.updateGroups(groups)
         }
 
-        override fun clearLog() {
+        // Эта ревизия требует clearLogs(), а не clearLog()
+        override fun clearLogs() {
             handler.clearLog()
         }
 
-        // В этой версии — non-null String
-        override fun writeLog(message: String) {
-            handler.appendLog(message)
+        // В этой ревизии параметр nullable
+        override fun writeLog(message: String?) {
+            message?.let { handler.appendLog(it) }
         }
 
         override fun writeStatus(message: StatusMessage?) {
@@ -123,9 +124,8 @@ open class CommandClient(
             handler.updateClashMode(newMode)
         }
 
-        // Новое требование интерфейса в твоём логе
         override fun writeConnections(message: Connections) {
-            // Если нужно — прокинь дальше; пока no-op
+            // no-op; при необходимости — прокинь в UI
         }
     }
 }

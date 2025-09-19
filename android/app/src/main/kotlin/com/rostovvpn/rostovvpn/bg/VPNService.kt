@@ -42,7 +42,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         }
     }
 
-    // авто-детект интерфейса через protect(fd) — как и было
+    // авто-детект интерфейса через protect(fd)
     override fun autoDetectInterfaceControl(fd: Int) {
         protect(fd)
     }
@@ -94,9 +94,8 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         }
 
         if (options.autoRoute) {
-            // В ЭТОЙ версии биндингов dnsServerAddress — МЕТОД
-            // (иначе компилятор ругается на сигнатуру addDnsServer)
-            builder.addDnsServer(options.dnsServerAddress())
+            // dnsServerAddress — это бокс, берём строку
+            builder.addDnsServer(options.dnsServerAddress.toString())
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 val inet4RouteAddress = options.inet4RouteAddress
@@ -151,7 +150,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
                     addIncludePackage(builder, packageName)
                 } else {
                     appList.forEach { addExcludePackage(builder, it) }
-                    // при необходимости исключить сам app:
+                    // при необходимости:
                     // addExcludePackage(builder, packageName)
                 }
             } else {
@@ -167,8 +166,6 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
                         addExcludePackage(builder, excludePackage.next())
                     }
                 }
-                // по желанию:
-                // addExcludePackage(builder, packageName)
             }
         }
 

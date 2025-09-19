@@ -2,7 +2,7 @@ package com.rostovvpn.rostovvpn
 
 import android.util.Log
 import com.google.gson.Gson
-import com.rostovvpn.rostovvpn.utils.RvpnCommandClient
+import com.rostovvpn.rostovvpn.utils.CommandClient
 import com.rostovvpn.rostovvpn.utils.ParsedOutboundGroup
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.EventChannel
@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 
 
 class ActiveGroupsChannel(private val scope: CoroutineScope) : FlutterPlugin,
-    RvpnCommandClient.Handler {
+    CommandClient.Handler {
     companion object {
         const val TAG = "A/ActiveGroupsChannel"
         const val CHANNEL = "com.rostovvpn.app/active-groups"
@@ -19,7 +19,7 @@ class ActiveGroupsChannel(private val scope: CoroutineScope) : FlutterPlugin,
     }
 
     private val client =
-        RvpnCommandClient(scope, RvpnCommandClient.ConnectionType.GroupOnly, this)
+        CommandClient(scope, CommandClient.ConnectionType.GroupOnly, this)
 
     private var channel: EventChannel? = null
     private var event: EventChannel.EventSink? = null
