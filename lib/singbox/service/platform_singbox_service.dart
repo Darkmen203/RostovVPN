@@ -8,7 +8,6 @@ import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
 import 'package:rostov_vpn/singbox/model/singbox_outbound.dart';
 import 'package:rostov_vpn/singbox/model/singbox_stats.dart';
 import 'package:rostov_vpn/singbox/model/singbox_status.dart';
-import 'package:rostov_vpn/singbox/model/warp_account.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service.dart';
 import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:rxdart/rxdart.dart';
@@ -253,28 +252,6 @@ class PlatformSingboxService with InfraLogger implements SingboxService {
       () async {
         await methodChannel.invokeMethod("clear_logs");
         return right(unit);
-      },
-    );
-  }
-
-  @override
-  TaskEither<String, WarpResponse> generateWarpConfig({
-    required String licenseKey,
-    required String previousAccountId,
-    required String previousAccessToken,
-  }) {
-    return TaskEither(
-      () async {
-        loggy.debug("generating warp config");
-        final warpConfig = await methodChannel.invokeMethod(
-          "generate_warp_config",
-          {
-            "license-key": licenseKey,
-            "previous-account-id": previousAccountId,
-            "previous-access-token": previousAccessToken,
-          },
-        );
-        return right(warpFromJson(jsonDecode(warpConfig as String)));
       },
     );
   }

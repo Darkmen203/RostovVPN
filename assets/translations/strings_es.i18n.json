@@ -96,8 +96,6 @@
         "permissionRequest": "Permiso a la cámara para escanear el código QR"
       },
       "manually": "Entrada manual",
-      "addWarp": "Añadir WARP",
-      "addingWarpMsg": "Por favor, espere mientras registramos WARP.",
       "addingProfileMsg": "Agregar perfil",
       "failureMsg": "No se pudo agregar el perfil"
     },
@@ -348,7 +346,6 @@
     "resetBtn": "Restablecer opciones",
     "serviceMode": "Modo de servicio",
     "quickSettings": "Ajustes rápidos",
-    "setupWarp": "Configurar WARP",
     "allOptions": "Todas las opciones de configuración",
     "serviceModes": {
       "proxy": "Proxy",
@@ -369,16 +366,8 @@
       "mux": "Multiplexer",
       "outbound": "Opciones de salida",
       "tlsTricks": "Trucos TLS",
-      "warp": "WARP Options",
       "misc": "Opciones varias"
     },
-    "warpConsent": {
-      "title": "Consentimiento WARP de Cloudflare",
-      "description(rich)": "Cloudflare WARP es un proveedor de VPN WireGuard gratuito. Al habilitar esta opción, acepta los ${tos(Términos de servicio)} y ${privacy(Política de privacidad)} de Cloudflare WARP."
-    },
-    "generateWarpConfig": "Generar configuración WARP",
-    "missingWarpConfig": "Falta la configuración WARP",
-    "warpConfigGenerated": "Se genera la configuración WARP",
     "pageTitle": "Opciones de configuración",
     "logLevel": "Registro del Nivel",
     "blockAds": "Bloquear anuncios",
@@ -418,21 +407,6 @@
     "tlsPaddingSize": "Relleno TLS",
     "enableMux": "Enable Mux",
     "muxProtocol": "Mux Protocol",
-    "muxMaxStreams": "Max Concurrent Streams",
-    "enableWarp": "Enable WARP",
-    "warpDetourMode": "Detour Mode",
-    "warpDetourModes": {
-      "proxyOverWarp": "Desvío de proxies a través de WARP",
-      "warpOverProxy": "Desvío de WARP a través de proxies",
-      "inbound": "Detour WARP through proxies",
-      "outbound": "Detour proxies through WARP"
-    },
-    "warpLicenseKey": "License Key",
-    "warpCleanIp": "Clean IP",
-    "warpPort": "Port",
-    "warpNoise": "Noise",
-    "warpNoiseSize": "Tamaño de ruido",
-    "warpNoiseMode": "Modo Ruido",
-    "warpNoiseDelay": "Retraso por ruido"
+    "muxMaxStreams": "Max Concurrent Streams"
   }
 }

@@ -100,18 +100,3 @@ enum MuxProtocol {
   smux,
   yamux;
 }
-
-@JsonEnum(valueField: 'key')
-enum WarpDetourMode {
-  proxyOverWarp("proxy_over_warp"),
-  warpOverProxy("warp_over_proxy");
-
-  const WarpDetourMode(this.key);
-
-  final String key;
-
-  String present(TranslationsEn t) => switch (this) {
-        proxyOverWarp => t.config.warpDetourModes.proxyOverWarp,
-        warpOverProxy => t.config.warpDetourModes.warpOverProxy,
-      };
-}

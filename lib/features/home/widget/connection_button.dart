@@ -15,6 +15,7 @@ import 'package:rostov_vpn/features/proxy/active/active_proxy_notifier.dart';
 import 'package:rostov_vpn/gen/assets.gen.dart';
 import 'package:rostov_vpn/utils/alerts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rostov_vpn/features/connection/widget/macos_privileged_helper.dart';
 import 'dart:developer';
 
 // TODO: rewrite
@@ -33,14 +34,20 @@ class ConnectionButton extends HookConsumerWidget {
 
     ref.listen(
       connectionNotifierProvider,
-      (_, next) {
-        if (next case AsyncError(:final error)) {
-          CustomAlertDialog.fromErr(t.presentError(error)).show(context);
+      (_, next) async {
+        // Специальная обработка отсутствующих привилегий на macOS
+        if (next case AsyncData(value: Disconnected(connectionFailure: final cf?))) {
+          final presented = t.presentError(cf);
+          if (cf.runtimeType.toString() == 'MissingPrivilege' &&
+              Theme.of(context).platform == TargetPlatform.macOS) {
+            await showMacOsTunHelperDialog(context, ref);
+            return;
+          }
+          CustomAlertDialog.fromErr(presented).show(context);
         }
-        if (next
-            case AsyncData(value: Disconnected(:final connectionFailure?))) {
-          CustomAlertDialog.fromErr(t.presentError(connectionFailure))
-              .show(context);
+        if (next case AsyncError(:final error)) {
+          // Общий обработчик ошибок
+          CustomAlertDialog.fromErr(t.presentError(error)).show(context);
         }
       },
     );

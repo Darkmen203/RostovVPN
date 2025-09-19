@@ -96,8 +96,6 @@
         "permissionRequest": "Autorisation de la caméra pour scanner le code QR"
       },
       "manually": "Saisie manuelle",
-      "addWarp": "Ajouter WARP",
-      "addingWarpMsg": "Veuillez patienter pendant que nous enregistrons WARP.",
       "addingProfileMsg": "Ajout d'un profil",
       "failureMsg": "Échec de l'ajout du profil"
     },
@@ -348,7 +346,6 @@
     "resetBtn": "Options de réinitialisation",
     "serviceMode": "Mode de service",
     "quickSettings": "Réglages rapides",
-    "setupWarp": "Configuration de WARP",
     "allOptions": "Toutes les options de configuration",
     "serviceModes": {
       "proxy": "Service proxy uniquement",
@@ -369,16 +366,8 @@
       "mux": "MultiPlexeur",
       "outbound": "Options sortantes",
       "tlsTricks": "Astuces TLS",
-      "warp": "Options de WARP ",
       "misc": "Diverses options"
     },
-    "warpConsent": {
-      "title": "Consentement du Cloudflare WARP",
-      "description(rich)": "Cloudflare WARP est un fournisseur VPN WireGuard gratuit. En activant cette option, vous acceptez les ${tos(Terms of Service)} et ${privacy(Privacy Policy)} de Cloudflare WARP."
-    },
-    "generateWarpConfig": "Générer une configuration WARP",
-    "missingWarpConfig": "Configuration WARP manquante",
-    "warpConfigGenerated": "La configuration WARP est générée",
     "pageTitle": "Options de configuration",
     "logLevel": "Niveau de journalisation",
     "blockAds": "Bloquer les publicités",
@@ -418,21 +407,6 @@
     "tlsPaddingSize": "TLS Padding",
     "enableMux": "Activer MUX",
     "muxProtocol": "Protocole MUX",
-    "muxMaxStreams": "Flux simultanés maximum",
-    "enableWarp": "Activer WARP",
-    "warpDetourMode": "Mode détour",
-    "warpDetourModes": {
-      "proxyOverWarp": "Proxy de détour via WARP",
-      "warpOverProxy": "Détour WARP via des proxys",
-      "inbound": "Détour WARP via des proxys",
-      "outbound": "Proxy de détour via WARP"
-    },
-    "warpLicenseKey": "Clé de licence",
-    "warpCleanIp": "IP propre",
-    "warpPort": "Port",
-    "warpNoise": "Nombre de bruit",
-    "warpNoiseSize": "Taille du bruit",
-    "warpNoiseMode": "Mode bruit",
-    "warpNoiseDelay": "Retard de bruit"
+    "muxMaxStreams": "Flux simultanés maximum"
   }
 }

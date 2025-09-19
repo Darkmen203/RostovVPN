@@ -2537,28 +2537,6 @@ class SingboxNativeLibrary {
   late final _urlTest = _urlTestPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> generateWarpConfig(
-    ffi.Pointer<ffi.Char> licenseKey,
-    ffi.Pointer<ffi.Char> accountId,
-    ffi.Pointer<ffi.Char> accessToken,
-  ) {
-    return _generateWarpConfig(
-      licenseKey,
-      accountId,
-      accessToken,
-    );
-  }
-
-  late final _generateWarpConfigPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(
-              ffi.Pointer<ffi.Char>,
-              ffi.Pointer<ffi.Char>,
-              ffi.Pointer<ffi.Char>)>>('generateWarpConfig');
-  late final _generateWarpConfig = _generateWarpConfigPtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
-          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
-
   ffi.Pointer<ffi.Char> StartCoreGrpcServer(
     ffi.Pointer<ffi.Char> listenAddress,
   ) {

@@ -48,7 +48,6 @@ const Map<String, Map<String, dynamic>> protocolSchemaValues = {
     "xray_outbound_raw": {},
     "xray_fragment": {"packets": "tlshello", "interval": "1-10", "length": "1-10"},
   },
-  "warp": {"type": "custom", "key": "", "host": "", "port": 808, "fake_packets": "1-10", "fake_packets_size": "1-10", "fake_packets_delay": "1-10", "fake_packets_mode": "m4"},
   "vless": {
     "type": "vless",
     "tag": "vless-out",

@@ -253,96 +253,13 @@ abstract class ConfigOptions {
     mapTo: (value) => value.name,
   );
 
-  static final enableWarp = PreferencesNotifier.create<bool, bool>(
-    "enable-warp",
-    false,
-  );
-
-  static final warpDetourMode = PreferencesNotifier.create<WarpDetourMode, String>(
-    "warp-detour-mode",
-    WarpDetourMode.proxyOverWarp,
-    mapFrom: WarpDetourMode.values.byName,
-    mapTo: (value) => value.name,
-  );
-
-  static final warpLicenseKey = PreferencesNotifier.create<String, String>(
-    "warp-license-key",
-    "",
-  );
-  static final warp2LicenseKey = PreferencesNotifier.create<String, String>(
-    "warp2s-license-key",
-    "",
-  );
-
-  static final warpAccountId = PreferencesNotifier.create<String, String>(
-    "warp-account-id",
-    "",
-  );
-  static final warp2AccountId = PreferencesNotifier.create<String, String>(
-    "warp2-account-id",
-    "",
-  );
-
-  static final warpAccessToken = PreferencesNotifier.create<String, String>(
-    "warp-access-token",
-    "",
-  );
-  static final warp2AccessToken = PreferencesNotifier.create<String, String>(
-    "warp2-access-token",
-    "",
-  );
-
-  static final warpCleanIp = PreferencesNotifier.create<String, String>(
-    "warp-clean-ip",
-    "auto",
-  );
-
-  static final warpPort = PreferencesNotifier.create<int, int>(
-    "warp-port",
-    0,
-    validator: (value) => isPort(value.toString()),
-  );
-
-  static final warpNoise = PreferencesNotifier.create<OptionalRange, String>(
-    "warp-noise",
-    const OptionalRange(min: 1, max: 3),
-    mapFrom: (value) => OptionalRange.parse(value, allowEmpty: true),
-    mapTo: const OptionalRangeJsonConverter().toJson,
-  );
-  static final warpNoiseMode = PreferencesNotifier.create<String, String>(
-    "warp-noise-mode",
-    "m4",
-  );
-
-  static final warpNoiseDelay = PreferencesNotifier.create<OptionalRange, String>(
-    "warp-noise-delay",
-    const OptionalRange(min: 10, max: 30),
-    mapFrom: (value) => OptionalRange.parse(value, allowEmpty: true),
-    mapTo: const OptionalRangeJsonConverter().toJson,
-  );
-  static final warpNoiseSize = PreferencesNotifier.create<OptionalRange, String>(
-    "warp-noise-size",
-    const OptionalRange(min: 10, max: 30),
-    mapFrom: (value) => OptionalRange.parse(value, allowEmpty: true),
-    mapTo: const OptionalRangeJsonConverter().toJson,
-  );
-
-  static final warpWireguardConfig = PreferencesNotifier.create<String, String>(
-    "warp-wireguard-config",
-    "",
-  );
-  static final warp2WireguardConfig = PreferencesNotifier.create<String, String>(
-    "warp2-wireguard-config",
-    "",
-  );
-
   static final hasExperimentalFeatures = Provider.autoDispose<bool>(
     (ref) {
       final mode = ref.watch(serviceMode);
       if (PlatformUtils.isDesktop && mode == ServiceMode.tun) {
         return true;
       }
-      if (ref.watch(enableTlsFragment) || ref.watch(enableTlsMixedSniCase) || ref.watch(enableTlsPadding) || ref.watch(enableMux) || ref.watch(enableWarp) || ref.watch(bypassLan) || ref.watch(allowConnectionFromLan)) {
+      if (ref.watch(enableTlsFragment) || ref.watch(enableTlsMixedSniCase) || ref.watch(enableTlsPadding) || ref.watch(enableMux) || ref.watch(bypassLan) || ref.watch(allowConnectionFromLan)) {
         return true;
       }
 
@@ -352,14 +269,6 @@ abstract class ConfigOptions {
 
   /// preferences to exclude from share and export
   static final privatePreferencesKeys = {
-    "warp.license-key",
-    "warp.access-token",
-    "warp.account-id",
-    "warp.wireguard-config",
-    "warp2.license-key",
-    "warp2.access-token",
-    "warp2.account-id",
-    "warp2.wireguard-config",
   };
 
   static final Map<String, StateNotifierProvider<PreferencesNotifier, dynamic>> preferences = {
@@ -400,24 +309,6 @@ abstract class ConfigOptions {
     "tls-tricks.mixed-sni-case": enableTlsMixedSniCase,
     "tls-tricks.enable-padding": enableTlsPadding,
     "tls-tricks.padding-size": tlsPaddingSize,
-
-    // warp
-    "warp.enable": enableWarp,
-    "warp.mode": warpDetourMode,
-    "warp.license-key": warpLicenseKey,
-    "warp.account-id": warpAccountId,
-    "warp.access-token": warpAccessToken,
-    "warp.clean-ip": warpCleanIp,
-    "warp.clean-port": warpPort,
-    "warp.noise": warpNoise,
-    "warp.noise-size": warpNoiseSize,
-    "warp.noise-mode": warpNoiseMode,
-    "warp.noise-delay": warpNoiseDelay,
-    "warp.wireguard-config": warpWireguardConfig,
-    "warp2.license-key": warp2LicenseKey,
-    "warp2.account-id": warp2AccountId,
-    "warp2.access-token": warp2AccessToken,
-    "warp2.wireguard-config": warp2WireguardConfig,
   };
 
   static final singboxConfigOptions = FutureProvider<SingboxConfigOption>(
@@ -509,34 +400,6 @@ abstract class ConfigOptions {
           mixedSniCase: ref.watch(enableTlsMixedSniCase),
           enablePadding: ref.watch(enableTlsPadding),
           paddingSize: ref.watch(tlsPaddingSize),
-        ),
-        warp: SingboxWarpOption(
-          enable: ref.watch(enableWarp),
-          mode: ref.watch(warpDetourMode),
-          wireguardConfig: ref.watch(warpWireguardConfig),
-          licenseKey: ref.watch(warpLicenseKey),
-          accountId: ref.watch(warpAccountId),
-          accessToken: ref.watch(warpAccessToken),
-          cleanIp: ref.watch(warpCleanIp),
-          cleanPort: ref.watch(warpPort),
-          noise: ref.watch(warpNoise),
-          noiseMode: ref.watch(warpNoiseMode),
-          noiseSize: ref.watch(warpNoiseSize),
-          noiseDelay: ref.watch(warpNoiseDelay),
-        ),
-        warp2: SingboxWarpOption(
-          enable: ref.watch(enableWarp),
-          mode: ref.watch(warpDetourMode),
-          wireguardConfig: ref.watch(warp2WireguardConfig),
-          licenseKey: ref.watch(warp2LicenseKey),
-          accountId: ref.watch(warp2AccountId),
-          accessToken: ref.watch(warp2AccessToken),
-          cleanIp: ref.watch(warpCleanIp),
-          cleanPort: ref.watch(warpPort),
-          noise: ref.watch(warpNoise),
-          noiseMode: ref.watch(warpNoiseMode),
-          noiseSize: ref.watch(warpNoiseSize),
-          noiseDelay: ref.watch(warpNoiseDelay),
         ),
         // geoipPath: ref.watch(geoAssetPathResolverProvider).relativePath(
         //       geoAssets.geoip.providerName,

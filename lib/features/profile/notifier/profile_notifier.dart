@@ -10,8 +10,6 @@ import 'package:rostov_vpn/core/notification/in_app_notification_controller.dart
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/features/common/adaptive_root_scaffold.dart';
-import 'package:rostov_vpn/features/config_option/notifier/warp_option_notifier.dart';
-import 'package:rostov_vpn/features/config_option/overview/warp_options_widgets.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
 import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
 import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
@@ -60,7 +58,7 @@ class AddProfile extends _$AddProfile with AppLogger {
   Future<void> add(String rawInput) async {
     if (state.isLoading) return;
     state = const AsyncLoading();
-    // await check4Warp(rawInput);
+
     state = await AsyncValue.guard(
       () async {
         final activeProfile = await ref.read(activeProfileProvider.future);
@@ -76,13 +74,7 @@ class AddProfile extends _$AddProfile with AppLogger {
         } else if (LinkParser.protocol(rawInput) case (final parsed)?) {
           loggy.debug("adding profile, content");
           var name = parsed.name;
-          final oldItem = await _profilesRepo.getByName(name);
-          if (name == "RostovVPN WARP" && oldItem != null) {
-            _profilesRepo.deleteById(oldItem.id).run();
-          }
-          while (await _profilesRepo.getByName(name) != null) {
-            name += '${randomInt(0, 9).run()}';
-          }
+          while (await _profilesRepo.getByName(name) != null) { name += '${randomInt(0, 9).run()}'; }
           task = _profilesRepo.addByContent(
             parsed.content,
             name: name,
@@ -106,48 +98,6 @@ class AddProfile extends _$AddProfile with AppLogger {
         ).run();
       },
     );
-  }
-
-  Future<void> check4Warp(String rawInput) async {
-    for (final line in rawInput.split("\n")) {
-      if (line.toLowerCase().startsWith("warp://")) {
-        final prefs = ref.read(sharedPreferencesProvider).requireValue;
-        final warp = ref.read(warpOptionNotifierProvider.notifier);
-
-        final consent = false && (prefs.getBool(WarpOptionNotifier.warpConsentGiven) ?? false);
-
-        final t = ref.read(translationsProvider);
-        final notification = ref.read(inAppNotificationControllerProvider);
-
-        if (!consent) {
-          final agreed = await showDialog<bool>(
-            context: RootScaffold.stateKey.currentContext!,
-            builder: (context) => const WarpLicenseAgreementModal(),
-          );
-
-          if (agreed ?? false) {
-            await prefs.setBool(WarpOptionNotifier.warpConsentGiven, true);
-            final toast = notification.showInfoToast(t.profile.add.addingWarpMsg, duration: const Duration(milliseconds: 100));
-            toast?.pause();
-            await warp.generateWarpConfig();
-            toast?.start();
-          } else {
-            return;
-          }
-        }
-
-        final accountId = prefs.getString("warp2-account-id");
-        final accessToken = prefs.getString("warp2-access-token");
-        final hasWarp2Config = accountId != null && accessToken != null;
-
-        if (!hasWarp2Config || true) {
-          final toast = notification.showInfoToast(t.profile.add.addingWarpMsg, duration: const Duration(milliseconds: 100));
-          toast?.pause();
-          await warp.generateWarp2Config();
-          toast?.start();
-        }
-      }
-    }
   }
 }
 

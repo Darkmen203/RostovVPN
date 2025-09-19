@@ -12,7 +12,6 @@ import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
 import 'package:rostov_vpn/singbox/model/singbox_outbound.dart';
 import 'package:rostov_vpn/singbox/model/singbox_stats.dart';
 import 'package:rostov_vpn/singbox/model/singbox_status.dart';
-import 'package:rostov_vpn/singbox/model/warp_account.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service.dart';
 import 'package:rostov_vpn/utils/utils.dart';
 import 'package:loggy/loggy.dart';
@@ -434,32 +433,5 @@ class FFISingboxService with InfraLogger implements SingboxService {
       }
     }
     return _logBuffer;
-  }
-
-  @override
-  TaskEither<String, WarpResponse> generateWarpConfig({
-    required String licenseKey,
-    required String previousAccountId,
-    required String previousAccessToken,
-  }) {
-    loggy.debug("generating warp config");
-    return TaskEither(
-      () => CombineWorker().execute(
-        () {
-          final response = _box
-              .generateWarpConfig(
-                licenseKey.toNativeUtf8().cast(),
-                previousAccountId.toNativeUtf8().cast(),
-                previousAccessToken.toNativeUtf8().cast(),
-              )
-              .cast<Utf8>()
-              .toDartString();
-          if (response.startsWith("error:")) {
-            return left(response.replaceFirst('error:', ""));
-          }
-          return right(warpFromJson(jsonDecode(response)));
-        },
-      ),
-    );
   }
 }

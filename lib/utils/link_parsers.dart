@@ -59,7 +59,6 @@ abstract class LinkParser {
         'hy' || 'hysteria' => fragment ?? ProxyType.hysteria.label,
         'ssh' => fragment ?? ProxyType.ssh.label,
         'wg' => fragment ?? ProxyType.wireguard.label,
-        'warp' => fragment ?? ProxyType.warp.label,
         _ => null,
       };
     }

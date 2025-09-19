@@ -39,7 +39,7 @@ GoRouter router(RouterRef ref) {
     initialLocation: initialLocation,
     debugLogDiagnostics: true,
     routes: [
-      if (useMobileRouter) $mobileShellRoute else $desktopShellRoute,
+      $appShellRoute,
       $introRoute,
     ],
     refreshListenable: notifier,

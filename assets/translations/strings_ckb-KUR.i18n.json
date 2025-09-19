@@ -96,8 +96,6 @@
         "permissionRequest": "ڕێگەدان بە کامێرا بۆ سکانکردنی QR Code"
       },
       "manually": "نووسینی دەستی",
-      "addWarp": "WARP زیاد بکە",
-      "addingWarpMsg": "تکایە چاوەڕێ بن تا ئێمە تۆماری WARP دەکەین.",
       "addingProfileMsg": "خەریکی زیادکردنی پرۆفایل",
       "failureMsg": "زیادکردنی پڕۆفایل شکستی هێنا"
     },
@@ -348,7 +346,6 @@
     "resetBtn": "ڕێکخستنەکان ڕێکبخەرەوە",
     "serviceMode": "دۆخی خزمەتگوزاری",
     "quickSettings": "ڕێکخستنەکانی خێرا",
-    "setupWarp": "ڕێکخستنی WARP",
     "allOptions": "سەرجەم ڕێکخستنەکانی ڕێکخستن",
     "serviceModes": {
       "proxy": "تەنها خزمەتگوزاری پرۆکسی",
@@ -369,16 +366,8 @@
       "mux": "مالتیپلێکسێر",
       "outbound": "ڕێکخستنەکانی دەرچوون",
       "tlsTricks": "فێڵەکانی TLS",
-      "warp": "ڕێکخستنەکانی WARP",
       "misc": "ڕێکخستنەکانی جۆراوجۆر"
     },
-    "warpConsent": {
-      "title": "ڕێککەوتنی WARP ی Cloudflare",
-      "description(rich)": "Cloudflare WARP دابینکەرێکی VPN ی بێبەرامبەری WireGuard ە. بە چالاککردنی ئەم بژاردە، تۆ ڕەزامەندیت لەسەر ${tos(مەرجەکانی خزمەتگوزاری)} و ${privacy(سیاسەتی نهێنی)} ی Cloudflare WARP."
-    },
-    "generateWarpConfig": "دروستکردنی ڕێکخستنی WARP",
-    "missingWarpConfig": "ڕێکخستنی WARP بەردەست نییە",
-    "warpConfigGenerated": "ڕێکخستنی WARP دروست کراوە",
     "pageTitle": "ڕێکخستنەکان",
     "logLevel": "ئاستی گوزارش",
     "blockAds": "Advertisements Asteng bike",
@@ -418,21 +407,6 @@
     "tlsPaddingSize": "قەبارەی TLS Padding",
     "enableMux": "چالاک کردنی Mux",
     "muxProtocol": "پرۆتۆکۆڵی Mux",
-    "muxMaxStreams": "زۆرترین ڕەوتی هاوکات",
-    "enableWarp": "چالاک کردنی WARP",
-    "warpDetourMode": "دۆخی وارپ",
-    "warpDetourModes": {
-      "proxyOverWarp": "تێپەڕاندنی پرۆکسیەکان لە ڕێگەی WARP",
-      "warpOverProxy": "تێپەڕاندنی WARP لە ڕێگەی پرۆکسیەوە",
-      "inbound": "تێپەڕاندنی WARP لە ڕێگەی پرۆکسیەوە",
-      "outbound": "تێپەڕاندنی پرۆکسیەکان لە ڕێگەی WARP"
-    },
-    "warpLicenseKey": "کلیلی مۆڵەت",
-    "warpCleanIp": "IP خاوێن",
-    "warpPort": "پۆرت",
-    "warpNoise": "ژمارەی ژاوەژاو",
-    "warpNoiseSize": "Deng Siza",
-    "warpNoiseMode": "Moda Deng",
-    "warpNoiseDelay": "دواکەوتنی ژاوەژاو"
+    "muxMaxStreams": "زۆرترین ڕەوتی هاوکات"
   }
 }

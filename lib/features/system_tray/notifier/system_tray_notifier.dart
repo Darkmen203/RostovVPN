@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/constants.dart';
 import 'package:rostov_vpn/core/router/router.dart';
@@ -12,7 +13,6 @@ import 'package:rostov_vpn/features/window/notifier/window_notifier.dart';
 import 'package:rostov_vpn/gen/assets.gen.dart';
 import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
 

@@ -50,8 +50,6 @@ class SingboxConfigOption with _$SingboxConfigOption {
     required List<SingboxRule> rules,
     required SingboxMuxOption mux,
     required SingboxTlsTricks tlsTricks,
-    required SingboxWarpOption warp,
-    required SingboxWarpOption warp2,
   }) = _SingboxConfigOption;
 
   String format() {
@@ -60,27 +58,6 @@ class SingboxConfigOption with _$SingboxConfigOption {
   }
 
   factory SingboxConfigOption.fromJson(Map<String, dynamic> json) => _$SingboxConfigOptionFromJson(json);
-}
-
-@freezed
-class SingboxWarpOption with _$SingboxWarpOption {
-  @JsonSerializable(fieldRename: FieldRename.kebab)
-  const factory SingboxWarpOption({
-    required bool enable,
-    required WarpDetourMode mode,
-    required String wireguardConfig,
-    required String licenseKey,
-    required String accountId,
-    required String accessToken,
-    required String cleanIp,
-    required int cleanPort,
-    @OptionalRangeJsonConverter() required OptionalRange noise,
-    @OptionalRangeJsonConverter() required OptionalRange noiseSize,
-    @OptionalRangeJsonConverter() required OptionalRange noiseDelay,
-    @OptionalRangeJsonConverter() required String noiseMode,
-  }) = _SingboxWarpOption;
-
-  factory SingboxWarpOption.fromJson(Map<String, dynamic> json) => _$SingboxWarpOptionFromJson(json);
 }
 
 @freezed

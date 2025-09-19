@@ -96,8 +96,6 @@
         "permissionRequest": "الإذن للكاميرا لمسح رمز الاستجابة السريعة"
       },
       "manually": "إدخال يدوي",
-      "addWarp": "أضف WARP",
-      "addingWarpMsg": "الرجاء الانتظار بينما نقوم بتسجيل WARP.",
       "addingProfileMsg": "إضافة ملف التعريف",
       "failureMsg": "فشل في إضافة ملف التعريف"
     },
@@ -348,7 +346,6 @@
     "resetBtn": "إعادة تعيين الخيارات",
     "serviceMode": "وضع الخدمة",
     "quickSettings": "الإعدادات السريعة",
-    "setupWarp": "إعداد WARP",
     "allOptions": "جميع خيارات التكوين",
     "serviceModes": {
       "proxy": "خدمة الوكيل فقط",
@@ -369,16 +366,8 @@
       "mux": "MultiPlexer",
       "outbound": "خيارات الخارج",
       "tlsTricks": "حيل TLS",
-      "warp": "خيارات WARP",
       "misc": "خيارات متنوعة"
     },
-    "warpConsent": {
-      "title": "موافقة Cloudflare WARP",
-      "description(rich)": "Cloudflare WARP هو مزود VPN مجاني لـ WireGuard. بتمكين هذا الخيار، فإنك توافق على ${tos(Terms of Service)} و ${privacy(Privacy Policy)} لـ Cloudflare WARP."
-    },
-    "generateWarpConfig": "إنشاء تكوين WARP",
-    "missingWarpConfig": "تكوين WARP مفقود",
-    "warpConfigGenerated": "تم إنشاء تكوين WARP",
     "pageTitle": "خيارات التكوين",
     "logLevel": "مستوى السجل",
     "blockAds": "منع الإعلانات",
@@ -418,21 +407,6 @@
     "tlsPaddingSize": "حشو TLS",
     "enableMux": "تمكين Mux",
     "muxProtocol": "بروتوكول Mux",
-    "muxMaxStreams": "أقصى عدد من التدفقات المتزامنة",
-    "enableWarp": "تمكين WARP",
-    "warpDetourMode": "وضع التفاف",
-    "warpDetourModes": {
-      "proxyOverWarp": "لف الخوادم الوكيلية عبر WARP",
-      "warpOverProxy": "لف WARP عبر الخوادم الوكيلية",
-      "inbound": "لف WARP عبر الخوادم الوكيلية",
-      "outbound": "لف الخوادم الوكيلية عبر WARP"
-    },
-    "warpLicenseKey": "مفتاح الترخيص",
-    "warpCleanIp": "عنوان IP نظيف",
-    "warpPort": "المنفذ",
-    "warpNoise": "عدد الضوضاء",
-    "warpNoiseSize": "حجم الضوضاء",
-    "warpNoiseMode": "وضع الضوضاء",
-    "warpNoiseDelay": "تأخير الضوضاء"
+    "muxMaxStreams": "أقصى عدد من التدفقات المتزامنة"
   }
 }

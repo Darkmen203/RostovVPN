@@ -13,7 +13,6 @@ import 'package:rostov_vpn/features/common/confirmation_dialogs.dart';
 import 'package:rostov_vpn/features/common/nested_app_bar.dart';
 import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
 import 'package:rostov_vpn/features/config_option/notifier/config_option_notifier.dart';
-import 'package:rostov_vpn/features/config_option/overview/warp_options_widgets.dart';
 import 'package:rostov_vpn/features/config_option/widget/preference_tile.dart';
 import 'package:rostov_vpn/features/log/model/log_level.dart';
 import 'package:rostov_vpn/features/settings/widgets/sections_widgets.dart';
@@ -24,14 +23,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:humanizer/humanizer.dart';
 
 enum ConfigOptionSection {
-  warp,
   fragment;
 
-  static final _warpKey = GlobalKey(debugLabel: "warp-section-key");
   static final _fragmentKey = GlobalKey(debugLabel: "fragment-section-key");
 
   GlobalKey get key => switch (this) {
-        ConfigOptionSection.warp => _warpKey,
         ConfigOptionSection.fragment => _fragmentKey,
       };
 }
@@ -323,9 +319,6 @@ class ConfigOptionsPage extends HookConsumerWidget {
                     presentValue: (value) => value.format(),
                     formatInputValue: (value) => value.format(),
                   ),
-                  const SettingsDivider(),
-                  SettingsSection(experimental(t.config.section.warp)),
-                  WarpOptionsTiles(key: ConfigOptionSection._warpKey),
                   const SettingsDivider(),
                   SettingsSection(t.config.section.misc),
                   ValuePreferenceWidget(

@@ -96,8 +96,6 @@
         "permissionRequest": "Права на использование камеры для считывания QR"
       },
       "manually": "Ввести вручную",
-      "addWarp": "Добавить WARP",
-      "addingWarpMsg": "Пожалуйста, подождите, пока мы зарегистрируем WARP.",
       "addingProfileMsg": "Добавление профиля",
       "failureMsg": "Не удалось добавить профиль"
     },
@@ -359,7 +357,6 @@
     "resetBtn": "Сбросить параметры",
     "serviceMode": "Режим работы",
     "quickSettings": "Быстрые настройки",
-    "setupWarp": "Настроить WARP",
     "allOptions": "Все параметры ",
     "serviceModes": {
       "proxy": "Прокси",
@@ -380,16 +377,8 @@
       "mux": "Мультиплексор",
       "outbound": "Исходящие параметры",
       "tlsTricks": "Хитрости TLS",
-      "warp": "Настройки WARP",
       "misc": "Разные параметры"
     },
-    "warpConsent": {
-      "title": "Согласие Cloudflare WARP",
-      "description(rich)": "Cloudflare WARP — бесплатный провайдер WireGuard VPN. Включая эту опцию, вы соглашаетесь с ${tos(Условиями обслуживания)} и ${privacy(Политикой конфиденциальности)} Cloudflare WARP."
-    },
-    "generateWarpConfig": "Cгенерировать конфигурацию WARP",
-    "missingWarpConfig": "Отсутствует конфигурация WARP",
-    "warpConfigGenerated": "Создана конфигурация WARP",
     "pageTitle": "Параметры конфигурации",
     "logLevel": "Уровень логирования",
     "blockAds": "Блокировать рекламу",
@@ -429,22 +418,7 @@
     "tlsPaddingSize": "TLS Padding",
     "enableMux": "Включить Mux",
     "muxProtocol": "Протокол Mux",
-    "muxMaxStreams": "Масимальное количество параллельных потоков",
-    "enableWarp": "Включить WARP",
-    "warpDetourMode": "Режим обхода WARP",
-    "warpDetourModes": {
-      "proxyOverWarp": "Работа Прокси через WARP",
-      "warpOverProxy": "Работа WARP через Прокси",
-      "inbound": "Обход WARP через Прокси",
-      "outbound": "Обход Прокси через WARP"
-    },
-    "warpLicenseKey": "Лицензионный ключ",
-    "warpCleanIp": "Очистить IP",
-    "warpPort": "Порт",
-    "warpNoise": "Шум",
-    "warpNoiseSize": "Размер шума",
-    "warpNoiseMode": "Шумовой режим",
-    "warpNoiseDelay": "Задержка шума"
+    "muxMaxStreams": "Масимальное количество параллельных потоков"
   },
   "window": {
     "hide": "Скрыть",

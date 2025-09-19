@@ -96,8 +96,6 @@
         "permissionRequest": "دسترسی به دوربین برای اسکن کد QR"
       },
       "manually": "افزودن دستی",
-      "addWarp": "افزودن WARP",
-      "addingWarpMsg": "لطفا صبر کنید تا وارپ ثبت شود",
       "addingProfileMsg": "در حال افزودن پروفایل",
       "failureMsg": "افزودن پروفایل ناموفق بود"
     },
@@ -352,7 +350,6 @@
     "resetBtn": "بازنشانی تنظیمات",
     "serviceMode": "حالت سرویس",
     "quickSettings": "تنظیمات سریع",
-    "setupWarp": "راه‌اندازی WARP",
     "allOptions": "همه‌ی تنظیمات پیکربندی",
     "serviceModes": {
       "proxy": "تنها سرویس پروکسی",
@@ -373,16 +370,8 @@
       "mux": "مالتی پلکسر",
       "outbound": "تنظیمات خروجی",
       "tlsTricks": "ترفندهای TLS",
-      "warp": "تنظیمات WARP",
       "misc": "تنظیمات متفرقه"
     },
-    "warpConsent": {
-      "title": "توافق‌نامه‌ی Cloudflare WARP",
-      "description(rich)": "Cloudflare WARP یک ارائه‌دهنده‌ی رایگان WireGuard VPN است. با فعال کردن این گزینه، با ${tos(شرایط خدمات)} و ${privacy(خط‌ مشی رازداری)} Cloudflare WARP موافقت می‌کنید."
-    },
-    "generateWarpConfig": "ایجاد پیکربندی WARP",
-    "missingWarpConfig": "پیکربندی WARP موجود نیست",
-    "warpConfigGenerated": "پیکربندی WARP ایجاد شد",
     "pageTitle": "تنظیمات پیکربندی",
     "logLevel": "سطح گزارش",
     "blockAds": "مسدود سازی تبلیغات",
@@ -422,21 +411,6 @@
     "tlsPaddingSize": "اندازه‌ی TLS Padding",
     "enableMux": "فعال‌سازی Mux",
     "muxProtocol": "پروتکل Mux",
-    "muxMaxStreams": "حداکثر جریان‌های هم‌زمان",
-    "enableWarp": "فعال‌سازی WARP",
-    "warpDetourMode": "حالت وارپ",
-    "warpDetourModes": {
-      "proxyOverWarp": "عبور پروکسی‌ها از طریق WARP",
-      "warpOverProxy": "عبور WARP از طریق پروکسی‌ها",
-      "inbound": "عبور WARP از طریق پروکسی‌ها",
-      "outbound": "عبور پروکسی‌ها از طریق WARP"
-    },
-    "warpLicenseKey": "کلید لایسنس",
-    "warpCleanIp": "آی‌پی تمیز",
-    "warpPort": "پورت",
-    "warpNoise": "تعداد نویز",
-    "warpNoiseSize": "اندازه نویز",
-    "warpNoiseMode": "حالت نویز",
-    "warpNoiseDelay": "تأخیر نویز"
+    "muxMaxStreams": "حداکثر جریان‌های هم‌زمان"
   }
 }

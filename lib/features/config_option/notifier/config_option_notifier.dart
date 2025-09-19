@@ -38,15 +38,6 @@ class ConfigOptionNotifier extends _$ConfigOptionNotifier with AppLogger {
     try {
       final options = await ref.read(ConfigOptions.singboxConfigOptions.future);
       Map map = options.toJson();
-      if (excludePrivate) {
-        for (final key in ConfigOptions.privatePreferencesKeys) {
-          final query = key.split('.').map((e) => '["$e"]').join();
-          final res = JsonPath('\$$query').read(map).firstOrNull;
-          if (res != null) {
-            map = res.pointer.remove(map)! as Map;
-          }
-        }
-      }
 
       const encoder = JsonEncoder.withIndent('  ');
       final json = encoder.convert(map);

@@ -96,8 +96,6 @@
         "permissionRequest": "QR Kodunu taramak için kamera izni"
       },
       "manually": "Manuel giriş",
-      "addWarp": "WARP ekle",
-      "addingWarpMsg": "WARP'ı kaydederken lütfen bekleyin.",
       "addingProfileMsg": "Profil Ekleniyor",
       "failureMsg": "Profil eklenemedi"
     },
@@ -348,7 +346,6 @@
     "resetBtn": "Ayarları sıfırla",
     "serviceMode": "Servis modu",
     "quickSettings": "Hızlı Ayarlar",
-    "setupWarp": "WARP'ı Kur",
     "allOptions": "Tüm Yapılandırma Seçenekleri",
     "serviceModes": {
       "proxy": "Proxy",
@@ -369,16 +366,8 @@
       "mux": "Multiplexer",
       "outbound": "Outbound Options",
       "tlsTricks": "TLS Tricks",
-      "warp": "WARP Options",
       "misc": "Çeşitli Seçenekler"
     },
-    "warpConsent": {
-      "title": "Cloudflare WARP Onayı",
-      "description(rich)": "Cloudflare WARP ücretsiz bir WireGuard VPN sağlayıcısıdır. Bu seçeneği etkinleştirerek Cloudflare WARP'ın ${tos(Hizmet Şartları)} ve ${privacy(Gizlilik Politikası)}'nı kabul etmiş olursunuz."
-    },
-    "generateWarpConfig": "WARP Yapılandırması Oluştur",
-    "missingWarpConfig": "WARP Yapılandırması Eksik",
-    "warpConfigGenerated": "WARP Yapılandırması Oluşturuldu",
     "pageTitle": "Yapılandırma Seçenekleri",
     "logLevel": "Log Seviyesi",
     "blockAds": "Reklamları Engelle",
@@ -418,21 +407,6 @@
     "tlsPaddingSize": "TLS Padding",
     "enableMux": "Enable Mux",
     "muxProtocol": "Mux Protocol",
-    "muxMaxStreams": "Max Concurrent Streams",
-    "enableWarp": "Enable WARP",
-    "warpDetourMode": "Detour Mode",
-    "warpDetourModes": {
-      "proxyOverWarp": "WARP Aracılığıyla Proxy'lerin Yönünü Değiştirin",
-      "warpOverProxy": "Proxy'ler Aracılığıyla WARP'tan Sapma",
-      "inbound": "Detour WARP through proxies",
-      "outbound": "Detour proxies through WARP"
-    },
-    "warpLicenseKey": "License Key",
-    "warpCleanIp": "Clean IP",
-    "warpPort": "Port",
-    "warpNoise": "Noise",
-    "warpNoiseSize": "Gürültü Boyutu",
-    "warpNoiseMode": "Gürültü Modu",
-    "warpNoiseDelay": "Gürültü Gecikmesi"
+    "muxMaxStreams": "Max Concurrent Streams"
   }
 }

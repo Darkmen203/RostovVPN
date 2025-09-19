@@ -96,8 +96,6 @@
         "permissionRequest": "Izin ke kamera untuk memindai Kode QR"
       },
       "manually": "Isian Manual",
-      "addWarp": "Tambahkan WARP",
-      "addingWarpMsg": "Mohon tunggu selagi kami mendaftarkan WARP.",
       "addingProfileMsg": "Tambahkan Profil",
       "failureMsg": "Gagal tambahkan profil"
     },
@@ -348,7 +346,6 @@
     "resetBtn": "Set Ulang Opsi",
     "serviceMode": "Sambung ulang agar perubahan diterapkan",
     "quickSettings": "Pengaturan Cepat",
-    "setupWarp": "Siapkan WARP",
     "allOptions": "Semua Opsi Konfigurasi",
     "serviceModes": {
       "proxy": "Proxy",
@@ -369,16 +366,8 @@
       "mux": "Multiplexer",
       "outbound": "Opsi Outbound",
       "tlsTricks": "TLS Tricks",
-      "warp": "Opsi WARP",
       "misc": "Opsi Misc"
     },
-    "warpConsent": {
-      "title": "Persetujuan Cloudflare WARP",
-      "description(rich)": "Cloudflare WARP adalah WireGuard VPN Provider gratis. Dengan mengaktifkan opsi/pilihan ini berarti kamu setuju pada Cloudflare WARP's ${tos(Terms of Service)} dan ${privacy(Privacy Policy)}."
-    },
-    "generateWarpConfig": "Hasilkan Konfigurasi WARP",
-    "missingWarpConfig": "Konfigurasi WARP tidak ada",
-    "warpConfigGenerated": "Konfigurasi WARP Dibuat",
     "pageTitle": "Opsi Konfig",
     "logLevel": "Log Level",
     "blockAds": "Blokir Iklan",
@@ -418,21 +407,6 @@
     "tlsPaddingSize": "TLS Padding",
     "enableMux": "Enable Mux",
     "muxProtocol": "Mux Protocol",
-    "muxMaxStreams": "Max Concurrent Streams",
-    "enableWarp": "Enable WARP",
-    "warpDetourMode": "Detour Mode",
-    "warpDetourModes": {
-      "proxyOverWarp": "Memutar Proxy Melalui WARP",
-      "warpOverProxy": "Jalan memutar WARP Melalui Proxy",
-      "inbound": "Detour WARP through proxies",
-      "outbound": "Detour proxies through WARP"
-    },
-    "warpLicenseKey": "License Key",
-    "warpCleanIp": "Clean IP",
-    "warpPort": "Port",
-    "warpNoise": "Noise",
-    "warpNoiseSize": "Ukuran Kebisingan",
-    "warpNoiseMode": "Modus Kebisingan",
-    "warpNoiseDelay": "Penundaan Kebisingan"
+    "muxMaxStreams": "Max Concurrent Streams"
   }
 }

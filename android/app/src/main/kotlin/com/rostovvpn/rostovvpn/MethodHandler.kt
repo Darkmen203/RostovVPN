@@ -34,7 +34,6 @@ class MethodHandler(private val scope: CoroutineScope) : FlutterPlugin,
             SelectOutbound("select_outbound"),
             UrlTest("url_test"),
             ClearLogs("clear_logs"),
-            GenerateWarpConfig("generate_warp_config"),
         }
     }
 
@@ -203,20 +202,6 @@ class MethodHandler(private val scope: CoroutineScope) : FlutterPlugin,
                     result.runCatching {
                         MainActivity.instance.onServiceResetLogs(mutableListOf())
                         success(true)
-                    }
-                }
-            }
-
-            Trigger.GenerateWarpConfig.method -> {
-                scope.launch(Dispatchers.IO) {
-                    result.runCatching {
-                        val args = call.arguments as Map<*, *>
-                        val warpConfig = Mobile.generateWarpConfig(
-                            args["license-key"] as String,
-                            args["previous-account-id"] as String,
-                            args["previous-access-token"] as String,
-                        )
-                        success(warpConfig)
                     }
                 }
             }
