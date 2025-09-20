@@ -20,8 +20,9 @@ import java.util.Enumeration
 import io.nekohasekai.libbox.NetworkInterface as LibboxNetworkInterface
 
 /**
- * Дефолтные реализации под Android для методов PlatformInterface.
- * (эта ревизия libbox требует sendNotification и старый StringIterator)
+ * Совместимо с ревизией, где:
+ * - у PlatformInterface НЕТ sendNotification(...) -> даём дефолтную реализацию БЕЗ override
+ * - StringIterator НОВОГО формата: len() / get(i)
  */
 interface PlatformInterfaceWrapper : PlatformInterface {
 
@@ -29,9 +30,7 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         error("invalid argument")
     }
 
-    override fun useProcFS(): Boolean {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-    }
+    override fun useProcFS(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun findConnectionOwner(
@@ -57,20 +56,18 @@ interface PlatformInterfaceWrapper : PlatformInterface {
     }
 
     @Suppress("DEPRECATION")
-    override fun uidByPackageName(packageName: String): Int {
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Application.packageManager.getPackageUid(
-                    packageName, PackageManager.PackageInfoFlags.of(0)
-                )
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Application.packageManager.getPackageUid(packageName, 0)
-            } else {
-                Application.packageManager.getApplicationInfo(packageName, 0).uid
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            error("android: package not found")
+    override fun uidByPackageName(packageName: String): Int = try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Application.packageManager.getPackageUid(
+                packageName, PackageManager.PackageInfoFlags.of(0)
+            )
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Application.packageManager.getPackageUid(packageName, 0)
+        } else {
+            Application.packageManager.getApplicationInfo(packageName, 0).uid
         }
+    } catch (_: PackageManager.NameNotFoundException) {
+        error("android: package not found")
     }
 
     override fun startDefaultInterfaceMonitor(listener: InterfaceUpdateListener) {
@@ -86,17 +83,15 @@ interface PlatformInterfaceWrapper : PlatformInterface {
     }
 
     override fun underNetworkExtension(): Boolean = false
-
     override fun includeAllNetworks(): Boolean = false
-
     override fun clearDNSCache() { /* no-op */ }
-
     override fun readWIFIState(): WIFIState? = null
 
-    // ЭТА ВЕТКА API ТРЕБУЕТ sendNotification
-    override fun sendNotification(notification: Notification) {
-        // no-op; уведомления ведём через ServiceNotification
-    }
+    // В ЭТОЙ схеме у родителя этого метода нет — поэтому БЕЗ override и с телом,
+    // чтобы ProxyService/VPNService не требовали своей реализации.
+    fun sendNotification(notification: Notification) { /* no-op */ }
+
+    // ==== Вспомогательные адаптеры ====
 
     private class InterfaceArray(private val iterator: Enumeration<NetworkInterface>) :
         NetworkInterfaceIterator {
@@ -110,7 +105,8 @@ interface PlatformInterfaceWrapper : PlatformInterface {
                 name = element.name
                 index = element.index
                 runCatching { mtu = element.mtu }
-                addresses = StringArray(prefixes.iterator())
+                // Ревизия со StringIterator(len/get)
+                addresses = StringArray(prefixes)
             }
         }
 
@@ -123,9 +119,9 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         }
     }
 
-    /** Старый итератор строк (hasNext/next). */
-    private class StringArray(private val it: Iterator<String>) : StringIterator {
-        override fun hasNext(): Boolean = it.hasNext()
-        override fun next(): String = it.next()
+    /** StringIterator новой формы: len()/get(i) */
+    private class StringArray(private val data: List<String>) : StringIterator {
+        override fun len(): Int = data.size
+        override fun get(i: Int): String = data[i]
     }
 }

@@ -49,7 +49,7 @@ open class CommandClient(
                 ConnectionType.Groups -> Libbox.CommandGroup
                 ConnectionType.Log -> Libbox.CommandLog
                 ConnectionType.ClashMode -> Libbox.CommandClashMode
-                ConnectionType.GroupOnly -> Libbox.CommandGroup // fallback
+                ConnectionType.GroupOnly -> Libbox.CommandGroup // fallback вместо CommandGroupInfoOnly
             }
             statusInterval = 2 * 1_000_000_000 // ns
         }
@@ -101,14 +101,12 @@ open class CommandClient(
             handler.updateGroups(groups)
         }
 
-        // В этой ветке есть clearLogs()
         override fun clearLogs() {
             handler.clearLog()
         }
 
-        // В этой ветке нет writeLog(...), зато есть writeLogs(StringIterator)
         override fun writeLogs(messageList: StringIterator) {
-            // Склеим пачку логов в одну строку (можно и по одной отправлять)
+            // Разворачиваем пачку логов и прокидываем по одной строке
             messageList.toList().forEach { handler.appendLog(it) }
         }
 
@@ -126,7 +124,7 @@ open class CommandClient(
         }
 
         override fun writeConnections(message: Connections) {
-            // no-op для нашего UI
+            // при необходимости: прокинуть в UI
         }
     }
 }
