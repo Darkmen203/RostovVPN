@@ -101,7 +101,10 @@ class ProxyRepositoryImpl with ExceptionHandler, InfraLogger implements ProxyRep
     String outboundTag,
   ) {
     return exceptionHandler(
-      () => singbox.selectOutbound(groupTag, outboundTag).mapLeft(ProxyUnexpectedFailure.new).run(),
+      () => singbox
+          .selectOutbound(groupTag, outboundTag)
+          .mapLeft(ProxyUnexpectedFailure.new)
+          .run(),
       ProxyUnexpectedFailure.new,
     );
   }
@@ -111,7 +114,8 @@ class ProxyRepositoryImpl with ExceptionHandler, InfraLogger implements ProxyRep
     var groupTag = groupTag_;
     loggy.debug("testing group: [$groupTag]");
     if (!["auto"].contains(groupTag)) {
-      loggy.warning("only auto proxy group can do url test. Please change go code if you want");
+      loggy.warning(
+          "only auto proxy group can do url test. Please change go code if you want");
     }
     groupTag = "auto";
 
@@ -121,9 +125,10 @@ class ProxyRepositoryImpl with ExceptionHandler, InfraLogger implements ProxyRep
     );
   }
 
-  static final Map<String, IpInfo Function(Map<String, dynamic> response)> _ipInfoSources = {
+  static final Map<String, IpInfo Function(Map<String, dynamic> response)>
+      _ipInfoSources = {
     // "https://geolocation-db.com/json/": IpInfo.fromGeolocationDbComJson, //bug response is not json
-    "https://ipwho.is/": IpInfo.fromIpwhoIsJson,
+    // "https://ipwho.is/": IpInfo.fromIpwhoIsJson,
     "https://api.ip.sb/geoip/": IpInfo.fromIpSbJson,
     "https://ipapi.co/json/": IpInfo.fromIpApiCoJson,
     "https://ipinfo.io/json/": IpInfo.fromIpInfoIoJson,
@@ -143,6 +148,8 @@ class ProxyRepositoryImpl with ExceptionHandler, InfraLogger implements ProxyRep
               proxyOnly: true,
             );
             if (response.statusCode == 200 && response.data != null) {
+              loggy.debug("getted current ip info [${source.value(response.data!)}]");
+
               return source.value(response.data!);
             }
           } catch (e, s) {

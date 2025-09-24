@@ -8,6 +8,7 @@ import 'package:ffi/ffi.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:rostov_vpn/core/model/directories.dart';
 import 'package:rostov_vpn/gen/singbox_generated_bindings.dart';
+import 'package:rostov_vpn/singbox/libbox_commands.dart';
 import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
 import 'package:rostov_vpn/singbox/model/singbox_outbound.dart';
 import 'package:rostov_vpn/singbox/model/singbox_stats.dart';
@@ -50,7 +51,10 @@ class FFISingboxService with InfraLogger implements SingboxService {
   Future<void> init() async {
     loggy.debug("initializing");
     _statusReceiver = ReceivePort('service status receiver');
-    final source = _statusReceiver.asBroadcastStream().map((event) => jsonDecode(event as String)).map(SingboxStatus.fromEvent);
+    final source = _statusReceiver
+        .asBroadcastStream()
+        .map((event) => jsonDecode(event as String))
+        .map(SingboxStatus.fromEvent);
     _status = ValueConnectableStream.seeded(
       source,
       const SingboxStopped(),
@@ -118,7 +122,10 @@ class FFISingboxService with InfraLogger implements SingboxService {
       () => CombineWorker().execute(
         () {
           final json = jsonEncode(options.toJson());
-          final err = _box.changeRostovvpnOptions(json.toNativeUtf8().cast()).cast<Utf8>().toDartString();
+          final err = _box
+              .changeRostovvpnOptions(json.toNativeUtf8().cast())
+              .cast<Utf8>()
+              .toDartString();
           if (err.isNotEmpty) {
             return left(err);
           }
@@ -234,7 +241,7 @@ class FFISingboxService with InfraLogger implements SingboxService {
     final statusStream = receiver.asBroadcastStream(
       onCancel: (_) {
         _logger.debug("stopping stats command client");
-        final err = _box.stopCommandClient(1).cast<Utf8>().toDartString();
+        final err = _box.stopCommandClient(LibboxCmd.status).cast<Utf8>().toDartString();
         if (err.isNotEmpty) {
           _logger.error("error stopping stats client");
         }
@@ -257,7 +264,10 @@ class FFISingboxService with InfraLogger implements SingboxService {
       },
     );
 
-    final err = _box.startCommandClient(1, receiver.sendPort.nativePort).cast<Utf8>().toDartString();
+    final err = _box
+        .startCommandClient(LibboxCmd.status, receiver.sendPort.nativePort)
+        .cast<Utf8>()
+        .toDartString();
     if (err.isNotEmpty) {
       loggy.error("error starting status command: $err");
       throw err;
@@ -276,7 +286,7 @@ class FFISingboxService with InfraLogger implements SingboxService {
         logger.debug("stopping");
         receiver.close();
         _outboundsStream = null;
-        final err = _box.stopCommandClient(5).cast<Utf8>().toDartString();
+        final err = _box.stopCommandClient(LibboxCmd.group).cast<Utf8>().toDartString();
         if (err.isNotEmpty) {
           _logger.error("error stopping group client");
         }
@@ -299,7 +309,10 @@ class FFISingboxService with InfraLogger implements SingboxService {
     );
 
     try {
-      final err = _box.startCommandClient(5, receiver.sendPort.nativePort).cast<Utf8>().toDartString();
+      final err = _box
+          .startCommandClient(LibboxCmd.group, receiver.sendPort.nativePort)
+          .cast<Utf8>()
+          .toDartString();
       if (err.isNotEmpty) {
         logger.error("error starting group command: $err");
         throw err;
@@ -320,7 +333,7 @@ class FFISingboxService with InfraLogger implements SingboxService {
       onCancel: (_) {
         logger.debug("stopping");
         receiver.close();
-        final err = _box.stopCommandClient(13).cast<Utf8>().toDartString();
+        final err = _box.stopCommandClient(LibboxCmd.group).cast<Utf8>().toDartString();
         if (err.isNotEmpty) {
           logger.error("failed stopping: $err");
         }
@@ -343,7 +356,10 @@ class FFISingboxService with InfraLogger implements SingboxService {
     );
 
     try {
-      final err = _box.startCommandClient(13, receiver.sendPort.nativePort).cast<Utf8>().toDartString();
+      final err = _box
+          .startCommandClient(LibboxCmd.group, receiver.sendPort.nativePort)
+          .cast<Utf8>()
+          .toDartString();
       if (err.isNotEmpty) {
         logger.error("error starting: $err");
         throw err;
@@ -382,7 +398,10 @@ class FFISingboxService with InfraLogger implements SingboxService {
     return TaskEither(
       () => CombineWorker().execute(
         () {
-          final err = _box.urlTest(groupTag.toNativeUtf8().cast()).cast<Utf8>().toDartString();
+          final err = _box
+              .urlTest(groupTag.toNativeUtf8().cast())
+              .cast<Utf8>()
+              .toDartString();
           if (err.isNotEmpty) {
             return left(err);
           }
@@ -398,7 +417,9 @@ class FFISingboxService with InfraLogger implements SingboxService {
   @override
   Stream<List<String>> watchLogs(String path) async* {
     yield await _readLogFile(File(path));
-    yield* Watcher(path, pollingDelay: const Duration(seconds: 1)).events.asyncMap((event) async {
+    yield* Watcher(path, pollingDelay: const Duration(seconds: 1))
+        .events
+        .asyncMap((event) async {
       if (event.type == ChangeType.MODIFY) {
         await _readLogFile(File(path));
       }
@@ -420,7 +441,8 @@ class FFISingboxService with InfraLogger implements SingboxService {
 
   Future<List<String>> _readLogFile(File file) async {
     if (_logFilePosition == 0 && file.lengthSync() == 0) return [];
-    final content = await file.openRead(_logFilePosition).transform(utf8.decoder).join();
+    final content =
+        await file.openRead(_logFilePosition).transform(utf8.decoder).join();
     _logFilePosition = file.lengthSync();
     final lines = const LineSplitter().convert(content);
     if (lines.length > 300) {
