@@ -2,11 +2,11 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/widget/animated_visibility.dart';
 import 'package:rostov_vpn/core/widget/shimmer_skeleton.dart';
 import 'package:rostov_vpn/features/proxy/active/active_proxy_notifier.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ActiveProxyDelayIndicator extends HookConsumerWidget {
   const ActiveProxyDelayIndicator({super.key});

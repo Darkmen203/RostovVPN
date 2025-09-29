@@ -1,5 +1,5 @@
-import 'package:rostov_vpn/utils/sentry_utils.dart';
 import 'package:loggy/loggy.dart';
+import 'package:rostov_vpn/utils/sentry_utils.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 // modified version of https://github.com/getsentry/sentry-dart/tree/main/logging

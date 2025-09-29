@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsInputDialog<T> extends HookConsumerWidget with PresLogger {
   const SettingsInputDialog({super.key, required this.title, required this.initialValue, this.mapTo, this.validator, this.valueFormatter, this.onReset, this.optionalAction, this.icon, this.digitsOnly = false, this.possibleValues});

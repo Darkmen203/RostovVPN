@@ -1,11 +1,11 @@
 import 'package:circle_flags/circle_flags.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/haptic/haptic_service.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/utils/ip_utils.dart';
 import 'package:rostov_vpn/gen/fonts.gen.dart';
 import 'package:rostov_vpn/utils/riverpod_utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final _showIp = StateProvider.autoDispose((ref) {
   ref.disposeDelay(const Duration(seconds: 20));

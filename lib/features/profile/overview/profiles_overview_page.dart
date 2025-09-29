@@ -1,16 +1,15 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/notification/in_app_notification_controller.dart';
-import 'package:rostov_vpn/core/router/router.dart';
 import 'package:rostov_vpn/features/profile/model/profile_sort_enum.dart';
 import 'package:rostov_vpn/features/profile/notifier/profiles_update_notifier.dart';
 import 'package:rostov_vpn/features/profile/overview/profiles_overview_notifier.dart';
 import 'package:rostov_vpn/features/profile/widget/profile_tile.dart';
 import 'package:rostov_vpn/utils/placeholders.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfilesOverviewModal extends HookConsumerWidget {
   const ProfilesOverviewModal({

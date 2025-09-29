@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/features/app_update/model/remote_version_entity.dart';
 import 'package:rostov_vpn/features/app_update/notifier/app_update_notifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showUpdateDialog(
   BuildContext context,
@@ -37,7 +37,7 @@ Future<void> showUpdateDialog(
                       text: currentVersion,
                       style: theme.textTheme.labelMedium,
                     ),
-                  ]),
+                  ],),
                 ),
                 Text.rich(
                   TextSpan(children: [
@@ -49,7 +49,7 @@ Future<void> showUpdateDialog(
                       text: remote.presentVersion, // см. getter в entity
                       style: theme.textTheme.labelMedium,
                     ),
-                  ]),
+                  ],),
                 ),
               ],
             ),

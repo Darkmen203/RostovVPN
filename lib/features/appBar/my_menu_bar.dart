@@ -1,11 +1,11 @@
 // lib/features/appBar/my_menu_bar.dart
 
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/login/login_manager_provider.dart';
 import 'package:rostov_vpn/features/appBar/login_dialog.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MyMenuBar extends ConsumerWidget {
   const MyMenuBar({super.key});

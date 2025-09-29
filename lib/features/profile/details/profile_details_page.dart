@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:humanizer/humanizer.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/widget/adaptive_icon.dart';
@@ -14,8 +16,6 @@ import 'package:rostov_vpn/features/profile/details/profile_details_notifier.dar
 import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
 import 'package:rostov_vpn/features/settings/widgets/widgets.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:humanizer/humanizer.dart';
 // import 'package:lucy_editor/lucy_editor.dart';
 // import 'package:re_highlight/languages/json.dart';
 // import 'package:re_highlight/styles/atom-one-light.dart';

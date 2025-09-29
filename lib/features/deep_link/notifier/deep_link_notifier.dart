@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:rostov_vpn/utils/utils.dart';
 import 'package:protocol_handler/protocol_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 
 part 'deep_link_notifier.g.dart';
 

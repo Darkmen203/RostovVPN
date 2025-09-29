@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/analytics/analytics_filter.dart';
 import 'package:rostov_vpn/core/analytics/analytics_logger.dart';
 import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
@@ -6,7 +7,6 @@ import 'package:rostov_vpn/core/logger/logger_controller.dart';
 import 'package:rostov_vpn/core/model/environment.dart';
 import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/utils/custom_loggers.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

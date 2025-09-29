@@ -2,6 +2,8 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:humanizer/humanizer.dart';
 import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/optional_range.dart';
@@ -19,8 +21,6 @@ import 'package:rostov_vpn/features/settings/widgets/sections_widgets.dart';
 import 'package:rostov_vpn/features/settings/widgets/settings_input_dialog.dart';
 import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:humanizer/humanizer.dart';
 
 enum ConfigOptionSection {
   fragment;

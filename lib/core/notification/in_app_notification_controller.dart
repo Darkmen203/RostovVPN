@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/features/common/adaptive_root_scaffold.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:toastification/toastification.dart';
 
 part 'in_app_notification_controller.g.dart';

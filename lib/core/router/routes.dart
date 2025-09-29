@@ -49,15 +49,15 @@ GlobalKey<NavigatorState>? _dynamicRootKey =
       routes: [
         TypedGoRoute<AddProfileRoute>(path: "add", name: AddProfileRoute.name),
         TypedGoRoute<ProfilesOverviewRoute>(
-            path: "profiles", name: ProfilesOverviewRoute.name),
+            path: "profiles", name: ProfilesOverviewRoute.name,),
         TypedGoRoute<NewProfileRoute>(
-            path: "profiles/new", name: NewProfileRoute.name),
+            path: "profiles/new", name: NewProfileRoute.name,),
         TypedGoRoute<ProfileDetailsRoute>(
-            path: "profiles/:id", name: ProfileDetailsRoute.name),
+            path: "profiles/:id", name: ProfileDetailsRoute.name,),
         TypedGoRoute<ConfigOptionsRoute>(
-            path: "config-options", name: ConfigOptionsRoute.name),
+            path: "config-options", name: ConfigOptionsRoute.name,),
         TypedGoRoute<QuickSettingsRoute>(
-            path: "quick-settings", name: QuickSettingsRoute.name),
+            path: "quick-settings", name: QuickSettingsRoute.name,),
     // TypedGoRoute<SettingsRoute>(path: "/settings", name: SettingsRoute.name),
 
         TypedGoRoute<SettingsRoute>( 
@@ -71,7 +71,7 @@ GlobalKey<NavigatorState>? _dynamicRootKey =
           ],
         ),
         TypedGoRoute<LogsOverviewRoute>(
-            path: "logs", name: LogsOverviewRoute.name),
+            path: "logs", name: LogsOverviewRoute.name,),
         TypedGoRoute<AboutRoute>(path: "about", name: AboutRoute.name),
       ],
     ),

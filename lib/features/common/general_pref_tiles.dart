@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/analytics/analytics_controller.dart';
 import 'package:rostov_vpn/core/localization/locale_extensions.dart';
 import 'package:rostov_vpn/core/localization/locale_preferences.dart';
@@ -10,7 +11,6 @@ import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/core/theme/app_theme_mode.dart';
 import 'package:rostov_vpn/core/theme/theme_preferences.dart';
 import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LocalePrefTile extends ConsumerWidget {
   const LocalePrefTile({super.key});

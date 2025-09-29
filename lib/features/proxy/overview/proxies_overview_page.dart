@@ -1,12 +1,12 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/features/common/nested_app_bar.dart';
 import 'package:rostov_vpn/features/proxy/overview/proxies_overview_notifier.dart';
 import 'package:rostov_vpn/features/proxy/widget/proxy_tile.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
   const ProxiesOverviewPage({super.key});

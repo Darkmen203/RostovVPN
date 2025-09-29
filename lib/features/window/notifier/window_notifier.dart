@@ -3,12 +3,12 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:screen_retriever/screen_retriever.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:screen_retriever/screen_retriever.dart';
 
 part 'window_notifier.g.dart';
 

@@ -13,8 +13,8 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'package:rostov_vpn/singbox/generated/core.pb.dart' as $0;
 import 'package:protobuf/protobuf.dart' as $pb;
+import 'package:rostov_vpn/singbox/generated/core.pb.dart' as $0;
 
 export 'core.pb.dart';
 

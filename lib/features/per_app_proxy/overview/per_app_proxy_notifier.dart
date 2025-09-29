@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/per_app_proxy/data/per_app_proxy_data_providers.dart';
 import 'package:rostov_vpn/features/per_app_proxy/model/installed_package_info.dart';
 import 'package:rostov_vpn/utils/riverpod_utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'per_app_proxy_notifier.g.dart';
 

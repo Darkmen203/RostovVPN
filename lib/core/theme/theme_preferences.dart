@@ -1,6 +1,6 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/core/theme/app_theme_mode.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme_preferences.g.dart';
 

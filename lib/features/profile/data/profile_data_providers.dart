@@ -1,3 +1,4 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/database/database_provider.dart';
 import 'package:rostov_vpn/core/directories/directories_provider.dart';
 import 'package:rostov_vpn/core/http_client/http_client_provider.dart';
@@ -6,7 +7,6 @@ import 'package:rostov_vpn/features/profile/data/profile_data_source.dart';
 import 'package:rostov_vpn/features/profile/data/profile_path_resolver.dart';
 import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'profile_data_providers.g.dart';
 

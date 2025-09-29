@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/core/router/router.dart';
 import 'package:rostov_vpn/features/per_app_proxy/model/per_app_proxy_mode.dart';
 import 'package:rostov_vpn/features/settings/notifier/platform_settings_notifier.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AdvancedSettingTiles extends HookConsumerWidget {
   const AdvancedSettingTiles({super.key});

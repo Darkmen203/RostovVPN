@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/analytics/analytics_controller.dart';
 import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
 import 'package:rostov_vpn/core/directories/directories_provider.dart';
@@ -17,7 +18,6 @@ import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/features/app/widget/app.dart';
 import 'package:rostov_vpn/features/auto_start/notifier/auto_start_notifier.dart';
 import 'package:rostov_vpn/features/deep_link/notifier/deep_link_notifier.dart';
-
 import 'package:rostov_vpn/features/log/data/log_data_providers.dart';
 import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
@@ -25,7 +25,6 @@ import 'package:rostov_vpn/features/system_tray/notifier/system_tray_notifier.da
 import 'package:rostov_vpn/features/window/notifier/window_notifier.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service_provider.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> lazyBootstrap(

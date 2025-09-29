@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:loggy/loggy.dart';
 import 'package:rostov_vpn/core/logger/custom_logger.dart';
 import 'package:rostov_vpn/utils/custom_loggers.dart';
-import 'package:loggy/loggy.dart';
 
 class LoggerController extends LoggyPrinter with InfraLogger {
   LoggerController(

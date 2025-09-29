@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
@@ -12,7 +13,6 @@ import 'package:rostov_vpn/features/log/data/log_data_providers.dart';
 import 'package:rostov_vpn/features/log/model/log_level.dart';
 import 'package:rostov_vpn/features/log/overview/logs_overview_notifier.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class LogsOverviewPage extends HookConsumerWidget with PresLogger {

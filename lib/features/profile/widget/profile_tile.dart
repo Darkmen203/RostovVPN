@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/router/router.dart';
@@ -16,8 +18,6 @@ import 'package:rostov_vpn/features/profile/notifier/profile_notifier.dart';
 import 'package:rostov_vpn/features/profile/overview/profiles_overview_notifier.dart';
 import 'package:rostov_vpn/gen/fonts.gen.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class ProfileTile extends HookConsumerWidget {
   const ProfileTile({

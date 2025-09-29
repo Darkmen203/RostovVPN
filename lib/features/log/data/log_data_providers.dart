@@ -1,8 +1,8 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/directories/directories_provider.dart';
 import 'package:rostov_vpn/features/log/data/log_path_resolver.dart';
 import 'package:rostov_vpn/features/log/data/log_repository.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'log_data_providers.g.dart';
 

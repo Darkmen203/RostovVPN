@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:loggy/loggy.dart';
+import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 

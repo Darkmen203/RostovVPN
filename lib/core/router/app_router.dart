@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/core/router/routes.dart';
 import 'package:rostov_vpn/features/deep_link/notifier/deep_link_notifier.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'app_router.g.dart';

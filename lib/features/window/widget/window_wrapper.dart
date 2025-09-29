@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/preferences/actions_at_closing.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/features/common/adaptive_root_scaffold.dart';
@@ -8,7 +9,6 @@ import 'package:rostov_vpn/features/window/notifier/window_notifier.dart';
 import 'package:rostov_vpn/features/window/widget/window_closing_dialog.dart';
 import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:rostov_vpn/utils/platform_utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 class WindowWrapper extends StatefulHookConsumerWidget {

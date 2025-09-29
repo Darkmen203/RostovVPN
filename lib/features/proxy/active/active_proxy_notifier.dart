@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/haptic/haptic_service.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/core/utils/throttler.dart';
@@ -11,7 +12,6 @@ import 'package:rostov_vpn/features/proxy/model/proxy_entity.dart';
 import 'package:rostov_vpn/features/proxy/model/proxy_failure.dart';
 import 'package:rostov_vpn/utils/riverpod_utils.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'active_proxy_notifier.g.dart';
 

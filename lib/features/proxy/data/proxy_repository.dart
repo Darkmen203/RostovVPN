@@ -115,7 +115,7 @@ class ProxyRepositoryImpl with ExceptionHandler, InfraLogger implements ProxyRep
     loggy.debug("testing group: [$groupTag]");
     if (!["auto"].contains(groupTag)) {
       loggy.warning(
-          "only auto proxy group can do url test. Please change go code if you want");
+          "only auto proxy group can do url test. Please change go code if you want",);
     }
     groupTag = "auto";
 

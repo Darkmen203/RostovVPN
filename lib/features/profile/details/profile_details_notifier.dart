@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
 import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
 import 'package:rostov_vpn/features/profile/details/profile_details_state.dart';
 import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
 import 'package:rostov_vpn/features/profile/model/profile_failure.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 part 'profile_details_notifier.g.dart';

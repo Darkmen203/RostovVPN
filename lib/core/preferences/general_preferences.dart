@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
 import 'package:rostov_vpn/core/model/environment.dart';
 import 'package:rostov_vpn/core/preferences/actions_at_closing.dart';
@@ -7,7 +8,6 @@ import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/core/utils/preferences_utils.dart';
 import 'package:rostov_vpn/features/per_app_proxy/model/per_app_proxy_mode.dart';
 import 'package:rostov_vpn/utils/platform_utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'general_preferences.g.dart';
 

@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:json_path/json_path.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
 import 'package:rostov_vpn/features/connection/data/connection_data_providers.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
 import 'package:rostov_vpn/utils/custom_loggers.dart';
-import 'package:json_path/json_path.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'config_option_notifier.g.dart';
 
@@ -37,7 +37,7 @@ class ConfigOptionNotifier extends _$ConfigOptionNotifier with AppLogger {
   Future<bool> exportJsonToClipboard({bool excludePrivate = true}) async {
     try {
       final options = await ref.read(ConfigOptions.singboxConfigOptions.future);
-      Map map = options.toJson();
+      final Map map = options.toJson();
 
       const encoder = JsonEncoder.withIndent('  ');
       final json = encoder.convert(map);

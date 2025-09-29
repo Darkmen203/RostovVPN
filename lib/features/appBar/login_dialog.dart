@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Результат диалога, возвращаемый при нажатии на "Войти"
 class LoginDialogResult {

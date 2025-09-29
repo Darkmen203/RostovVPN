@@ -2,6 +2,7 @@ import 'package:dartx/dartx.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/widget/animated_visibility.dart';
 import 'package:rostov_vpn/core/widget/shimmer_skeleton.dart';
@@ -11,7 +12,6 @@ import 'package:rostov_vpn/features/proxy/model/proxy_failure.dart';
 import 'package:rostov_vpn/features/stats/notifier/stats_notifier.dart';
 import 'package:rostov_vpn/gen/fonts.gen.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ActiveProxyFooter extends HookConsumerWidget {
   const ActiveProxyFooter({super.key});

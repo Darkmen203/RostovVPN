@@ -3,6 +3,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
@@ -11,7 +12,6 @@ import 'package:rostov_vpn/features/per_app_proxy/model/installed_package_info.d
 import 'package:rostov_vpn/features/per_app_proxy/model/per_app_proxy_mode.dart';
 import 'package:rostov_vpn/features/per_app_proxy/overview/per_app_proxy_notifier.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class PerAppProxyPage extends HookConsumerWidget with PresLogger {

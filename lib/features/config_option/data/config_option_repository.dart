@@ -1,19 +1,17 @@
 import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/model/optional_range.dart';
 import 'package:rostov_vpn/core/model/region.dart';
-
 import 'package:rostov_vpn/core/utils/exception_handler.dart';
 import 'package:rostov_vpn/core/utils/json_converters.dart';
 import 'package:rostov_vpn/core/utils/preferences_utils.dart';
 import 'package:rostov_vpn/features/config_option/model/config_option_failure.dart';
-
 import 'package:rostov_vpn/features/log/model/log_level.dart';
 import 'package:rostov_vpn/singbox/model/singbox_config_enum.dart';
 import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
 import 'package:rostov_vpn/singbox/model/singbox_rule.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ConfigOptions {

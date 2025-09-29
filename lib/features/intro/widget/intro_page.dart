@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/analytics/analytics_controller.dart';
 import 'package:rostov_vpn/core/http_client/dio_http_client.dart';
 import 'package:rostov_vpn/core/localization/locale_preferences.dart';
@@ -13,7 +14,6 @@ import 'package:rostov_vpn/features/common/general_pref_tiles.dart';
 import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
 import 'package:rostov_vpn/gen/assets.gen.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:timezone_to_country/timezone_to_country.dart';
 

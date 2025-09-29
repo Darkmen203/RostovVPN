@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
-import 'package:rostov_vpn/utils/utils.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
+import 'package:rostov_vpn/utils/utils.dart';
 
 part 'auto_start_notifier.g.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/preferences/actions_at_closing.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/features/window/notifier/window_notifier.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class WindowClosingDialog extends ConsumerStatefulWidget {
   const WindowClosingDialog({super.key});

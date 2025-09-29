@@ -2,10 +2,10 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/router/routes.dart';
 import 'package:rostov_vpn/core/utils/preferences_utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 bool _testExperimentalNotice = false;
 

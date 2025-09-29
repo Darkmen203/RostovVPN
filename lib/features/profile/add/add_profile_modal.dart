@@ -4,15 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
-import 'package:rostov_vpn/core/notification/in_app_notification_controller.dart';
-import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/core/router/router.dart';
 import 'package:rostov_vpn/features/common/qr_code_scanner_screen.dart';
-import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
 import 'package:rostov_vpn/features/profile/notifier/profile_notifier.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AddProfileModal extends HookConsumerWidget {
   const AddProfileModal({
@@ -153,7 +150,7 @@ class AddProfileModal extends HookConsumerWidget {
                       children: [
                         if (!PlatformUtils.isDesktop)
                           const SizedBox(
-                              height: 16), // Spacing between the buttons
+                              height: 16,), // Spacing between the buttons
                         if (!PlatformUtils.isDesktop)
                           Semantics(
                             button: true,

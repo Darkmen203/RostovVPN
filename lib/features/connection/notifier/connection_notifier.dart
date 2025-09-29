@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:in_app_review/in_app_review.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/haptic/haptic_service.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/features/connection/data/connection_data_providers.dart';
@@ -8,8 +10,6 @@ import 'package:rostov_vpn/features/connection/model/connection_status.dart';
 import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

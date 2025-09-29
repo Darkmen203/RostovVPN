@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/log/data/log_data_providers.dart';
 import 'package:rostov_vpn/features/log/model/log_entity.dart';
 import 'package:rostov_vpn/features/log/model/log_level.dart';
 import 'package:rostov_vpn/features/log/overview/logs_overview_state.dart';
 import 'package:rostov_vpn/utils/riverpod_utils.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'logs_overview_notifier.g.dart';

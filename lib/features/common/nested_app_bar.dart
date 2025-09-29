@@ -9,7 +9,9 @@ bool showDrawerButton(BuildContext context) {
   if (!useMobileRouter) return true;
   final String location = GoRouterState.of(context).uri.path;
   if (location == const HomeRoute().location ||
-      location == const ProfilesOverviewRoute().location) return true;
+      location == const ProfilesOverviewRoute().location) {
+    return true;
+  }
   if (location.startsWith(const ProxiesRoute().location)) return true;
   return false;
 }
@@ -53,7 +55,7 @@ class NestedAppBar extends StatelessWidget {
             : (Navigator.of(context).canPop()
                 ? IconButton(
                     icon: Icon(
-                        context.isRtl ? Icons.arrow_forward : Icons.arrow_back),
+                        context.isRtl ? Icons.arrow_forward : Icons.arrow_back,),
                     padding: EdgeInsets.only(right: context.isRtl ? 50 : 0),
                     onPressed: () {
                       Navigator.of(context)

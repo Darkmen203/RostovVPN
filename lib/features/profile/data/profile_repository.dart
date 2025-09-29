@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:meta/meta.dart';
 import 'package:rostov_vpn/core/database/app_database.dart';
 import 'package:rostov_vpn/core/http_client/dio_http_client.dart';
 import 'package:rostov_vpn/core/utils/exception_handler.dart';
@@ -18,7 +19,6 @@ import 'package:rostov_vpn/features/profile/model/profile_sort_enum.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service.dart';
 import 'package:rostov_vpn/utils/custom_loggers.dart';
 import 'package:rostov_vpn/utils/link_parsers.dart';
-import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class ProfileRepository {
@@ -332,7 +332,7 @@ class ProfileRepositoryImpl
                 () async {
                   final profilePatch = remoteProfile.subInfoPatch().copyWith(
                       lastUpdate: Value(DateTime.now()),
-                      active: Value(baseProfile.active));
+                      active: Value(baseProfile.active),);
 
                   await profileDataSource.edit(
                     baseProfile.id,

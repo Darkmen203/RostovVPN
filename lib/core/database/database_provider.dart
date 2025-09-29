@@ -1,5 +1,5 @@
-import 'package:rostov_vpn/core/database/app_database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/core/database/app_database.dart';
 
 part 'database_provider.g.dart';
 

@@ -1,7 +1,7 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/settings/data/settings_data_providers.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service_provider.dart';
 import 'package:rostov_vpn/utils/custom_loggers.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'platform_settings_notifier.g.dart';
 

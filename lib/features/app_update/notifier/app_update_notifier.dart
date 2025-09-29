@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
 import 'package:rostov_vpn/core/preferences/preferences_provider.dart';

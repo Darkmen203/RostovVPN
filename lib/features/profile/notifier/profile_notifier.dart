@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/haptic/haptic_service.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/notification/in_app_notification_controller.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
-import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
-import 'package:rostov_vpn/features/common/adaptive_root_scaffold.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
 import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
 import 'package:rostov_vpn/features/profile/data/profile_repository.dart';
@@ -18,7 +16,6 @@ import 'package:rostov_vpn/features/profile/model/profile_failure.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
 import 'package:rostov_vpn/utils/riverpod_utils.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'profile_notifier.g.dart';
 

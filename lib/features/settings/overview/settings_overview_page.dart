@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/features/common/nested_app_bar.dart';
 import 'package:rostov_vpn/features/settings/widgets/widgets.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsOverviewPage extends HookConsumerWidget {
   const SettingsOverviewPage({super.key});

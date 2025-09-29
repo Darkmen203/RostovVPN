@@ -1,17 +1,16 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:meta/meta.dart';
 import 'package:rostov_vpn/core/model/directories.dart';
 import 'package:rostov_vpn/core/utils/exception_handler.dart';
 import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
 import 'package:rostov_vpn/features/connection/data/connection_platform_source.dart';
 import 'package:rostov_vpn/features/connection/model/connection_failure.dart';
 import 'package:rostov_vpn/features/connection/model/connection_status.dart';
-
 import 'package:rostov_vpn/features/profile/data/profile_path_resolver.dart';
 import 'package:rostov_vpn/singbox/model/singbox_config_option.dart';
 import 'package:rostov_vpn/singbox/model/singbox_status.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:meta/meta.dart';
 
 abstract interface class ConnectionRepository {
   SingboxConfigOption? get configOptionsSnapshot;
@@ -33,7 +32,9 @@ abstract interface class ConnectionRepository {
   );
 }
 
-class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements ConnectionRepository {
+class ConnectionRepositoryImpl
+    with ExceptionHandler, InfraLogger
+    implements ConnectionRepository {
   ConnectionRepositoryImpl({
     required this.directories,
     required this.singbox,
@@ -60,10 +61,16 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
           (event) => switch (event) {
             SingboxStopped(:final alert?, :final message) => Disconnected(
                 switch (alert) {
-                  SingboxAlert.emptyConfiguration => ConnectionFailure.invalidConfig(message),
-                  SingboxAlert.requestNotificationPermission => ConnectionFailure.missingNotificationPermission(message),
-                  SingboxAlert.requestVPNPermission => ConnectionFailure.missingVpnPermission(message),
-                  SingboxAlert.startCommandServer || SingboxAlert.createService || SingboxAlert.startService => ConnectionFailure.unexpected(message),
+                  SingboxAlert.emptyConfiguration =>
+                    ConnectionFailure.invalidConfig(message),
+                  SingboxAlert.requestNotificationPermission =>
+                    ConnectionFailure.missingNotificationPermission(message),
+                  SingboxAlert.requestVPNPermission =>
+                    ConnectionFailure.missingVpnPermission(message),
+                  SingboxAlert.startCommandServer ||
+                  SingboxAlert.createService ||
+                  SingboxAlert.startService =>
+                    ConnectionFailure.unexpected(message),
                 },
               ),
             SingboxStopped() => const Disconnected(),
@@ -79,7 +86,9 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
     return TaskEither<ConnectionFailure, SingboxConfigOption>.Do(
       ($) async {
         final options = await $(
-          configOptionRepository.getFullSingboxConfigOption().mapLeft((l) => const InvalidConfigOption()),
+          configOptionRepository
+              .getFullSingboxConfigOption()
+              .mapLeft((l) => const InvalidConfigOption()),
         );
 
         return $(
@@ -112,7 +121,10 @@ class ConnectionRepositoryImpl with ExceptionHandler, InfraLogger implements Con
         if (testUrl != null) {
           newOptions = options.copyWith(connectionTestUrl: testUrl);
         }
-        return singbox.changeOptions(newOptions).mapLeft(InvalidConfigOption.new).run();
+        return singbox
+            .changeOptions(newOptions)
+            .mapLeft(InvalidConfigOption.new)
+            .run();
       },
       UnexpectedConnectionFailure.new,
     );

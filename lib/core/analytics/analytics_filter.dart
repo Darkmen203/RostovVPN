@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 FutureOr<SentryEvent?> sentryBeforeSend(SentryEvent event, {Hint? hint}) {

@@ -189,7 +189,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
     if (response.statusCode == 401) {
       // Например, токен недействителен
       throw LoginException('Unauthorized',
-          type: LoginExceptionType.unauthorized);
+          type: LoginExceptionType.unauthorized,);
     } else if (response.statusCode >= 400 && response.statusCode < 600) {
       throw LoginException(
         'Сервер вернул ошибку [${response.statusCode}]',
@@ -342,7 +342,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
           print('[LOGIN] authenticate attempt ' +
               attempt.toString() +
               ' for ' +
-              username);
+              username,);
         }
         final user = await _authenticateUserFromServer(username, password);
         return user;
@@ -446,7 +446,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
             print('[HTTP] dataExpire GET attempt ' +
                 attempt.toString() +
                 ' ' +
-                url.toString());
+                url.toString(),);
           }
           response = await http.get(
             url,
@@ -460,17 +460,17 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
         } on SocketException catch (_) {
           if (attempt >= 3) return null;
           await Future.delayed(
-              delays[(attempt - 1).clamp(0, delays.length - 1)]);
+              delays[(attempt - 1).clamp(0, delays.length - 1)],);
           continue;
         } on http.ClientException catch (_) {
           if (attempt >= 3) return null;
           await Future.delayed(
-              delays[(attempt - 1).clamp(0, delays.length - 1)]);
+              delays[(attempt - 1).clamp(0, delays.length - 1)],);
           continue;
         } on TimeoutException catch (_) {
           if (attempt >= 3) return null;
           await Future.delayed(
-              delays[(attempt - 1).clamp(0, delays.length - 1)]);
+              delays[(attempt - 1).clamp(0, delays.length - 1)],);
           continue;
         }
         if (response.statusCode < 400) {

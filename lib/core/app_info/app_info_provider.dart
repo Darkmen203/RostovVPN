@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:rostov_vpn/core/model/app_info_entity.dart';
-import 'package:rostov_vpn/core/model/environment.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/core/model/app_info_entity.dart';
+import 'package:rostov_vpn/core/model/environment.dart';
 
 part 'app_info_provider.g.dart';
 

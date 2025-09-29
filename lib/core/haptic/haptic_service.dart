@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'haptic_service.g.dart';

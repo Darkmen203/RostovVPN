@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/theme/theme_extensions.dart';
@@ -10,13 +13,11 @@ import 'package:rostov_vpn/features/config_option/notifier/config_option_notifie
 import 'package:rostov_vpn/features/connection/model/connection_status.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
 import 'package:rostov_vpn/features/connection/widget/experimental_feature_notice.dart';
+import 'package:rostov_vpn/features/connection/widget/macos_privileged_helper.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
 import 'package:rostov_vpn/features/proxy/active/active_proxy_notifier.dart';
 import 'package:rostov_vpn/gen/assets.gen.dart';
 import 'package:rostov_vpn/utils/alerts.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rostov_vpn/features/connection/widget/macos_privileged_helper.dart';
-import 'dart:developer';
 
 // TODO: rewrite
 class ConnectionButton extends HookConsumerWidget {
@@ -147,7 +148,6 @@ class _ConnectionButton extends StatelessWidget {
             ],
             // 2) Основная кнопка
             FocusableActionDetector(
-                autofocus: false,
                 onShowFocusHighlight: (_) {},
                 child: Semantics(
                   button: true,
@@ -171,7 +171,6 @@ class _ConnectionButton extends StatelessWidget {
                       shape: const CircleBorder(),
                       color: const Color.fromARGB(30, 204, 204, 204),
                       child: InkWell(
-                        canRequestFocus: true,
                         hoverColor: const Color.fromARGB(100, 255, 255, 255),
                         focusColor: const Color.fromARGB(100, 255, 255, 255),
                         onTap: onTap,
@@ -188,7 +187,7 @@ class _ConnectionButton extends StatelessWidget {
                   )
                       .animate(target: enabled ? 0 : 1)
                       .scaleXY(end: .88, curve: Curves.easeIn),
-                )),
+                ),),
           ],
         ),
         const Gap(16),
