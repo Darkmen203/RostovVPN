@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -24,25 +25,24 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
   Future<void> build() async {
     if (!PlatformUtils.isDesktop) return;
 
-    final activeProxy = ref.watch(activeProxyNotifierProvider);
-    final delay = activeProxy.value?.urlTestDelay ?? 0;
+    // узкое наблюдение только за нужным полем, без await
+    final delay = ref.watch(
+      activeProxyNotifierProvider
+          .select((s) => s.valueOrNull?.urlTestDelay ?? 0),
+    );
     final newConnectionStatus = delay > 0 && delay < 65000;
-    ConnectionStatus connection;
-    try {
-      connection = await ref.watch(connectionNotifierProvider.future);
-    } catch (e) {
-      loggy.warning("error getting connection status", e);
-      connection = const ConnectionStatus.disconnected();
-    }
+    final connectionAv = ref.watch(connectionNotifierProvider);
+    final connection =
+        connectionAv.value ?? const ConnectionStatus.disconnected();
 
     final t = ref.watch(translationsProvider);
 
     var tooltip = Constants.appName;
     final serviceMode = ref.watch(ConfigOptions.serviceMode);
     if (connection == const Disconnected()) {
-      setIcon(connection);
+      unawaited(SystemTrayNotifier.setIcon(connection));
     } else if (newConnectionStatus) {
-      setIcon(const Connected());
+      unawaited(SystemTrayNotifier.setIcon(const Connected()));
       tooltip = "$tooltip - ${connection.present(t)}";
       if (newConnectionStatus) {
         tooltip = "$tooltip : ${delay}ms";
@@ -52,14 +52,20 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
       // else if (delay>1000)
       //   SystemTrayNotifier.setIcon(timeout ? Disconnecting() : Connecting());
     } else {
-      setIcon(const Disconnecting());
+      unawaited(SystemTrayNotifier.setIcon(const Disconnecting()));
       tooltip = "$tooltip - ${connection.present(t)}";
     }
     if (Platform.isMacOS) {
-      windowManager.setBadgeLabel("${delay}ms");
+      unawaited(windowManager.setBadgeLabel("${delay}ms").catchError((e) {
+        loggy.debug('setBadgeLabel error', e);
+      }));
     }
-    if (!Platform.isLinux) await trayManager.setToolTip(tooltip);
-
+    if (!Platform.isLinux) {
+      unawaited(trayManager
+          .setToolTip(tooltip)
+          .timeout(const Duration(seconds: 2))
+          .catchError((e) => loggy.debug('setToolTip error', e)));
+    }
     final destinations = <(String label, String location)>[
       (t.home.pageTitle, const HomeRoute().location),
       (t.proxies.pageTitle, const ProxiesRoute().location),
@@ -90,7 +96,9 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
           checked: false,
           disabled: connection.isSwitching,
           onClick: (_) async {
-            await ref.read(connectionNotifierProvider.notifier).toggleConnection();
+            await ref
+                .read(connectionNotifierProvider.notifier)
+                .toggleConnection();
           },
         ),
         MenuItem.separator(),
@@ -108,7 +116,9 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
             onClick: (menuItem) async {
               final newMode = ServiceMode.values.byName(menuItem.key!);
               loggy.debug("switching service mode: [$newMode]");
-              await ref.read(ConfigOptions.serviceMode.notifier).update(newMode);
+              await ref
+                  .read(ConfigOptions.serviceMode.notifier)
+                  .update(newMode);
             },
           ),
         ),
@@ -139,22 +149,29 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
       ],
     );
 
-    await trayManager.setContextMenu(menu);
+    // не блокируем build: выполняем контекстное меню «в фоне»
+    unawaited(trayManager
+        .setContextMenu(menu)
+        .timeout(const Duration(seconds: 3))
+        .catchError((e) => loggy.debug('setContextMenu error', e)));
   }
 
-  static void setIcon(ConnectionStatus status) {
+  static Future<void> setIcon(ConnectionStatus status) async {
     if (!PlatformUtils.isDesktop) return;
-    trayManager
-        .setIcon(
-          _trayIconPath(status),
-          isTemplate: Platform.isMacOS,
-        )
-        .asStream();
+    try {
+      await trayManager.setIcon(
+        _trayIconPath(status),
+        isTemplate: Platform.isMacOS,
+      );
+    } catch (e) {
+      // иконка — не критично
+    }
   }
 
   static String _trayIconPath(ConnectionStatus status) {
     if (Platform.isWindows) {
-      final Brightness brightness = WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      final Brightness brightness =
+          WidgetsBinding.instance.platformDispatcher.platformBrightness;
       final isDarkMode = brightness == Brightness.dark;
       switch (status) {
         case Connected():
