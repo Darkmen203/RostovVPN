@@ -30,6 +30,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="RostovVPN"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
 
         <meta-data

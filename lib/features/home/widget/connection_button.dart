@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -26,32 +27,57 @@ class ConnectionButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(translationsProvider);
-    final connectionStatus = ref.watch(connectionNotifierProvider);
-    final activeProxy = ref.watch(activeProxyNotifierProvider);
-    final delay = activeProxy.valueOrNull?.urlTestDelay ?? 0;
+    // Локальный снимок статуса соединения, обновляем через listen (post-frame).
+    final connectionStatusState = useState<AsyncValue<ConnectionStatus>>(
+        ref.read(connectionNotifierProvider));
+
+    // Локальный снимок delay из activeProxy — для "Connecting…" и жёлтого мигания.
+    // Инициализируем 0, чтобы до первого измерения показать "Connecting…".
+    final delayState = useState<int>(0);
 
     final requiresReconnect =
         ref.watch(configOptionNotifierProvider).valueOrNull;
 
-    ref.listen(
+    ref.listen<AsyncValue<ConnectionStatus>>(
       connectionNotifierProvider,
-      (_, next) async {
-        // Специальная обработка отсутствующих привилегий на macOS
-        if (next case AsyncData(value: Disconnected(connectionFailure: final cf?))) {
-          final presented = t.presentError(cf);
-          if (cf.runtimeType.toString() == 'MissingPrivilege' &&
-              Theme.of(context).platform == TargetPlatform.macOS) {
-            await showMacOsTunHelperDialog(context, ref);
-            return;
+      (prev, next) {
+        // 1) сам UI-контент кнопки меняем ТОЛЬКО после текущего кадра
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          connectionStatusState.value = next;
+        });
+        // 2) сайд-эффекты (диалоги/хелпер) тоже переносим на пост-кадр
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          if (!context.mounted) return;
+          // Специальная обработка отсутствующих привилегий на macOS
+          if (next
+              case AsyncData(
+                value: Disconnected(connectionFailure: final cf?)
+              )) {
+            final presented = t.presentError(cf);
+            if (cf.runtimeType.toString() == 'MissingPrivilege' &&
+                Theme.of(context).platform == TargetPlatform.macOS) {
+              await showMacOsTunHelperDialog(context, ref);
+              return;
+            }
+            await CustomAlertDialog.fromErr(presented).show(context);
+          } else if (next case AsyncError(:final error)) {
+            // Общий обработчик ошибок
+            await CustomAlertDialog.fromErr(t.presentError(error))
+                .show(context);
           }
-          CustomAlertDialog.fromErr(presented).show(context);
-        }
-        if (next case AsyncError(:final error)) {
-          // Общий обработчик ошибок
-          CustomAlertDialog.fromErr(t.presentError(error)).show(context);
-        }
+        });
       },
     );
+
+    final connectionStatus = connectionStatusState.value;
+
+    // Слушаем активный прокси, но НЕ через watch, чтобы не ронять билд.
+    ref.listen(activeProxyNotifierProvider, (prev, next) {
+      final d = next.valueOrNull?.urlTestDelay ?? 0;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        delayState.value = d;
+      });
+    });
 
     final buttonTheme = Theme.of(context).extension<ConnectionButtonTheme>()!;
 
@@ -66,51 +92,58 @@ class ConnectionButton extends HookConsumerWidget {
     }
 
     return _ConnectionButton(
-      onTap: switch (connectionStatus) {
-        AsyncData(value: Disconnected()) || AsyncError() => () async {
-            if (await showExperimentalNotice()) {
+        onTap: switch (connectionStatus) {
+          AsyncData(value: Disconnected()) || AsyncError() => () async {
+              if (await showExperimentalNotice()) {
+                return await ref
+                    .read(connectionNotifierProvider.notifier)
+                    .toggleConnection();
+              }
+            },
+          AsyncData(value: Connected()) => () async {
+              if (requiresReconnect == true && await showExperimentalNotice()) {
+                return await ref
+                    .read(connectionNotifierProvider.notifier)
+                    .reconnect(await ref.read(activeProfileProvider.future));
+              }
               return await ref
                   .read(connectionNotifierProvider.notifier)
                   .toggleConnection();
-            }
-          },
-        AsyncData(value: Connected()) => () async {
-            if (requiresReconnect == true && await showExperimentalNotice()) {
-              return await ref
-                  .read(connectionNotifierProvider.notifier)
-                  .reconnect(await ref.read(activeProfileProvider.future));
-            }
-            return await ref
-                .read(connectionNotifierProvider.notifier)
-                .toggleConnection();
-          },
-        _ => () {},
-      },
-      enabled: switch (connectionStatus) {
-        AsyncData(value: Connected()) ||
-        AsyncData(value: Disconnected()) ||
-        AsyncError() =>
-          true,
-        _ => false,
-      },
-      label: switch (connectionStatus) {
-        AsyncData(value: Connected()) when requiresReconnect == true =>
-          t.connection.reconnect,
-        AsyncData(value: Connected()) when delay <= 0 || delay >= 65000 =>
-          t.connection.connecting,
-        AsyncData(value: final status) => status.present(t),
-        _ => "",
-      },
-      buttonColor: switch (connectionStatus) {
-        AsyncData(value: Connected()) when requiresReconnect == true =>
-          Colors.teal,
-        AsyncData(value: Connected()) when delay <= 0 || delay >= 65000 =>
-          const Color.fromARGB(255, 185, 176, 103),
-        AsyncData(value: Connected()) => buttonTheme.connectedColor!,
-        AsyncData(value: _) => buttonTheme.idleColor!,
-        _ => Colors.red,
-      },
-    );
+            },
+          _ => () {},
+        },
+        enabled: switch (connectionStatus) {
+          AsyncData(value: Connected()) ||
+          AsyncData(value: Disconnected()) ||
+          AsyncError() =>
+            true,
+          _ => false,
+        },
+        label: switch (connectionStatus) {
+          AsyncData(value: Connected()) when requiresReconnect == true =>
+            t.connection.reconnect,
+          // Вернули "Connecting…" пока delay не измерен или истёк таймаут
+          AsyncData(value: Connected())
+              when (delayState.value <= 0 || delayState.value >= 65000) =>
+            t.connection.connecting,
+          AsyncData(value: final status) => status.present(t),
+          _ => "",
+        },
+        buttonColor: switch (connectionStatus) {
+          AsyncData(value: Connected()) when requiresReconnect == true =>
+            Colors.teal,
+          // Жёлтый "мигающий" круг в Connecting
+          AsyncData(value: Connected())
+              when (delayState.value <= 0 || delayState.value >= 65000) =>
+            const Color.fromARGB(255, 185, 176, 103),
+          AsyncData(value: Connected()) => buttonTheme.connectedColor!,
+          AsyncData(value: _) => buttonTheme.idleColor!,
+          _ => Colors.red,
+        },
+        isConnectedGlow: switch (connectionStatus) {
+          AsyncData(value: Connected()) => true,
+          _ => false,
+        });
   }
 }
 
@@ -120,20 +153,17 @@ class _ConnectionButton extends StatelessWidget {
     required this.enabled,
     required this.label,
     required this.buttonColor,
+    required this.isConnectedGlow,
   });
 
   final VoidCallback onTap;
   final bool enabled;
   final String label;
   final Color buttonColor;
+  final bool isConnectedGlow;
 
   @override
   Widget build(BuildContext context) {
-    // Проверим, запущен ли VPN (Connected) — пусть glow будет только тогда
-    // (Можно передавать флаг извне или по-другому определять)
-    final bool isConnectedGlow = enabled;
-    log('isConnectedGlow $isConnectedGlow');
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -148,46 +178,47 @@ class _ConnectionButton extends StatelessWidget {
             ],
             // 2) Основная кнопка
             FocusableActionDetector(
-                onShowFocusHighlight: (_) {},
-                child: Semantics(
-                  button: true,
-                  enabled: enabled,
-                  label: label,
-                  child: Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     blurRadius: 16,
-                      //     color: buttonColor.withAlpha(255),
-                      //   ),
-                      // ],
-                    ),
-                    width: 300,
-                    height: 300,
-                    child: Material(
-                      key: const ValueKey("home_connection_button"),
-                      shape: const CircleBorder(),
-                      color: const Color.fromARGB(30, 204, 204, 204),
-                      child: InkWell(
-                        hoverColor: const Color.fromARGB(100, 255, 255, 255),
-                        focusColor: const Color.fromARGB(100, 255, 255, 255),
-                        onTap: onTap,
-                        autofocus: true,
-                        child: TweenAnimationBuilder(
-                          tween: ColorTween(end: buttonColor),
-                          duration: const Duration(milliseconds: 250),
-                          builder: (context, value, child) {
-                            return Assets.images.logo.svg(fit: BoxFit.cover);
-                          },
-                        ),
+              onShowFocusHighlight: (_) {},
+              child: Semantics(
+                button: true,
+                enabled: enabled,
+                label: label,
+                child: Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     blurRadius: 16,
+                    //     color: buttonColor.withAlpha(255),
+                    //   ),
+                    // ],
+                  ),
+                  width: 300,
+                  height: 300,
+                  child: Material(
+                    key: const ValueKey("home_connection_button"),
+                    shape: const CircleBorder(),
+                    color: const Color.fromARGB(30, 204, 204, 204),
+                    child: InkWell(
+                      hoverColor: const Color.fromARGB(100, 255, 255, 255),
+                      focusColor: const Color.fromARGB(100, 255, 255, 255),
+                      onTap: onTap,
+                      autofocus: true,
+                      child: TweenAnimationBuilder(
+                        tween: ColorTween(end: buttonColor),
+                        duration: const Duration(milliseconds: 250),
+                        builder: (context, value, child) {
+                          return Assets.images.logo.svg(fit: BoxFit.cover);
+                        },
                       ),
-                    ).animate(target: enabled ? 0 : 1).blurXY(end: 1),
-                  )
-                      .animate(target: enabled ? 0 : 1)
-                      .scaleXY(end: .88, curve: Curves.easeIn),
-                ),),
+                    ),
+                  ).animate(target: enabled ? 0 : 1).blurXY(end: 1),
+                )
+                    .animate(target: enabled ? 0 : 1)
+                    .scaleXY(end: .88, curve: Curves.easeIn),
+              ),
+            ),
           ],
         ),
         const Gap(16),

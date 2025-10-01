@@ -164,6 +164,25 @@ class BoxService(
                 File(workingDir, "current-config.json").writeText(content)
             }
 
+            // ↓↓↓ добавь это ↓↓↓
+            try {
+                // Разбиваем на куски, иначе Logcat обрежет
+                val chunk = 1000
+                var i = 0
+                while (i < content.length) {
+                    val end = (i + chunk).coerceAtMost(content.length)
+                    Log.d(TAG, "SERVICE CONFIG [${i}..${end}]: ${content.substring(i, end)}")
+                    i = end
+                }
+                // Параллельно сохраним целиком в файл, чтобы открыть глазами
+                val out = File(Application.application.getExternalFilesDir(null), "last_config.json")
+                out.writeText(content)
+                Log.i(TAG, "Saved service config to: ${out.absolutePath}")
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to dump service config", e)
+            }
+            // ↑↑↑
+
             withContext(Dispatchers.Main) {
                 notification.show(activeProfileName, R.string.status_starting)
                 binder.broadcast { it.onServiceResetLogs(listOf()) }
