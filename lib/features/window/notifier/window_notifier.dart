@@ -5,11 +5,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
+import 'package:rostov_vpn/features/tunnel_service/tunnel_service_controller.dart';
 import 'package:rostov_vpn/utils/utils.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
-
 part 'window_notifier.g.dart';
 
 const minimumWindowSize = Size(368, 800);
@@ -35,7 +35,7 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
 
     var windowWidth = 368.0;
     var windowHeight = 800.0;
-    log('$windowHeight windowHeight $workAreaSize' );
+    log('$windowHeight windowHeight $workAreaSize');
 
     // Если не помещается по ширине или высоте - уменьшаем
     if (windowWidth > workAreaSize.width ||
@@ -44,7 +44,7 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
       windowWidth = windowWidth.clamp(0, workAreaSize.width);
       windowHeight = windowHeight.clamp(0, workAreaSize.height - 20);
       await windowManager.setMinimumSize(Size(windowWidth, windowHeight));
-    }else{
+    } else {
       await windowManager.setMinimumSize(minimumWindowSize);
     }
 
@@ -77,10 +77,13 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
         .abortConnection()
         .timeout(const Duration(seconds: 2))
         .catchError(
-      (e) {
-        loggy.warning("error aborting connection on quit", e);
-      },
-    );
+            (e) => loggy.warning("error aborting connection on quit", e));
+
+    // После разрыва соединения — мягко гасим TunService (порт 18020)
+    try {
+      await TunnelServiceController.gracefulShutdown();
+    } catch (_) {}
+
     await trayManager.destroy();
     await windowManager.destroy();
   }

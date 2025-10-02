@@ -4,6 +4,10 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
+#include <signal.h>
+#include <unistd.h>
+#include <limits.h>
+#include <string>
 
 #include "flutter/generated_plugin_registrant.h"
 
@@ -15,6 +19,54 @@ struct _MyApplication
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 #define ICON_PATH "./rostov_vpn.png"
+
+static void StopVpnFast()
+{
+  // CLI рядом с бинарём
+  char exePath[PATH_MAX];
+  ssize_t len = readlink("/proc/self/exe", exePath, sizeof(exePath) - 1);
+  std::string dir = ".";
+  if (len > 0)
+  {
+    exePath[len] = '\0';
+    std::string p(exePath);
+    dir = p.substr(0, p.find_last_of("/"));
+  }
+  std::string cli = dir + "/RostovVPNCli";
+  if (fork() == 0)
+  {
+    execl(cli.c_str(), "RostovVPNCli", "tunnel", "stop", (char *)NULL);
+    _exit(0);
+  }
+  usleep(600000); // 0.6s
+  if (fork() == 0)
+  {
+    execl(cli.c_str(), "RostovVPNCli", "tunnel", "deactivate-force", (char *)NULL);
+    _exit(0);
+  }
+}
+
+static void DisableProxyFast()
+{
+  // Если CLI поддерживает — предпочтительно:
+  if (fork() == 0)
+  {
+    execlp("RostovVPNCli", "RostovVPNCli", "proxy", "off", (char *)NULL);
+    _exit(0);
+  }
+  // GNOME best-effort:
+  if (fork() == 0)
+  {
+    execlp("gsettings", "gsettings", "set", "org.gnome.system.proxy", "mode", "none", (char *)NULL);
+    _exit(0);
+  }
+}
+
+static void on_signal(int)
+{
+  StopVpnFast();
+  DisableProxyFast();
+}
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication *application)
@@ -50,7 +102,6 @@ static void my_application_activate(GApplication *application)
     gtk_header_bar_set_title(header_bar, "RostovVPN");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
-    
   }
   else
   {
@@ -72,7 +123,6 @@ static void my_application_activate(GApplication *application)
   gtk_widget_hide(GTK_WIDGET(window));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
-  
 }
 
 // Implements GApplication::local_command_line.
@@ -102,6 +152,8 @@ static void my_application_startup(GApplication *application)
   // MyApplication* self = MY_APPLICATION(object);
 
   // Perform any actions required at application startup.
+  signal(SIGTERM, on_signal);
+  signal(SIGINT, on_signal);
 
   G_APPLICATION_CLASS(my_application_parent_class)->startup(application);
 }
@@ -112,6 +164,8 @@ static void my_application_shutdown(GApplication *application)
   // MyApplication* self = MY_APPLICATION(object);
 
   // Perform any actions required at application shutdown.
+  StopVpnFast();
+  DisableProxyFast();
 
   G_APPLICATION_CLASS(my_application_parent_class)->shutdown(application);
 }
@@ -139,7 +193,7 @@ MyApplication *my_application_new()
 {
   return MY_APPLICATION(g_object_new(my_application_get_type(),
                                      "application-id", APPLICATION_ID,
-                                    //  "flags", G_APPLICATION_DEFAULT_FLAGS,
-                                    "flags", G_APPLICATION_FLAGS_NONE,
+                                     //  "flags", G_APPLICATION_DEFAULT_FLAGS,
+                                     "flags", G_APPLICATION_FLAGS_NONE,
                                      nullptr));
 }

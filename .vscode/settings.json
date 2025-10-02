@@ -3,5 +3,10 @@
     "cSpell.words": [
         "checkpw",
         "gologin"
-    ]
+    ],
+    "files.associations": {
+        "*.css": "css",
+        "*.erb": "erb",
+        "xstring": "cpp"
+    }
 }

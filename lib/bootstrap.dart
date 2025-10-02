@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -22,6 +21,7 @@ import 'package:rostov_vpn/features/log/data/log_data_providers.dart';
 import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
 import 'package:rostov_vpn/features/system_tray/notifier/system_tray_notifier.dart';
+import 'package:rostov_vpn/features/tunnel_service/tunnel_service_controller.dart';
 import 'package:rostov_vpn/features/window/notifier/window_notifier.dart';
 import 'package:rostov_vpn/singbox/service/singbox_service_provider.dart';
 import 'package:rostov_vpn/utils/utils.dart';
@@ -35,7 +35,8 @@ Future<void> lazyBootstrap(
 
   LoggerController.preInit();
   FlutterError.onError = Logger.logFlutterError;
-  WidgetsBinding.instance.platformDispatcher.onError = Logger.logPlatformDispatcherError;
+  WidgetsBinding.instance.platformDispatcher.onError =
+      Logger.logPlatformDispatcherError;
 
   final stopWatch = Stopwatch()..start();
 
@@ -60,11 +61,14 @@ Future<void> lazyBootstrap(
     () => container.read(sharedPreferencesProvider.future),
   );
 
-  final enableAnalytics = await container.read(analyticsControllerProvider.future);
+  final enableAnalytics =
+      await container.read(analyticsControllerProvider.future);
   if (enableAnalytics) {
     await _init(
       "analytics",
-      () => container.read(analyticsControllerProvider.notifier).enableAnalytics(),
+      () => container
+          .read(analyticsControllerProvider.notifier)
+          .enableAnalytics(),
     );
   }
 
@@ -73,7 +77,8 @@ Future<void> lazyBootstrap(
     () async {
       try {
         await PreferencesMigration(
-          sharedPreferences: container.read(sharedPreferencesProvider).requireValue,
+          sharedPreferences:
+              container.read(sharedPreferencesProvider).requireValue,
         ).migrate();
       } catch (e, stackTrace) {
         Logger.bootstrap.error("preferences migration failed", e, stackTrace);
@@ -88,12 +93,21 @@ Future<void> lazyBootstrap(
 
   if (PlatformUtils.isDesktop) {
     await _init(
+      "tunnel self-heal",
+      () async {
+        try {
+          await TunnelServiceController.selfHealOnStartup();
+        } catch (_) {}
+      },
+    );
+    await _init(
       "window controller",
       () => container.read(windowNotifierProvider.future),
     );
 
     final silentStart = container.read(Preferences.silentStart);
-    Logger.bootstrap.debug("silent start [${silentStart ? "Enabled" : "Disabled"}]");
+    Logger.bootstrap
+        .debug("silent start [${silentStart ? "Enabled" : "Disabled"}]");
     if (!silentStart) {
       await container.read(windowNotifierProvider.notifier).open(focus: false);
     } else {
@@ -170,10 +184,13 @@ Future<T> _init<T>(
 }) async {
   final stopWatch = Stopwatch()..start();
   Logger.bootstrap.info("initializing [$name]");
-  Future<T> func() => timeout != null ? initializer().timeout(Duration(milliseconds: timeout)) : initializer();
+  Future<T> func() => timeout != null
+      ? initializer().timeout(Duration(milliseconds: timeout))
+      : initializer();
   try {
     final result = await func();
-    Logger.bootstrap.debug("[$name] initialized in ${stopWatch.elapsedMilliseconds}ms");
+    Logger.bootstrap
+        .debug("[$name] initialized in ${stopWatch.elapsedMilliseconds}ms");
     return result;
   } catch (e, stackTrace) {
     Logger.bootstrap.error("[$name] error initializing", e, stackTrace);
