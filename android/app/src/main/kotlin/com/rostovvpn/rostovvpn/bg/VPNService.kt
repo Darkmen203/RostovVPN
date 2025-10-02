@@ -63,11 +63,6 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
     }
 
     fun addExcludePackage(builder: Builder, packageName: String) {
-        // Не позволяем исключить само VPN-приложение
-        if (packageName == this.packageName) {
-            Log.d(TAG, "Skip excluding myself: $packageName")
-            return
-        }
         try {
             Log.d(TAG, "Excluding $packageName")
             builder.addDisallowedApplication(packageName)
@@ -81,14 +76,6 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
         val builder = Builder()
             .setSession("sing-box")
             .setMtu(options.mtu)
-
-        // Разрешаем bypass базовой сети (API 29+) — помогает стабильнее работать EXCLUDE
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                builder.allowBypass()
-                Log.d(TAG, "VPN builder: allowBypass()")
-            }
-        } catch (t: Throwable) { Log.w(TAG, "allowBypass failed: ${t.message}") }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             builder.setMetered(false)
@@ -158,16 +145,13 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
 
             if (Settings.perAppProxyEnabled) {
                 val appList = Settings.perAppProxyList
-                val mode = Settings.perAppProxyMode
-                Log.d(TAG, "Per-app enabled. Mode=$mode, size=${appList.size}")
-                if (mode == PerAppProxyMode.INCLUDE) {
+                if (Settings.perAppProxyMode == PerAppProxyMode.INCLUDE) {
                     appList.forEach { addIncludePackage(builder, it) }
                     addIncludePackage(builder, packageName)
                 } else {
                     appList.forEach { addExcludePackage(builder, it) }
-                    // В EXCLUDE режиме не смешиваем allowed/disallowed.
-                    // Само приложение не исключаем, значит оно остаётся внутри VPN по умолчанию.
-                    Log.d(TAG, "EXCLUDE mode: do not mix allowed/disallowed; self stays included by default")
+                    // при необходимости:
+                    // addExcludePackage(builder, packageName)
                 }
             } else {
                 val includePackage = options.includePackage
@@ -185,35 +169,13 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
             }
         }
 
-        // --- Политика системного HTTP-прокси ---
-        // Не объявляем прокси в режиме EXCLUDE при непустом списке приложений.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val perAppEnabled = Settings.perAppProxyEnabled
-            val perAppMode = Settings.perAppProxyMode
-            val perAppListSize = if (perAppEnabled) Settings.perAppProxyList.size else 0
-
-            val excludeActive = perAppEnabled &&
-                    perAppMode == PerAppProxyMode.EXCLUDE &&
-                    perAppListSize > 0
-
-            val allowSystemProxy =
-                options.isHTTPProxyEnabled &&
-                !excludeActive
-
-            systemProxyAvailable = allowSystemProxy
-            systemProxyEnabled = allowSystemProxy && Settings.systemProxyEnabled
-
-            Log.d(
-                TAG,
-                "System proxy policy: allow=$allowSystemProxy, enabled=$systemProxyEnabled, " +
-                        "perAppEnabled=$perAppEnabled, mode=$perAppMode, listSize=$perAppListSize"
-            )
-
+        if (options.isHTTPProxyEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            systemProxyAvailable = true
+            systemProxyEnabled = Settings.systemProxyEnabled
             if (systemProxyEnabled) {
                 builder.setHttpProxy(
                     ProxyInfo.buildDirectProxy(
-                        options.httpProxyServer,
-                        options.httpProxyServerPort
+                        options.httpProxyServer, options.httpProxyServerPort
                     )
                 )
             }
