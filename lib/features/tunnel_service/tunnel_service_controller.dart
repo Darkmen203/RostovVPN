@@ -27,6 +27,7 @@ class TunnelServiceController {
     if (!ok) {
       try {
         await _forceDeactivate();
+        await _forceExit();
       } catch (_) {}
       await _waitPortClosed(const Duration(seconds: 2));
     }
@@ -42,7 +43,9 @@ class TunnelServiceController {
 
   static Future<void> _stop() => _runCli(['tunnel', 'stop']);
   static Future<void> _forceDeactivate() =>
-      _runCli(['tunnel', 'deactivate-force']);
+      _runCli(['tunnel', 'deactivate']);
+  static Future<void> _forceExit() =>
+      _runCli(['tunnel', 'exit']);
 
   static Future<void> _runCli(List<String> args) async {
     final exe = Platform.isWindows ? 'RostovVPNCli.exe' : 'RostovVPNCli';
@@ -73,12 +76,12 @@ class TunnelServiceController {
   }
 
   /// Снятие системного прокси при выходе (best-effort).
-  /// Сначала пробуем CLI: `RostovVPNCli proxy off`.
+  /// Сначала пробуем CLI: `RostovVPNCli stop`.
   /// Если команда не доступна — применяем OS-fallback.
   static Future<void> disableProxyOnQuit() async {
     // 1) Предпочтительно поручаем CLI (он может сделать WinINet refresh и т.д.)
     try {
-      await _runCli(['proxy', 'off']);
+      await _runCli(['stop']);
     } catch (_) {}
 
     // 2) Fallback по ОС
