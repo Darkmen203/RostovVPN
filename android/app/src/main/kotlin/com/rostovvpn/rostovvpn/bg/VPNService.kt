@@ -51,10 +51,6 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
     var systemProxyEnabled = false
 
     fun addIncludePackage(builder: Builder, packageName: String) {
-        if (packageName == this.packageName) {
-            Log.d(TAG, "Cannot include myself: $packageName")
-            return
-        }
         try {
             Log.d(TAG, "Including $packageName")
             builder.addAllowedApplication(packageName)
@@ -63,6 +59,10 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
     }
 
     fun addExcludePackage(builder: Builder, packageName: String) {
+        // if (packageName == this.packageName) {
+        //     Log.d(TAG, "Skip excluding myself: $packageName")
+        //     return
+        // }
         try {
             Log.d(TAG, "Excluding $packageName")
             builder.addDisallowedApplication(packageName)
@@ -151,7 +151,7 @@ class VPNService : VpnService(), PlatformInterfaceWrapper {
                 } else {
                     appList.forEach { addExcludePackage(builder, it) }
                     // при необходимости:
-                    // addExcludePackage(builder, packageName)
+                    addExcludePackage(builder, packageName)
                 }
             } else {
                 val includePackage = options.includePackage
