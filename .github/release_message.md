@@ -6,13 +6,6 @@
 
 **Download based on your OS:**
 
-<div dir="rtl">
-
-**بر اساس سیستم عامل خود دانلود کنید:**
-
-</div>
-
-
 
 <div align=left>
 <table>

@@ -383,11 +383,6 @@ jobs:
             mv dist/*/*.$EXT tmp_out/${FILENAME}.$EXT
             ls tmp_out
             chmod +x tmp_out/${FILENAME}.$EXT
-            if [ "${{matrix.platform}}" == "linux" ];then
-              cp ./.github/help/linux/* tmp_out/
-            else
-              cp ./.github/help/mac-windows/* tmp_out/
-            fi
             if [[ "${{matrix.platform}}" == 'ios' ]];then
               echo mv tmp_out/${FILENAME}.$EXT out/
               mv tmp_out/${FILENAME}.$EXT out/
