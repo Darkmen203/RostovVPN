@@ -82,7 +82,6 @@ if (Test-Path "build\windows\x64\runner\Release") {
 
 # --- Windows portable ZIP ---
 xcopy "build\windows\x64\runner\Release" "dist\tmp\rostovvpn-next" /E/H/C/I/Y
-xcopy ".github\help\mac-windows\*.url"     "dist\tmp\rostovvpn-next" /E/H/C/I/Y
 Compress-Archive -Force -Path "dist\tmp\rostovvpn-next" -DestinationPath "out\RostovVPN-Windows-Portable-x64.zip" -ErrorAction SilentlyContinue
 
 # Чистим кэш circle_flags (без шума в логах)
