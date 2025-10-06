@@ -41,12 +41,6 @@ class HomePage extends HookConsumerWidget {
             tooltip: t.config.quickSettings,
             color: Colors.white,
           ),
-          // IconButton(
-          //   onPressed: () => const AddProfileRoute().push(context),
-          //   icon: const Icon(FluentIcons.add_circle_24_filled),
-          //   tooltip: t.profile.add.buttonText,
-          //   color: Colors.white,
-          // ),
         ],
       ),
       body: Stack(

@@ -215,14 +215,13 @@ class LoginManager {
     } catch (e) {
       throw LoginException(
         'Неизвестная ошибка при запросе: $e',
-        type: LoginExceptionType.unknown,
       );
     }
 
     if (response.statusCode == 401) {
       // Например, токен недействителен
       throw LoginException('Unauthorized',
-          type: LoginExceptionType.unauthorized);
+          type: LoginExceptionType.unauthorized,);
     } else if (response.statusCode >= 400 && response.statusCode < 600) {
       throw LoginException(
         'Сервер вернул ошибку [${response.statusCode}]',

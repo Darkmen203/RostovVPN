@@ -237,19 +237,6 @@
       "showSystemApps": "顯示系統應用程式",
       "hideSystemApps": "隱藏系統應用程式",
       "clearSelection": "清空選項"
-    },
-    "geoAssets": {
-      "pageTitle": "路由資源文件",
-      "geoip": "GeoIP",
-      "geosite": "Geosite",
-      "version": "版本${version}",
-      "fileMissing": "檔案遺失",
-      "update": "更新",
-      "download": "下載",
-      "failureMsg": "更新資源文件失敗",
-      "successMsg": "已成功更新資源文件",
-      "addRecommended": "新增推薦的資源文件",
-      "missingGeoAssetsMsg": "所選路由資源的檔案遺失。下載它們或選擇現有的。"
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "錯誤反應",
       "connectionError": "連線錯誤",
       "badCertificate": "無效證書"
-    },
-    "geoAssets": {
-      "unexpected": "意外錯誤",
-      "notUpdate": "暫無可用更新",
-      "activeNotFound": "未找到活動 GEO 資源文件"
     }
   },
   "play": {

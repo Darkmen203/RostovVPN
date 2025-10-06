@@ -237,19 +237,6 @@
       "showSystemApps": "Mostrar aplicaciones del sistema",
       "hideSystemApps": "Ocultar aplicaciones del sistema",
       "clearSelection": "Selección clara"
-    },
-    "geoAssets": {
-      "pageTitle": "Activos de enrutamiento",
-      "geoip": "GeoIP",
-      "geosite": "Geosite",
-      "version": "Versión ${version}",
-      "fileMissing": "Archivo faltante",
-      "update": "Actualizar",
-      "download": "Descargar",
-      "failureMsg": "No se pudo actualizar el activo",
-      "successMsg": "Activo actualizado correctamente",
-      "addRecommended": "Agregar activos recomendados",
-      "missingGeoAssetsMsg": "Faltan los archivos de los recursos de enrutamiento seleccionados. Descárgalos o elige los existentes."
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "Mala respuesta",
       "connectionError": "Error de conexión",
       "badCertificate": "Certificado malo"
-    },
-    "geoAssets": {
-      "unexpected": "Error inesperado",
-      "notUpdate": "Actualización no disponible",
-      "activeNotFound": "Activo geográfico activo no encontrado"
     }
   },
   "play": {

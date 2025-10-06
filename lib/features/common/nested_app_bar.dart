@@ -12,7 +12,6 @@ bool showDrawerButton(BuildContext context) {
       location == const ProfilesOverviewRoute().location) {
     return true;
   }
-  if (location.startsWith(const ProxiesRoute().location)) return true;
   return false;
 }
 

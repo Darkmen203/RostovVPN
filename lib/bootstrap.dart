@@ -16,7 +16,6 @@ import 'package:rostov_vpn/core/preferences/preferences_migration.dart';
 import 'package:rostov_vpn/core/preferences/preferences_provider.dart';
 import 'package:rostov_vpn/features/app/widget/app.dart';
 import 'package:rostov_vpn/features/auto_start/notifier/auto_start_notifier.dart';
-import 'package:rostov_vpn/features/deep_link/notifier/deep_link_notifier.dart';
 import 'package:rostov_vpn/features/log/data/log_data_providers.dart';
 import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
@@ -134,11 +133,6 @@ Future<void> lazyBootstrap(
   await _safeInit(
     "active profile",
     () => container.read(activeProfileProvider.future),
-    timeout: 1000,
-  );
-  await _safeInit(
-    "deep link service",
-    () => container.read(deepLinkNotifierProvider.future),
     timeout: 1000,
   );
   await _init(

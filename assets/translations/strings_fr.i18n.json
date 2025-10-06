@@ -237,19 +237,6 @@
       "showSystemApps": "Afficher les applications système",
       "hideSystemApps": "Masquer les applications système",
       "clearSelection": "Effacer la sélection"
-    },
-    "geoAssets": {
-      "pageTitle": "Actifs de routage",
-      "geoip": "GéoIP",
-      "geosite": "GéoSite",
-      "version": "Version ${version}",
-      "fileMissing": "Dossier manquant",
-      "update": "Mise à jour",
-      "download": "Télécharger",
-      "failureMsg": "Échec de la mise à jour de l'actif",
-      "successMsg": "Actif mis à jour avec succès",
-      "addRecommended": "Ajouter des actifs recommandés",
-      "missingGeoAssetsMsg": "Les fichiers des ressources de routage sélectionnées sont manquants. Téléchargez-les ou choisissez ceux existants"
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "Mauvaise réponse",
       "connectionError": "Erreur de connexion",
       "badCertificate": "Mauvais certificat"
-    },
-    "geoAssets": {
-      "unexpected": "Erreur inattendue",
-      "notUpdate": "Pas de mise a jour disponible",
-      "activeNotFound": "Actif géographique actif introuvable"
     }
   },
   "play": {

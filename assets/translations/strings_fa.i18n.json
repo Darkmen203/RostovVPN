@@ -237,19 +237,6 @@
       "showSystemApps": "نمایش برنامه‌های سیستمی",
       "hideSystemApps": "پنهان کردن برنامه‌های سیستمی",
       "clearSelection": "پاک کردن انتخاب‌ها"
-    },
-    "geoAssets": {
-      "pageTitle": "فایل‌های مسیریابی",
-      "geoip": "ژئو آی‌پی",
-      "geosite": "ژئو سایت",
-      "version": "نسخه ${version}",
-      "fileMissing": "فایل موجود نیست",
-      "update": "به‌روزرسانی",
-      "download": "دانلود",
-      "failureMsg": "به‌روزرسانی فایل ناموفق بود",
-      "successMsg": "فایل‌ با موفقیت به‌روزرسانی شد",
-      "addRecommended": "افزودن فایل‌های توصیه‌شده",
-      "missingGeoAssetsMsg": "فایل‌های مسیریابی انتخاب شده وجود ندارند. یا آن‌ها را دانلود کنید و یا یکی از موارد موجود را انتخاب کنید"
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "پاسخ نامعتبر",
       "connectionError": "خطای اتصال",
       "badCertificate": "خطای اعتبارسنجی"
-    },
-    "geoAssets": {
-      "unexpected": "خطای غیرمنتظره",
-      "notUpdate": "هیچ به‌روزرسانی موجود نیست",
-      "activeNotFound": "فایل جغرافیایی فعال یافت نشد"
     }
   },
   "play": {

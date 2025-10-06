@@ -237,19 +237,6 @@
       "showSystemApps": "Sistem uygulamalarını göster",
       "hideSystemApps": "Sistem uygulamalarını gizle",
       "clearSelection": "Seçimi temizle"
-    },
-    "geoAssets": {
-      "pageTitle": "Varlıkları Yönlendirme",
-      "geoip": "GeoIP",
-      "geosite": "Geosite",
-      "version": "Sürüm ${version}",
-      "fileMissing": "Eksik dosya",
-      "update": "Güncelleme",
-      "download": "İndirmek",
-      "failureMsg": "Öğe güncellenemedi",
-      "successMsg": "Öğe başarıyla güncellendi",
-      "addRecommended": "Önerilen Varlıkları Ekle",
-      "missingGeoAssetsMsg": "Seçilen yönlendirme varlıklarının dosyaları eksik. Bunları indirin veya mevcut olanları seçin."
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "Kötü yanıt",
       "connectionError": "Bağlantı hatası",
       "badCertificate": "Kötü sertifika"
-    },
-    "geoAssets": {
-      "unexpected": "Beklenmeyen hata",
-      "notUpdate": "Güncelleme mevcut değil",
-      "activeNotFound": "Etkin Coğrafi Varlık Bulunamadı"
     }
   },
   "play": {

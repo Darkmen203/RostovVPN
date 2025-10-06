@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
@@ -29,7 +27,7 @@ class ConnectionButton extends HookConsumerWidget {
     final t = ref.watch(translationsProvider);
     // Локальный снимок статуса соединения, обновляем через listen (post-frame).
     final connectionStatusState = useState<AsyncValue<ConnectionStatus>>(
-        ref.read(connectionNotifierProvider));
+        ref.read(connectionNotifierProvider),);
 
     // Локальный снимок delay из activeProxy — для "Connecting…" и жёлтого мигания.
     // Инициализируем 0, чтобы до первого измерения показать "Connecting…".
@@ -143,7 +141,7 @@ class ConnectionButton extends HookConsumerWidget {
         isConnectedGlow: switch (connectionStatus) {
           AsyncData(value: Connected()) => true,
           _ => false,
-        });
+        },);
   }
 }
 

@@ -68,8 +68,6 @@ class ShortcutWrapper extends HookConsumerWidget {
                 final captureResult =
                     await Clipboard.getData(Clipboard.kTextPlain)
                         .then((value) => value?.text ?? '');
-                AddProfileRoute(url: captureResult)
-                    .push(rootNavigatorKey.currentContext!);
               }
               return null;
             },

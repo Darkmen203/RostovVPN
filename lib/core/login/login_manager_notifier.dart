@@ -182,7 +182,6 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
     } catch (e) {
       throw LoginException(
         'Неизвестная ошибка при запросе: $e',
-        type: LoginExceptionType.unknown,
       );
     }
 
@@ -339,10 +338,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
       attempt++;
       try {
         if (kDebugMode) {
-          print('[LOGIN] authenticate attempt ' +
-              attempt.toString() +
-              ' for ' +
-              username,);
+          print('[LOGIN] authenticate attempt $attempt for $username',);
         }
         final user = await _authenticateUserFromServer(username, password);
         return user;
@@ -443,10 +439,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
         attempt++;
         try {
           if (kDebugMode) {
-            print('[HTTP] dataExpire GET attempt ' +
-                attempt.toString() +
-                ' ' +
-                url.toString(),);
+            print('[HTTP] dataExpire GET attempt $attempt $url',);
           }
           response = await http.get(
             url,
@@ -455,7 +448,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
             },
           ).timeout(const Duration(seconds: 10));
           if (kDebugMode) {
-            print('[HTTP] dataExpire <= ' + response.statusCode.toString());
+            print('[HTTP] dataExpire <= ${response.statusCode}');
           }
         } on SocketException catch (_) {
           if (attempt >= 3) return null;

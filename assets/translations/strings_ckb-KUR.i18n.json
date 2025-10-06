@@ -237,19 +237,6 @@
       "showSystemApps": "نیشاندانی ئەپەکانی سیستەم",
       "hideSystemApps": "شاردنەوەی بەرنامەکانی سیستەم",
       "clearSelection": "سڕینەوەی هەڵبژاردنەکان"
-    },
-    "geoAssets": {
-      "pageTitle": "پەڕگەکانی ڕێڕەو",
-      "geoip": "GeoIP",
-      "geosite": "GeoSite",
-      "version": "وەشان ${version}",
-      "fileMissing": "پەڕگە بوونی نییە",
-      "update": "بەڕۆژکردن",
-      "download": "داگرتن",
-      "failureMsg": "شکستی هێنا لە نوێکردنەوەی پەڕگە",
-      "successMsg": "پەڕگەکە بە سەرکەوتوویی نوێکرایەوە",
-      "addRecommended": "زیادکردنی فایلەکانی پێشنیار کراو",
-      "missingGeoAssetsMsg": "فایلەکانی ڕێڕەوی هەڵبژێردراو بوونیان نییە. یان دایانبگرە یان یەکێک لەوانە هەڵبژێرە کە بەردەستە"
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "وەڵامی خراپ",
       "connectionError": "هەڵەی پەیوەندی",
       "badCertificate": "بڕوانامەی خراپ"
-    },
-    "geoAssets": {
-      "unexpected": "هەڵەی چاوەڕواننەکراو",
-      "notUpdate": "هیچ نوێکارییەک بەردەست نییە",
-      "activeNotFound": "پەڕگەی جوگرافی چالاک نەدۆزرایەوە"
     }
   },
   "play": {

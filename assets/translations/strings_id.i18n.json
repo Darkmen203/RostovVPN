@@ -237,19 +237,6 @@
       "showSystemApps": "Tampil aplikasi sistem",
       "hideSystemApps": "Sembunyikan aplikasi sistem",
       "clearSelection": "Bersihkan seleksi"
-    },
-    "geoAssets": {
-      "pageTitle": "Rute Aset",
-      "geoip": "Geoip",
-      "geosite": "Geosite",
-      "version": "Versi ${version}",
-      "fileMissing": "File Hilang",
-      "update": "Perbarui",
-      "download": "Unduh",
-      "failureMsg": "Gagal perbarui aset",
-      "successMsg": "Sukses perbarui aset",
-      "addRecommended": "Tambah aset rekomendasi",
-      "missingGeoAssetsMsg": "Routing aset terpilih filenya hilang. Silahkan unduh atau pilih dari yang ada"
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "Response Rusak",
       "connectionError": "Sambungan Error",
       "badCertificate": "Sertifikat Rusak"
-    },
-    "geoAssets": {
-      "unexpected": "Error Tidak Terduga",
-      "notUpdate": "Perbaruan tidak tersedia",
-      "activeNotFound": "Geo Aset Aktif tidak ditemukan"
     }
   },
   "play": {

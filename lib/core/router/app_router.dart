@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/preferences/general_preferences.dart';
 import 'package:rostov_vpn/core/router/routes.dart';
-import 'package:rostov_vpn/features/deep_link/notifier/deep_link_notifier.dart';
 import 'package:rostov_vpn/utils/utils.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -20,19 +19,7 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 @riverpod
 GoRouter router(RouterRef ref) {
   final notifier = ref.watch(routerListenableProvider.notifier);
-  final deepLink = ref.listen(
-    deepLinkNotifierProvider,
-    (_, next) async {
-      if (next case AsyncData(value: final link?)) {
-        await ref.state.push(AddProfileRoute(url: link.url).location);
-      }
-    },
-  );
-  final initialLink = deepLink.read();
   String initialLocation = const HomeRoute().location;
-  if (initialLink case AsyncData(value: final link?)) {
-    initialLocation = AddProfileRoute(url: link.url).location;
-  }
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,
@@ -52,10 +39,8 @@ GoRouter router(RouterRef ref) {
 
 final tabLocations = [
   const HomeRoute().location,
-  const ProxiesRoute().location,
   const ConfigOptionsRoute().location,
   const SettingsRoute().location,
-  const LogsOverviewRoute().location,
   const AboutRoute().location,
 ];
 

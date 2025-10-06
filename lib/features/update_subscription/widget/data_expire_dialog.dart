@@ -3,11 +3,11 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DataExpireDialog extends HookConsumerWidget {
-  DataExpireDialog({
+  const DataExpireDialog({
     required this.daysLeft,
-    Key? key,
+    super.key,
     this.canIgnore = true,
-  }) : super(key: key);
+  });
 
   final int daysLeft;
   final bool canIgnore;

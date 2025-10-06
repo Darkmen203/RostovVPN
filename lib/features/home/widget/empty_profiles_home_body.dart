@@ -1,9 +1,7 @@
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
-import 'package:rostov_vpn/core/router/router.dart';
 
 class EmptyProfilesHomeBody extends HookConsumerWidget {
   const EmptyProfilesHomeBody({super.key});
@@ -19,11 +17,6 @@ class EmptyProfilesHomeBody extends HookConsumerWidget {
         children: [
           Text(t.home.emptyProfilesMsg),
           const Gap(16),
-          OutlinedButton.icon(
-            onPressed: () => const AddProfileRoute().push(context),
-            icon: const Icon(FluentIcons.add_24_regular),
-            label: Text(t.profile.add.buttonText),
-          ),
         ],
       ),
     );
@@ -44,10 +37,6 @@ class EmptyActiveProfileHomeBody extends HookConsumerWidget {
         children: [
           Text(t.home.noActiveProfileMsg),
           const Gap(16),
-          OutlinedButton(
-            onPressed: () => const ProfilesOverviewRoute().push(context),
-            child: Text(t.profile.overviewPageTitle),
-          ),
         ],
       ),
     );

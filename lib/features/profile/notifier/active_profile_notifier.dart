@@ -1,7 +1,7 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/features/profile/data/profile_data_providers.dart';
 import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
 import 'package:rostov_vpn/utils/utils.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'active_profile_notifier.g.dart';
 

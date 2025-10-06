@@ -98,9 +98,9 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
   }
 
   final helperPath = existing.first;
-  final plistLabel = 'com.rostovvpn.helper';
-  final plistPath = '/Library/LaunchDaemons/$plistLabel.plist';
-  final helperDst = '/Library/PrivilegedHelperTools/$plistLabel';
+  const plistLabel = 'com.rostovvpn.helper';
+  const plistPath = '/Library/LaunchDaemons/$plistLabel.plist';
+  const helperDst = '/Library/PrivilegedHelperTools/$plistLabel';
 
   // Пытаемся найти готовый plist в ресурсах
   final bundledPlistCandidates = <String>[
@@ -116,23 +116,21 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
   if (bundledPlist.isNotEmpty) {
     // Автоматическая установка через osascript
     final cmds = [
-      '/usr/bin/xattr -dr com.apple.quarantine ' + _shQ(helperPath) + ' || true',
-      '/usr/bin/xattr -dr com.apple.quarantine ' + _shQ(bundledPlist) + ' || true',
+      '/usr/bin/xattr -dr com.apple.quarantine ${_shQ(helperPath)} || true',
+      '/usr/bin/xattr -dr com.apple.quarantine ${_shQ(bundledPlist)} || true',
       '/bin/mkdir -p /Library/PrivilegedHelperTools',
-      '/bin/cp -f ' + _shQ(helperPath) + ' ' + _shQ(helperDst),
-      '/usr/sbin/chown root:wheel ' + _shQ(helperDst),
-      '/bin/chmod 755 ' + _shQ(helperDst),
-      '/bin/cp -f ' + _shQ(bundledPlist) + ' ' + _shQ(plistPath),
-      '/usr/sbin/chown root:wheel ' + _shQ(plistPath),
-      '/bin/chmod 644 ' + _shQ(plistPath),
-      '/bin/launchctl bootstrap system ' + _shQ(plistPath) + ' || /bin/launchctl bootout system ' + _shQ(plistPath) + ' && /bin/launchctl bootstrap system ' + _shQ(plistPath),
-      '/bin/launchctl enable system/' + plistLabel,
-      '/bin/launchctl kickstart -k system/' + plistLabel,
+      '/bin/cp -f ${_shQ(helperPath)} ${_shQ(helperDst)}',
+      '/usr/sbin/chown root:wheel ${_shQ(helperDst)}',
+      '/bin/chmod 755 ${_shQ(helperDst)}',
+      '/bin/cp -f ${_shQ(bundledPlist)} ${_shQ(plistPath)}',
+      '/usr/sbin/chown root:wheel ${_shQ(plistPath)}',
+      '/bin/chmod 644 ${_shQ(plistPath)}',
+      '/bin/launchctl bootstrap system ${_shQ(plistPath)} || /bin/launchctl bootout system ${_shQ(plistPath)} && /bin/launchctl bootstrap system ${_shQ(plistPath)}',
+      '/bin/launchctl enable system/$plistLabel',
+      '/bin/launchctl kickstart -k system/$plistLabel',
     ];
 
-    final appleScript = 'do shell script "' +
-        cmds.map((c) => c.replaceAll('"', '\\"')).join(' && ').replaceAll('\n', ' ; ') +
-        '" with administrator privileges';
+    final appleScript = 'do shell script "${cmds.map((c) => c.replaceAll('"', '\\"')).join(' && ').replaceAll('\n', ' ; ')}" with administrator privileges';
     try {
       final result = await Process.run('/usr/bin/osascript', ['-e', appleScript]);
       if (result.exitCode == 0) {
@@ -147,7 +145,7 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
           showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-              title: const Text('Ошибка установки helper\'а'),
+              title: const Text("Ошибка установки helper'а"),
               content: SingleChildScrollView(
                 child: SelectableText('Код: ${result.exitCode}\n${result.stderr}\n${result.stdout}'),
               ),
@@ -185,12 +183,12 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
     'set -e',
     'sudo mkdir -p /Library/PrivilegedHelperTools',
     "sudo cp -f '${helperPath.replaceAll("'", "'\\''")}' '$helperDst'",
-    'sudo chown root:wheel "'+helperDst+'"',
-    'sudo chmod 755 "'+helperDst+'"',
-    '# Сохраните launchd plist в '+plistPath+', затем:',
-    'sudo launchctl bootstrap system "'+plistPath+'"',
-    'sudo launchctl enable system/'+plistLabel,
-    'sudo launchctl kickstart -k system/'+plistLabel,
+    'sudo chown root:wheel "$helperDst"',
+    'sudo chmod 755 "$helperDst"',
+    '# Сохраните launchd plist в $plistPath, затем:',
+    'sudo launchctl bootstrap system "$plistPath"',
+    'sudo launchctl enable system/$plistLabel',
+    'sudo launchctl kickstart -k system/$plistLabel',
   ].join('\n');
 
   if (context.mounted) {
@@ -200,9 +198,7 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
         title: const Text('Требуется подготовка plist'),
         content: SingleChildScrollView(
           child: SelectableText(
-            'Найден helper: '+helperPath+'\n\n'
-            'Для завершения установки нужен launchd plist (Label: '+plistLabel+').\n\n'
-            'Шаги (в терминале):\n\n'+commands,
+            'Найден helper: $helperPath\n\nДля завершения установки нужен launchd plist (Label: $plistLabel).\n\nШаги (в терминале):\n\n$commands',
           ),
         ),
         actions: [
@@ -216,4 +212,4 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
   }
 }
 
-String _shQ(String path) => '\'' + path.replaceAll('\'', '\'\\\'\'') + '\'';
+String _shQ(String path) => "'${path.replaceAll("'", "'\\''")}'";

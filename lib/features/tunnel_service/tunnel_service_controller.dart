@@ -98,7 +98,7 @@ class TunnelServiceController {
         'REG_DWORD',
         '/d',
         '0',
-        '/f'
+        '/f',
       ]);
       await _runCmd([
         'reg',
@@ -106,7 +106,7 @@ class TunnelServiceController {
         r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
         '/v',
         'ProxyServer',
-        '/f'
+        '/f',
       ]);
       await _runCmd([
         'reg',
@@ -114,7 +114,7 @@ class TunnelServiceController {
         r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
         '/v',
         'AutoConfigURL',
-        '/f'
+        '/f',
       ]);
       await _runCmd([
         'reg',
@@ -122,14 +122,14 @@ class TunnelServiceController {
         r'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings',
         '/v',
         'ProxyOverride',
-        '/f'
+        '/f',
       ]);
       // WinHTTP (служебный прокси). М.б. понадобятся права — best-effort.
       await _runCmd(['netsh', 'winhttp', 'reset', 'proxy']);
     } else if (Platform.isLinux) {
       // GNOME: системный прокси через gsettings
       await _runCmd(
-          ['gsettings', 'set', 'org.gnome.system.proxy', 'mode', 'none']);
+          ['gsettings', 'set', 'org.gnome.system.proxy', 'mode', 'none'],);
     } else if (Platform.isMacOS) {
       // Пока только CLI; при необходимости добавим networksetup с именами сервисов.
     }
@@ -158,7 +158,7 @@ class TunnelServiceController {
   static Future<bool> _isPortOpen() async {
     try {
       final socket = await Socket.connect('127.0.0.1', _port,
-          timeout: const Duration(milliseconds: 250));
+          timeout: const Duration(milliseconds: 250),);
       await socket.close();
       return true;
     } catch (_) {

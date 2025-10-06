@@ -75,25 +75,6 @@ class ProfilesOverviewModal extends HookConsumerWidget {
                   alignment: WrapAlignment.center,
                   spacing: 8,
                   children: [
-                    // FilledButton.icon(
-                    //   onPressed: () {
-                    //     const AddProfileRoute().push(context);
-                    //   },
-                    //   icon: const Icon(FluentIcons.add_24_filled),
-                    //   label: Text(t.profile.add.shortBtnTxt),
-                    // ),
-                    // FilledButton.icon(
-                    //   onPressed: () {
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (context) {
-                    //         return const ProfilesSortModal();
-                    //       },
-                    //     );
-                    //   },
-                    //   icon: const Icon(FluentIcons.arrow_sort_24_filled),
-                    //   label: Text(t.general.sort),
-                    // ),
                     FilledButton.icon(
                       onPressed: () async {
                         await ref

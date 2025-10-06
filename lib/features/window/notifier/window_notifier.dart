@@ -77,7 +77,7 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
         .abortConnection()
         .timeout(const Duration(seconds: 2))
         .catchError(
-            (e) => loggy.warning("error aborting connection on quit", e));
+            (e) => loggy.warning("error aborting connection on quit", e),);
 
     // После разрыва соединения — мягко гасим TunService (порт 18020)
     try {

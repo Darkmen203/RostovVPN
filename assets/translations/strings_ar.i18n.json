@@ -237,19 +237,6 @@
       "showSystemApps": "عرض تطبيقات النظام",
       "hideSystemApps": "إخفاء تطبيقات النظام",
       "clearSelection": "مسح الاختيار"
-    },
-    "geoAssets": {
-      "pageTitle": "أصول التوجيه",
-      "geoip": "GeoIP",
-      "geosite": "GeoSite",
-      "version": "الإصدار ${version}",
-      "fileMissing": "الملف مفقود",
-      "update": "تحديث",
-      "download": "تنزيل",
-      "failureMsg": "فشل في تحديث الأصل",
-      "successMsg": "تم تحديث الأصل بنجاح",
-      "addRecommended": "إضافة الأصول الموصى بها",
-      "missingGeoAssetsMsg": "ملفات أصول التوجيه المحددة مفقودة. قم بتنزيلها أو اختر ملفات موجودة"
     }
   },
   "about": {
@@ -318,11 +305,6 @@
       "badResponse": "استجابة سيئة",
       "connectionError": "خطأ في الاتصال",
       "badCertificate": "شهادة غير صالحة"
-    },
-    "geoAssets": {
-      "unexpected": "خطأ غير متوقع",
-      "notUpdate": "لا يوجد تحديث متاح",
-      "activeNotFound": "لم يتم العثور على أصل Geo النشط"
     }
   },
   "play": {

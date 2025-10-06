@@ -244,19 +244,6 @@
       "showSystemApps": "Show System Apps",
       "hideSystemApps": "Hide System Apps",
       "clearSelection": "Clear Selection"
-    },
-    "geoAssets": {
-      "pageTitle": "Routing Assets",
-      "geoip": "GeoIP",
-      "geosite": "GeoSite",
-      "version": "Version ${version}",
-      "fileMissing": "File Missing",
-      "update": "Update",
-      "download": "Download",
-      "failureMsg": "Failed to Update Asset",
-      "successMsg": "Successfully Updated Asset",
-      "addRecommended": "Add Recommended Assets",
-      "missingGeoAssetsMsg": "Selected Routing Assets' files are missing. Either download them or choose existing ones"
     }
   },
   "about": {
@@ -325,11 +312,6 @@
       "badResponse": "Bad Response",
       "connectionError": "Connection Error",
       "badCertificate": "Bad Certificate"
-    },
-    "geoAssets": {
-      "unexpected": "Unexpected Error",
-      "notUpdate": "No Update Available",
-      "activeNotFound": "Active Geo Asset Not Found"
     }
   },
   "play": {

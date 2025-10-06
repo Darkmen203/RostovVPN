@@ -58,18 +58,16 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
     if (Platform.isMacOS) {
       unawaited(windowManager.setBadgeLabel("${delay}ms").catchError((e) {
         loggy.debug('setBadgeLabel error', e);
-      }));
+      }),);
     }
     if (!Platform.isLinux) {
       unawaited(trayManager
           .setToolTip(tooltip)
           .timeout(const Duration(seconds: 2))
-          .catchError((e) => loggy.debug('setToolTip error', e)));
+          .catchError((e) => loggy.debug('setToolTip error', e)),);
     }
     final destinations = <(String label, String location)>[
       (t.home.pageTitle, const HomeRoute().location),
-      (t.proxies.pageTitle, const ProxiesRoute().location),
-      (t.logs.pageTitle, const LogsOverviewRoute().location),
       (t.settings.pageTitle, const SettingsRoute().location),
       (t.about.pageTitle, const AboutRoute().location),
     ];
@@ -153,7 +151,7 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
     unawaited(trayManager
         .setContextMenu(menu)
         .timeout(const Duration(seconds: 3))
-        .catchError((e) => loggy.debug('setContextMenu error', e)));
+        .catchError((e) => loggy.debug('setContextMenu error', e)),);
   }
 
   static Future<void> setIcon(ConnectionStatus status) async {
