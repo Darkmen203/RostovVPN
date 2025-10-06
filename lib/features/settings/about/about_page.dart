@@ -40,7 +40,7 @@ class AboutPage extends HookConsumerWidget {
             return;
           case AppUpdateStateIgnored(:final versionInfo):
             // по желанию: можно ничего не показывать, но оставлю подсказку
-            // await showUpdateDialog(context, versionInfo, currentVersion: appInfo.presentVersion);
+            await showUpdateDialog(context, versionInfo, currentVersion: appInfo.presentVersion);
             return;
           case AppUpdateStateError(:final error):
             return CustomToast.error(t.presentShortError(error)).show(context);

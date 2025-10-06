@@ -4,12 +4,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rostov_vpn/core/providers/animations_provider.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
 import 'package:rostov_vpn/features/tunnel_service/tunnel_service_controller.dart';
 import 'package:rostov_vpn/utils/utils.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
+
 part 'window_notifier.g.dart';
 
 const minimumWindowSize = Size(368, 800);
@@ -19,6 +21,7 @@ const defaultWindowSize = Size(428, 800);
 class WindowNotifier extends _$WindowNotifier with AppLogger {
   @override
   Future<void> build() async {
+    ref.read(animationsEnabledProvider.notifier).state = true;
     if (!PlatformUtils.isDesktop) return;
 
     // if (Platform.isWindows) {
@@ -56,6 +59,7 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
   }
 
   Future<void> open({bool focus = true}) async {
+    ref.read(animationsEnabledProvider.notifier).state = true;
     await windowManager.show();
     if (focus) await windowManager.focus();
     if (Platform.isMacOS) {
@@ -65,6 +69,7 @@ class WindowNotifier extends _$WindowNotifier with AppLogger {
 
   // TODO add option to quit or minimize to tray
   Future<void> close() async {
+    ref.read(animationsEnabledProvider.notifier).state = false;
     await windowManager.hide();
     if (Platform.isMacOS) {
       await windowManager.setSkipTaskbar(true);

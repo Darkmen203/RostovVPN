@@ -7,6 +7,7 @@ import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/theme/theme_extensions.dart';
 import 'package:rostov_vpn/core/widget/animated_text.dart';
+import 'package:rostov_vpn/core/providers/animations_provider.dart';
 import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
 import 'package:rostov_vpn/features/config_option/notifier/config_option_notifier.dart';
 import 'package:rostov_vpn/features/connection/model/connection_status.dart';
@@ -78,6 +79,7 @@ class ConnectionButton extends HookConsumerWidget {
     });
 
     final buttonTheme = Theme.of(context).extension<ConnectionButtonTheme>()!;
+    final animationsEnabled = ref.watch(animationsEnabledProvider);
 
     Future<bool> showExperimentalNotice() async {
       final hasExperimental = ref.read(ConfigOptions.hasExperimentalFeatures);
@@ -89,7 +91,9 @@ class ConnectionButton extends HookConsumerWidget {
       return true;
     }
 
-    return _ConnectionButton(
+    return TickerMode(
+      enabled: animationsEnabled,
+      child: _ConnectionButton(
         onTap: switch (connectionStatus) {
           AsyncData(value: Disconnected()) || AsyncError() => () async {
               if (await showExperimentalNotice()) {
@@ -141,7 +145,9 @@ class ConnectionButton extends HookConsumerWidget {
         isConnectedGlow: switch (connectionStatus) {
           AsyncData(value: Connected()) => true,
           _ => false,
-        },);
+        },
+      ),
+    );
   }
 }
 

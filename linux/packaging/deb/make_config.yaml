@@ -8,7 +8,7 @@ priority: optional
 section: x11
 installed_size: 6604
 essential: false
-icon: ./assets/images/source/ic_launcher_border.png
+icon: ./assets/images/app_icon.png
 
 postinstall_scripts:
   - echo "Installed RostovVPN"

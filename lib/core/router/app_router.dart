@@ -19,7 +19,7 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 @riverpod
 GoRouter router(RouterRef ref) {
   final notifier = ref.watch(routerListenableProvider.notifier);
-  String initialLocation = const HomeRoute().location;
+  final String initialLocation = const HomeRoute().location;
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,

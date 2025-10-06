@@ -1,6 +1,7 @@
 import 'package:dartx/dartx.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/constants/colors.dart';
 import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
@@ -8,6 +9,7 @@ import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/login/login_manager_provider.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/router/router.dart';
+import 'package:rostov_vpn/core/providers/animations_provider.dart';
 import 'package:rostov_vpn/features/home/widget/connection_button.dart';
 import 'package:rostov_vpn/features/home/widget/empty_profiles_home_body.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
@@ -28,6 +30,13 @@ class HomePage extends HookConsumerWidget {
     final loginState = ref.watch(loginManagerProvider);
     final isLoading = loginState?.isLoading ?? false;
 
+    useEffect(() {
+      final notifier = ref.read(animationsEnabledProvider.notifier);
+      notifier.state = true;
+      return () {
+        notifier.state = false;
+      };
+    }, const []);
     return Scaffold(
       backgroundColor: AppColors.darkGray,
       // Шапка с названием и логином
