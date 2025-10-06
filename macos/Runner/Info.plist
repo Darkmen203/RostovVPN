@@ -44,5 +44,7 @@
 	</array>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>RostovVPN uses notifications to show connection status and service alerts.</string>
 </dict>
 </plist>
