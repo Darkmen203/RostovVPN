@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -7,7 +8,18 @@ import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/utils/utils.dart';
 
 class SettingsInputDialog<T> extends HookConsumerWidget with PresLogger {
-  const SettingsInputDialog({super.key, required this.title, required this.initialValue, this.mapTo, this.validator, this.valueFormatter, this.onReset, this.optionalAction, this.icon, this.digitsOnly = false, this.possibleValues});
+  const SettingsInputDialog(
+      {super.key,
+      required this.title,
+      required this.initialValue,
+      this.mapTo,
+      this.validator,
+      this.valueFormatter,
+      this.onReset,
+      this.optionalAction,
+      this.icon,
+      this.digitsOnly = false,
+      this.possibleValues,});
 
   final String title;
   final T initialValue;
@@ -65,14 +77,22 @@ class SettingsInputDialog<T> extends HookConsumerWidget with PresLogger {
                   // Callback to fetch suggestions based on user input
                   suggestionsCallback: (pattern) async {
                     final items = possibleValues!.map((p) => p.toString());
-                    var res = items.where((suggestion) => suggestion.toLowerCase().contains(pattern.toLowerCase())).toList();
-                    if (res.length <= 1) res = [pattern, ...items.where((s) => s != pattern)];
+                    var res = items
+                        .where((suggestion) => suggestion
+                            .toLowerCase()
+                            .contains(pattern.toLowerCase()),)
+                        .toList();
+                    if (res.length <= 1) {
+                      res = [pattern, ...items.where((s) => s != pattern)];
+                    }
                     return res;
                   },
                   // Widget to build each suggestion in the list
                   itemBuilder: (context, suggestion) {
                     return ListTile(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10), // Minimize ListTile padding
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 3,
+                          horizontal: 10,), // Minimize ListTile padding
                       minTileHeight: 0,
                       title: Text(
                         suggestion,
@@ -84,7 +104,9 @@ class SettingsInputDialog<T> extends HookConsumerWidget with PresLogger {
                   // Callback when a suggestion is selected
                   onSelected: (suggestion) {
                     // Handle the selected suggestion
-                    print('Selected: $suggestion');
+                    if (kDebugMode) {
+                      print('Selected: $suggestion');
+                    }
                     textController.text = suggestion;
                   },
                 )
@@ -108,7 +130,8 @@ class SettingsInputDialog<T> extends HookConsumerWidget with PresLogger {
               child: TextButton(
                 onPressed: () async {
                   optionalAction!.$2();
-                  await Navigator.of(context).maybePop(T == String ? textController.value.text : null);
+                  await Navigator.of(context)
+                      .maybePop(T == String ? textController.value.text : null);
                 },
                 child: Text(optionalAction!.$1.toUpperCase()),
               ),
@@ -140,9 +163,11 @@ class SettingsInputDialog<T> extends HookConsumerWidget with PresLogger {
                 if (validator?.call(textController.value.text) == false) {
                   await Navigator.of(context).maybePop();
                 } else if (mapTo != null) {
-                  await Navigator.of(context).maybePop(mapTo!.call(textController.value.text));
+                  await Navigator.of(context)
+                      .maybePop(mapTo!.call(textController.value.text));
                 } else {
-                  await Navigator.of(context).maybePop(T == String ? textController.value.text : null);
+                  await Navigator.of(context)
+                      .maybePop(T == String ? textController.value.text : null);
                 }
               },
               child: Text(localizations.okButtonLabel.toUpperCase()),
@@ -155,7 +180,8 @@ class SettingsInputDialog<T> extends HookConsumerWidget with PresLogger {
 }
 
 class AutocompleteField extends StatelessWidget {
-  const AutocompleteField({super.key, required this.initialValue, required this.options});
+  const AutocompleteField(
+      {super.key, required this.initialValue, required this.options,});
   final List<String> options;
   final String initialValue;
 
@@ -163,7 +189,10 @@ class AutocompleteField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Autocomplete<String>(
       initialValue: TextEditingValue(
-        text: initialValue, selection: TextSelection(baseOffset: 0, extentOffset: initialValue.length), // Selects the entire text
+        text: initialValue,
+        selection: TextSelection(
+            baseOffset: 0,
+            extentOffset: initialValue.length,), // Selects the entire text
       ),
       optionsBuilder: (TextEditingValue textEditingValue) {
         // if (textEditingValue.text == '') {

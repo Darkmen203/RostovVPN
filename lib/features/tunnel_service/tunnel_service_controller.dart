@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 class TunnelServiceController {
   static const int _port = 18020;
 
@@ -72,6 +74,9 @@ class TunnelServiceController {
         continue;
       }
     }
+    if (kDebugMode){
+      print("lib\features\tunnel_service\tunnel_service_controller.dart: err=$lastErr");
+    }
     // В релизе молча игнорируем; при дев-отладке можно залогировать lastErr.
   }
 
@@ -137,7 +142,7 @@ class TunnelServiceController {
 
   static Future<void> _runCmd(List<String> cmd) async {
     try {
-      final result = await Process.run(
+      await Process.run(
         cmd.first,
         cmd.length > 1 ? cmd.sublist(1) : const <String>[],
       ).timeout(const Duration(seconds: 2));

@@ -33,7 +33,7 @@ bool get isMobilePlatform =>
     }.contains(defaultTargetPlatform) &&
     !kIsWeb;
 
-GlobalKey<NavigatorState>? _dynamicRootKey;
+final GlobalKey<NavigatorState> _dynamicRootKey = GlobalKey<NavigatorState>();
 
 @TypedShellRoute<AppShellRoute>(
   routes: [
@@ -190,7 +190,7 @@ class SettingsRoute extends GoRouteData {
   const SettingsRoute();
   static const name = "Settings";
 
-  static final GlobalKey<NavigatorState>? $parentNavigatorKey = _dynamicRootKey;
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = _dynamicRootKey;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
@@ -209,7 +209,7 @@ class ConfigOptionsRoute extends GoRouteData {
   final String? section;
   static const name = "Config Options";
 
-  static final GlobalKey<NavigatorState>? $parentNavigatorKey = _dynamicRootKey;
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = _dynamicRootKey;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
@@ -246,7 +246,7 @@ class AboutRoute extends GoRouteData {
   const AboutRoute();
   static const name = "About";
 
-  static final GlobalKey<NavigatorState>? $parentNavigatorKey = _dynamicRootKey;
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = _dynamicRootKey;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {

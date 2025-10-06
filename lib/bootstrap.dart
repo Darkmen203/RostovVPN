@@ -160,8 +160,8 @@ Future<void> lazyBootstrap(
   stopWatch.stop();
 
   runApp(
-    ProviderScope(
-      parent: container,
+    UncontrolledProviderScope(
+      container: container,
       child: SentryUserInteractionWidget(
         child: const App(),
       ),

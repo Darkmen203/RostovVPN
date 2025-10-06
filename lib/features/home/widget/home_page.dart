@@ -8,8 +8,8 @@ import 'package:rostov_vpn/core/app_info/app_info_provider.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/login/login_manager_provider.dart';
 import 'package:rostov_vpn/core/model/failures.dart';
-import 'package:rostov_vpn/core/router/router.dart';
 import 'package:rostov_vpn/core/providers/animations_provider.dart';
+import 'package:rostov_vpn/core/router/router.dart';
 import 'package:rostov_vpn/features/home/widget/connection_button.dart';
 import 'package:rostov_vpn/features/home/widget/empty_profiles_home_body.dart';
 import 'package:rostov_vpn/features/profile/notifier/active_profile_notifier.dart';
@@ -36,7 +36,7 @@ class HomePage extends HookConsumerWidget {
       return () {
         notifier.state = false;
       };
-    }, const []);
+    }, const [],);
     return Scaffold(
       backgroundColor: AppColors.darkGray,
       // Шапка с названием и логином

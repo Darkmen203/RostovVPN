@@ -217,26 +217,27 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
       );
     }
 
-    final List dataList = dataField;
+    final dataList = dataField.cast<Map<String, dynamic>>();
     if (dataList.isEmpty) {
       throw LoginException(
         'Пользователь $username не найден (Data пустой)',
         type: LoginExceptionType.userNotFound,
       );
     }
-    final firstObj = jsonBody["data"][0];
-    if (firstObj["attributes"] == null) {
+    final firstObj = dataList.first;
+    final Object? attributes = firstObj["attributes"];
+    if (attributes is! Map<String, dynamic>) {
       throw LoginException(
         'Нет поля Attributes',
         type: LoginExceptionType.serverError,
       );
     }
 
-    final userAttr = firstObj["attributes"] as Map<String, dynamic>;
+    final userAttr = attributes;
     final serverUsername = userAttr["username"] as String?;
     final hashedPassword = userAttr["password"] as String?;
     final subscriptionLink = userAttr["subscription_link"] as String?;
-    final dataExpireStr = userAttr["data_expire"];
+    final dataExpireStr = userAttr["data_expire"] as String?;
 
     if (serverUsername == null || hashedPassword == null) {
       throw LoginException(
@@ -257,7 +258,7 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
     // Парсим дату (если она не null)
     DateTime? expireDate;
     if (dataExpireStr != null) {
-      if (dataExpireStr is String && dataExpireStr.isNotEmpty) {
+      if (dataExpireStr.isNotEmpty) {
         expireDate = DateTime.tryParse(dataExpireStr);
         // Если не смогли распарсить, можно оставить null
       }
@@ -496,16 +497,21 @@ class LoginManagerNotifier extends StateNotifier<LoginState?> {
         final data = jsonDecode(response.body);
         if (data is Map<String, dynamic>) {
           final dataField = data["data"];
-          if (dataField is List && dataField.isNotEmpty) {
-            final firstObj = dataField[0];
-            final attr = firstObj["attributes"] as Map<String, dynamic>?;
-            if (attr != null) {
-              final dataExpireStr = attr["data_expire"] as String?;
-              if (dataExpireStr == null) {
-                return "null";
-              }
-              return dataExpireStr; // Может быть null
+          if (dataField is List) {
+            final dataList = dataField.cast<Map<String, dynamic>>();
+            if (dataList.isEmpty) {
+              return null;
             }
+            final firstObj = dataList.first;
+            final Object? attributes = firstObj["attributes"];
+            if (attributes is! Map<String, dynamic>) {
+              return null;
+            }
+            final dataExpireStr = attributes["data_expire"] as String?;
+            if (dataExpireStr == null) {
+              return "null";
+            }
+            return dataExpireStr;
           }
         }
       }

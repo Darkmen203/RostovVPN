@@ -127,6 +127,9 @@ class _DataExpireAlertState extends ConsumerState<DataExpireAlert> {
                       await Clipboard.setData(
                         const ClipboardData(text: '+7 (996) 613-08-01'),
                       );
+                      if (!dialogContext.mounted) {
+                        return;
+                      }
                       // Покажем SnackBar «Скопировано»
                       ScaffoldMessenger.of(dialogContext).showSnackBar(
                         const SnackBar(content: Text('Номер скопирован')),

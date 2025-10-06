@@ -31,6 +31,5 @@ class SingboxOutboundGroupItem with _$SingboxOutboundGroupItem {
   factory SingboxOutboundGroupItem.fromJson(Map<String, dynamic> json) => _$SingboxOutboundGroupItemFromJson(json);
 }
 
-final Map<String, ProxyType> _keyMap = Map.fromEntries(ProxyType.values.map((e) => MapEntry(e.key, e)));
 
 ProxyType _typeFromJson(dynamic type) => ProxyType.fromJson(type);

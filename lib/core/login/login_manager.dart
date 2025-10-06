@@ -77,7 +77,9 @@ class LoginManager {
         return LoginState.fromJsonString(content);
       }
     } catch (e) {
-      print('Ошибка чтения loginState.json: $e');
+      if (kDebugMode) {
+        print('Ошибка чтения loginState.json: $e');
+      }
     }
     return null;
   }
@@ -88,7 +90,9 @@ class LoginManager {
       final file = await _getLoginFile();
       await file.writeAsString(state.toJsonString());
     } catch (e) {
-      print('Ошибка записи loginState.json: $e');
+      if (kDebugMode) {
+        print('Ошибка записи loginState.json: $e');
+      }
     }
   }
 
@@ -100,7 +104,9 @@ class LoginManager {
         await file.delete();
       }
     } catch (e) {
-      print('Ошибка удаления loginState.json: $e');
+      if (kDebugMode) {
+        print('Ошибка удаления loginState.json: $e');
+      }
     }
   }
 
@@ -179,8 +185,7 @@ class LoginManager {
     String username,
     String plainPassword,
   ) async {
-    
-    const apiUrl = Environment.apiUrl; 
+    const apiUrl = Environment.apiUrl;
     if (kDebugMode) {
       print(apiUrl);
     }
@@ -220,8 +225,10 @@ class LoginManager {
 
     if (response.statusCode == 401) {
       // Например, токен недействителен
-      throw LoginException('Unauthorized',
-          type: LoginExceptionType.unauthorized,);
+      throw LoginException(
+        'Unauthorized',
+        type: LoginExceptionType.unauthorized,
+      );
     } else if (response.statusCode >= 400 && response.statusCode < 600) {
       throw LoginException(
         'Сервер вернул ошибку [${response.statusCode}]',
@@ -250,26 +257,27 @@ class LoginManager {
       );
     }
 
-    final List dataList = dataField;
+    final dataList = dataField.cast<Map<String, dynamic>>();
     if (dataList.isEmpty) {
       throw LoginException(
         'Пользователь $username не найден (Data пустой)',
         type: LoginExceptionType.userNotFound,
       );
     }
-    final firstObj = jsonBody["data"][0];
-    if (firstObj["attributes"] == null) {
+    final firstObj = dataList.first;
+    final attributes = firstObj["attributes"];
+    if (attributes is! Map<String, dynamic>) {
       throw LoginException(
         'Нет поля Attributes',
         type: LoginExceptionType.serverError,
       );
     }
 
-    final userAttr = firstObj["attributes"] as Map<String, dynamic>;
+    final userAttr = attributes;
     final serverUsername = userAttr["username"] as String?;
     final hashedPassword = userAttr["password"] as String?;
     final subscriptionLink = userAttr["subscription_link"] as String?;
-    final dataExpireStr = userAttr["data_expire"];
+    final dataExpireStr = userAttr["data_expire"] as String?;
 
     if (serverUsername == null || hashedPassword == null) {
       throw LoginException(
@@ -290,7 +298,7 @@ class LoginManager {
     // Парсим дату (если она не null)
     DateTime? expireDate;
     if (dataExpireStr != null) {
-      if (dataExpireStr is String && dataExpireStr.isNotEmpty) {
+      if (dataExpireStr.isNotEmpty) {
         expireDate = DateTime.tryParse(dataExpireStr);
         // Если не смогли распарсить, можно оставить null
       }

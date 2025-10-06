@@ -79,6 +79,9 @@ Future<void> showUpdateDialog(
                   if (await canLaunchUrl(uri)) {
                     await launchUrl(uri, mode: LaunchMode.externalApplication);
                   }
+                  if (!ctx.mounted) {
+                    return;
+                  }
                   Navigator.of(ctx).pop();
                 },
                 child: Text(t.appUpdate.updateNowBtnTxt),
