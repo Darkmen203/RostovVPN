@@ -1,12 +1,12 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
-import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/core/router/router.dart';
 import 'package:rostov_vpn/features/profile/model/profile_entity.dart';
 import 'package:rostov_vpn/features/profile/overview/profiles_overview_notifier.dart';
@@ -21,8 +21,6 @@ class ProfileTile extends HookConsumerWidget {
   });
 
   final ProfileEntity profile;
-
-  /// home screen active profile card
   final bool isMain;
 
   @override
@@ -30,23 +28,43 @@ class ProfileTile extends HookConsumerWidget {
     final t = ref.watch(translationsProvider);
     final theme = Theme.of(context);
 
-    final selectActiveMutation = useMutation(
-      initialOnFailure: (err) {
-        CustomToast.error(t.presentShortError(err)).show(context);
-      },
-      initialOnSuccess: () {
-        if (context.mounted && context.canPop()) context.pop();
-      },
-    );
+    final remoteProfile = profile is RemoteProfileEntity
+        ? profile as RemoteProfileEntity
+        : null;
+    final subInfo = remoteProfile?.subInfo;
+    final isSelecting = useState(false);
 
-    final subInfo = switch (profile) {
-      RemoteProfileEntity(:final subInfo) => subInfo,
-      _ => null,
-    };
+    final effectiveMargin = isMain
+        ? const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+        : const EdgeInsets.only(left: 12, right: 12, bottom: 12);
+    final effectiveElevation = profile.active ? 12.0 : 4.0;
+    final effectiveOutlineColor =
+        profile.active ? theme.colorScheme.outlineVariant : Colors.transparent;
 
-    final effectiveMargin = isMain ? const EdgeInsets.symmetric(horizontal: 16, vertical: 8) : const EdgeInsets.only(left: 12, right: 12, bottom: 12);
-    final double effectiveElevation = profile.active ? 12 : 4;
-    final effectiveOutlineColor = profile.active ? theme.colorScheme.outlineVariant : Colors.transparent;
+    Future<void> onTap() async {
+      if (isMain) {
+        const ProfilesOverviewRoute().go(context);
+        return;
+      }
+      if (profile.active || isSelecting.value) return;
+
+      isSelecting.value = true;
+      try {
+        await ref
+            .read(profilesOverviewNotifierProvider.notifier)
+            .selectActiveProfile(profile.id);
+
+        if (context.mounted && context.canPop()) {
+          context.pop();
+        }
+      } catch (error) {
+        if (context.mounted) {
+          CustomToast.error(error.toString()).show(context);
+        }
+      } finally {
+        isSelecting.value = false;
+      }
+    }
 
     return Card(
       margin: effectiveMargin,
@@ -70,17 +88,7 @@ class ProfileTile extends HookConsumerWidget {
                 namesRoute: isMain,
                 label: isMain ? t.profile.activeProfileBtnSemanticLabel : null,
                 child: InkWell(
-                  onTap: () {
-                    if (isMain) {
-                      const ProfilesOverviewRoute().go(context);
-                    } else {
-                      if (selectActiveMutation.state.isInProgress) return;
-                      if (profile.active) return;
-                      selectActiveMutation.setFuture(
-                        ref.read(profilesOverviewNotifierProvider.notifier).selectActiveProfile(profile.id),
-                      );
-                    }
-                  },
+                  onTap: onTap,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -107,7 +115,8 @@ class ProfileTile extends HookConsumerWidget {
                                       style: theme.textTheme.titleMedium?.copyWith(
                                         fontFamily: FontFamily.emoji,
                                       ),
-                                      semanticsLabel: t.profile.activeProfileNameSemanticLabel(
+                                      semanticsLabel: t.profile
+                                          .activeProfileNameSemanticLabel(
                                         name: profile.name,
                                       ),
                                     ),
@@ -154,7 +163,6 @@ class ProfileTile extends HookConsumerWidget {
   }
 }
 
-// TODO add support url
 class ProfileSubscriptionInfo extends HookConsumerWidget {
   const ProfileSubscriptionInfo(this.subInfo, {super.key});
 
@@ -169,7 +177,9 @@ class ProfileSubscriptionInfo extends HookConsumerWidget {
       return (t.profile.subscription.remainingDuration(duration: "∞"), null);
     } else {
       return (
-        t.profile.subscription.remainingDuration(duration: subInfo.remaining.inDays),
+        t.profile.subscription.remainingDuration(
+          duration: subInfo.remaining.inDays,
+        ),
         null,
       );
     }
@@ -188,10 +198,11 @@ class ProfileSubscriptionInfo extends HookConsumerWidget {
           textDirection: TextDirection.ltr,
           child: Flexible(
             child: Text(
-              subInfo.total > 10 * 1099511627776 //10TB
+              subInfo.total > 10 * 1099511627776 // 10TB
                   ? "∞ GiB"
                   : subInfo.consumption.sizeOf(subInfo.total),
-              semanticsLabel: t.profile.subscription.remainingTrafficSemanticLabel(
+              semanticsLabel:
+                  t.profile.subscription.remainingTrafficSemanticLabel(
                 consumed: subInfo.consumption.sizeGB(),
                 total: subInfo.total.sizeGB(),
               ),
@@ -212,7 +223,6 @@ class ProfileSubscriptionInfo extends HookConsumerWidget {
   }
 }
 
-// TODO change colors
 class RemainingTrafficIndicator extends StatelessWidget {
   const RemainingTrafficIndicator(this.ratio, {super.key});
 

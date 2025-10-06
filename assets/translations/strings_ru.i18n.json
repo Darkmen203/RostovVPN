@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "Профили",
-    "detailsPageTitle": "Профиль",
     "activeProfileNameSemanticLabel": "Имя активного профиля: «${name}».",
     "activeProfileBtnSemanticLabel": "Посмотреть все профили",
     "nonActiveProfileBtnSemanticLabel": "Выберите «${name}» в качестве активного профиля.",
@@ -107,23 +106,6 @@
       "successMsg": "Профиль успешно обновлён",
       "namedFailureMsg": "Не удалось обновить \"${name}\".",
       "namedSuccessMsg": "\"${name}\" успешно обновлено"
-    },
-    "share": {
-      "buttonText": "Поделиться",
-      "exportToClipboardSuccess": "Ссылка скопирована в буфер обмена",
-      "exportSubLinkToClipboard": "Скопировать ссылку на подписку в буфер обмена",
-      "subLinkQrCode": "QR-код ссылки на подписку",
-      "exportConfigToClipboard": "Скопировать конфигурацию в буфер обмена",
-      "exportConfigToClipboardSuccess": "Конфигурация скопирована в буфер обмена"
-    },
-    "edit": {
-      "buttonTxt": "Изменить",
-      "selectActiveTxt": "Выберите активный профиль"
-    },
-    "delete": {
-      "buttonTxt": "Удалить",
-      "confirmationMsg": "Безвозвратно удалить профиль?",
-      "successMsg": "Профиль успешно удалён"
     },
     "save": {
       "buttonText": "Сохранить",

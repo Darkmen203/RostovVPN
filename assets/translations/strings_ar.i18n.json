@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "الملفات الشخصية",
-    "detailsPageTitle": "ملف التعريف",
     "activeProfileNameSemanticLabel": "اسم ملف التعريف النشط: \"${name}\".",
     "activeProfileBtnSemanticLabel": "عرض جميع ملفات التعريف",
     "nonActiveProfileBtnSemanticLabel": "اختر \"${name}\" كملف تعريف نشط",
@@ -107,23 +106,6 @@
       "successMsg": "تم تحديث ملف التعريف بنجاح",
       "namedFailureMsg": "فشل في تحديث \"${name}\"",
       "namedSuccessMsg": "تم تحديث \"${name}\" بنجاح"
-    },
-    "share": {
-      "buttonText": "مشاركة",
-      "exportToClipboardSuccess": "تم تصدير البيانات إلى الحافظة",
-      "exportSubLinkToClipboard": "تصدير رابط الاشتراك إلى الحافظة",
-      "subLinkQrCode": "رمز الاستجابة السريعة لرابط الاشتراك",
-      "exportConfigToClipboard": "تصدير التكوين إلى الحافظة",
-      "exportConfigToClipboardSuccess": "تم نسخ التكوين إلى الحافظة"
-    },
-    "edit": {
-      "buttonTxt": "تحرير",
-      "selectActiveTxt": "اختر ملف التعريف النشط"
-    },
-    "delete": {
-      "buttonTxt": "حذف",
-      "confirmationMsg": "حذف ملف التعريف نهائياً؟",
-      "successMsg": "تم حذف ملف التعريف بنجاح"
     },
     "save": {
       "buttonText": "حفظ",

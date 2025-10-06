@@ -1,8 +1,8 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
-import 'package:rostov_vpn/core/model/failures.dart';
 import 'package:rostov_vpn/features/common/nested_app_bar.dart';
 import 'package:rostov_vpn/features/proxy/overview/proxies_overview_notifier.dart';
 import 'package:rostov_vpn/features/proxy/widget/proxy_tile.dart';
@@ -18,11 +18,22 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
     final asyncProxies = ref.watch(proxiesOverviewNotifierProvider);
     final notifier = ref.watch(proxiesOverviewNotifierProvider.notifier);
     final sortBy = ref.watch(proxiesSortNotifierProvider);
+    final isChangingProxy = useState(false);
 
-    final selectActiveProxyMutation = useMutation(
-      initialOnFailure: (error) =>
-          CustomToast.error(t.presentShortError(error)).show(context),
-    );
+    Future<void> changeProxy(String groupTag, String proxyTag) async {
+      if (isChangingProxy.value) return;
+      isChangingProxy.value = true;
+      try {
+        await notifier.changeProxy(groupTag, proxyTag);
+      } catch (error, stackTrace) {
+        loggy.warning('change proxy failed', error, stackTrace);
+        if (context.mounted) {
+          CustomToast.error(error.toString()).show(context);
+        }
+      } finally {
+        isChangingProxy.value = false;
+      }
+    }
 
     final appBar = NestedAppBar(
       title: Text(t.proxies.pageTitle),
@@ -84,15 +95,7 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
                           return ProxyTile(
                             proxy,
                             selected: group.selected == proxy.tag,
-                            onSelect: () async {
-                              if (selectActiveProxyMutation
-                                  .state.isInProgress) {
-                                return;
-                              }
-                              selectActiveProxyMutation.setFuture(
-                                notifier.changeProxy(group.tag, proxy.tag),
-                              );
-                            },
+                            onSelect: () async => changeProxy(group.tag, proxy.tag),
                           );
                         },
                         itemCount: group.items.length,
@@ -110,17 +113,7 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
                       return ProxyTile(
                         proxy,
                         selected: group.selected == proxy.tag,
-                        onSelect: () async {
-                          if (selectActiveProxyMutation.state.isInProgress) {
-                            return;
-                          }
-                          selectActiveProxyMutation.setFuture(
-                            notifier.changeProxy(
-                              group.tag,
-                              proxy.tag,
-                            ),
-                          );
-                        },
+                        onSelect: () async => changeProxy(group.tag, proxy.tag),
                       );
                     },
                     itemCount: group.items.length,
@@ -142,7 +135,7 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
             slivers: [
               appBar,
               SliverErrorBodyPlaceholder(
-                t.presentShortError(error),
+                error.toString(),
                 icon: null,
               ),
             ],
@@ -159,7 +152,6 @@ class ProxiesOverviewPage extends HookConsumerWidget with PresLogger {
           ),
         );
 
-      // TODO: remove
       default:
         return const Scaffold();
     }

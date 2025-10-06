@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rostov_vpn/core/localization/translations.dart';
 import 'package:rostov_vpn/core/model/constants.dart';
-import 'package:rostov_vpn/core/router/router.dart';
 import 'package:rostov_vpn/features/config_option/data/config_option_repository.dart';
 import 'package:rostov_vpn/features/connection/model/connection_status.dart';
 import 'package:rostov_vpn/features/connection/notifier/connection_notifier.dart';
@@ -66,11 +65,6 @@ class SystemTrayNotifier extends _$SystemTrayNotifier with AppLogger {
           .timeout(const Duration(seconds: 2))
           .catchError((e) => loggy.debug('setToolTip error', e)),);
     }
-    final destinations = <(String label, String location)>[
-      (t.home.pageTitle, const HomeRoute().location),
-      (t.settings.pageTitle, const SettingsRoute().location),
-      (t.about.pageTitle, const AboutRoute().location),
-    ];
 
     // loggy.debug('updating system tray');
 

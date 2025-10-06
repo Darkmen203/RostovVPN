@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "配置文件",
-    "detailsPageTitle": "配置文件",
     "activeProfileNameSemanticLabel": "激活的配置文件名称：“${name}”。",
     "activeProfileBtnSemanticLabel": "查看所有配置文件",
     "nonActiveProfileBtnSemanticLabel": "选择 “${name}” 作为激活的配置文件",
@@ -107,23 +106,6 @@
       "successMsg": "配置文件更新成功",
       "namedFailureMsg": "无法更新\"${name}\"",
       "namedSuccessMsg": "\"${name}\" 更新成功"
-    },
-    "share": {
-      "buttonText": "分享",
-      "exportToClipboardSuccess": "导出到剪贴板",
-      "exportSubLinkToClipboard": "将订阅链接导出到剪贴板",
-      "subLinkQrCode": "订阅链接二维码",
-      "exportConfigToClipboard": "将配置导出到剪贴板",
-      "exportConfigToClipboardSuccess": "配置已复制到剪贴板"
-    },
-    "edit": {
-      "buttonTxt": "编辑",
-      "selectActiveTxt": "选择并激活配置文件"
-    },
-    "delete": {
-      "buttonTxt": "删除",
-      "confirmationMsg": "要永久删除配置文件吗？",
-      "successMsg": "配置文件删除成功"
     },
     "save": {
       "buttonText": "保存",

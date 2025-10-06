@@ -65,7 +65,6 @@ class ShortcutWrapper extends HookConsumerWidget {
           PasteIntent: CallbackAction(
             onInvoke: (_) async {
               if (rootNavigatorKey.currentContext != null) {
-                final captureResult =
                     await Clipboard.getData(Clipboard.kTextPlain)
                         .then((value) => value?.text ?? '');
               }

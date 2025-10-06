@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "Beberapa Profil",
-    "detailsPageTitle": "Profil",
     "activeProfileNameSemanticLabel": "Nama profil aktif: \"${name}\".",
     "activeProfileBtnSemanticLabel": "Tampilkan semua profil.",
     "nonActiveProfileBtnSemanticLabel": "Pilih \"${name}\" sebagai profil aktif.",
@@ -107,23 +106,6 @@
       "successMsg": "Sukses perbarui profil",
       "namedFailureMsg": "Gagal perbarui \"${name}\"",
       "namedSuccessMsg": "Sukses perbarui \"${name}\""
-    },
-    "share": {
-      "buttonText": "Bagi",
-      "exportToClipboardSuccess": "Taruh ke clipboard",
-      "exportSubLinkToClipboard": "Taruh link langganan ke clipboard",
-      "subLinkQrCode": "Link Langganan QR",
-      "exportConfigToClipboard": "Taruh konfigurasi ke clipboard",
-      "exportConfigToClipboardSuccess": "Salin konfigurasi ke clipboard"
-    },
-    "edit": {
-      "buttonTxt": "Ubah",
-      "selectActiveTxt": "Pilih profil aktif"
-    },
-    "delete": {
-      "buttonTxt": "Hapus",
-      "confirmationMsg": "Hapus profil permanen?",
-      "successMsg": "Sukses hapus profil"
     },
     "save": {
       "buttonText": "Simpan",

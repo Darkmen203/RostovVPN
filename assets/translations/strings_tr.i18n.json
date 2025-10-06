@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "Profiller",
-    "detailsPageTitle": "Profil",
     "activeProfileNameSemanticLabel": "Aktif profil adı: \"${name}\".",
     "activeProfileBtnSemanticLabel": "Tüm profilleri görüntüleyin",
     "nonActiveProfileBtnSemanticLabel": "Aktif profil olarak \"${name}\" seçeneğini seçin.",
@@ -107,23 +106,6 @@
       "successMsg": "Profil başarıyla güncellendi",
       "namedFailureMsg": "\"${name}\" güncellenemedi",
       "namedSuccessMsg": "\"${name}\" başarıyla güncellendi"
-    },
-    "share": {
-      "buttonText": "Paylaş",
-      "exportToClipboardSuccess": "Panoya aktarıldı",
-      "exportSubLinkToClipboard": "Abonelik bağlantısını panoya aktar",
-      "subLinkQrCode": "QR kodun abonelik bağlantısı ",
-      "exportConfigToClipboard": "Yapılandırmayı panoya aktar",
-      "exportConfigToClipboardSuccess": "Yapılandırma panoya kopyalandı"
-    },
-    "edit": {
-      "buttonTxt": "Düzenle",
-      "selectActiveTxt": "Etkin profili seçin"
-    },
-    "delete": {
-      "buttonTxt": "Sil",
-      "confirmationMsg": "Profil kalıcı olarak silinsin mi?",
-      "successMsg": "Profil başarıyla silindi"
     },
     "save": {
       "buttonText": "Kaydet",

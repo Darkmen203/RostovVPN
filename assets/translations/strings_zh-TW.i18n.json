@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "設定檔",
-    "detailsPageTitle": "設定檔",
     "activeProfileNameSemanticLabel": "活動設定檔名稱：“${name}”。",
     "activeProfileBtnSemanticLabel": "查看所有設定檔",
     "nonActiveProfileBtnSemanticLabel": "選擇“${name}”作為活動設定檔。",
@@ -107,23 +106,6 @@
       "successMsg": "設定檔更新成功",
       "namedFailureMsg": "無法更新“${name}”",
       "namedSuccessMsg": "“${name}” 更新成功"
-    },
-    "share": {
-      "buttonText": "分享",
-      "exportToClipboardSuccess": "匯出到剪貼簿",
-      "exportSubLinkToClipboard": "將訂閱連結匯出到剪貼簿",
-      "subLinkQrCode": "訂閱連結 QR code",
-      "exportConfigToClipboard": "將配置匯出到剪貼簿",
-      "exportConfigToClipboardSuccess": "配置已複製到剪貼簿"
-    },
-    "edit": {
-      "buttonTxt": "編輯",
-      "selectActiveTxt": "選擇活動設定檔"
-    },
-    "delete": {
-      "buttonTxt": "刪除",
-      "confirmationMsg": "要永久刪除設定檔嗎？",
-      "successMsg": "設定檔刪除成功"
     },
     "save": {
       "buttonText": "儲存",

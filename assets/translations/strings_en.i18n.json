@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "Profiles",
-    "detailsPageTitle": "Profile",
     "activeProfileNameSemanticLabel": "Active Profile Name: \"${name}\".",
     "activeProfileBtnSemanticLabel": "View All Profiles",
     "nonActiveProfileBtnSemanticLabel": "Select \"${name}\" as Active Profile",
@@ -107,23 +106,6 @@
       "successMsg": "Profile Updated Successfully",
       "namedFailureMsg": "Failed to Update \"${name}\"",
       "namedSuccessMsg": "\"${name}\" Updated Successfully"
-    },
-    "share": {
-      "buttonText": "Share",
-      "exportToClipboardSuccess": "Exported to Clipboard",
-      "exportSubLinkToClipboard": "Export Subscription Link to Clipboard",
-      "subLinkQrCode": "Subscription Link QR Code",
-      "exportConfigToClipboard": "Export Configuration to Clipboard",
-      "exportConfigToClipboardSuccess": "Configuration Copied to Clipboard"
-    },
-    "edit": {
-      "buttonTxt": "Edit",
-      "selectActiveTxt": "Select Active Profile"
-    },
-    "delete": {
-      "buttonTxt": "Delete",
-      "confirmationMsg": "Delete Profile Permanently?",
-      "successMsg": "Profile Deleted Successfully"
     },
     "save": {
       "buttonText": "Save",

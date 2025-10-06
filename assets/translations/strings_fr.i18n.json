@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "Profils",
-    "detailsPageTitle": "Profil",
     "activeProfileNameSemanticLabel": "Nom du profil actif : \"${name}\".",
     "activeProfileBtnSemanticLabel": "Afficher tous les profils",
     "nonActiveProfileBtnSemanticLabel": "Sélectionnez \"${name}\" comme profil actif",
@@ -107,23 +106,6 @@
       "successMsg": "Mise à jour du profil réussie",
       "namedFailureMsg": "Échec de la mise à jour de \"${name}\"",
       "namedSuccessMsg": "\"${name}\" a été mis à jour avec succès"
-    },
-    "share": {
-      "buttonText": "Partager",
-      "exportToClipboardSuccess": "Exporté vers le Presse-papiers",
-      "exportSubLinkToClipboard": "Exporter le lien d'abonnement vers le presse-papiers",
-      "subLinkQrCode": "Code QR du lien d'abonnement",
-      "exportConfigToClipboard": "Exporter la configuration vers le presse-papiers",
-      "exportConfigToClipboardSuccess": "Configuration copiée dans le presse-papiers"
-    },
-    "edit": {
-      "buttonTxt": "Modifier",
-      "selectActiveTxt": "Sélectionnez un profil actif"
-    },
-    "delete": {
-      "buttonTxt": "Supprimer",
-      "confirmationMsg": "Supprimer le profil définitivement ?",
-      "successMsg": "Profil supprimé avec succès"
     },
     "save": {
       "buttonText": "Sauvegarder",

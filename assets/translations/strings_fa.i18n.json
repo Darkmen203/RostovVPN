@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "پروفایل‌ها",
-    "detailsPageTitle": "پروفایل",
     "activeProfileNameSemanticLabel": "نام پروفایل فعال: ${name}",
     "activeProfileBtnSemanticLabel": "نمایش همه‌ی پروفایل‌ها",
     "nonActiveProfileBtnSemanticLabel": "انتخاب ${name} به‌عنوان پروفایل فعال",
@@ -107,23 +106,6 @@
       "successMsg": "پروفایل با موفقیت به‌روزرسانی شد",
       "namedFailureMsg": "به‌روزرسانی \"${name}\" ناموفق بود",
       "namedSuccessMsg": "\"${name}\" با موفقیت به‌روز شد"
-    },
-    "share": {
-      "buttonText": "اشتراک‌گذاری",
-      "exportToClipboardSuccess": "به کلیپ‌بورد اضافه شد",
-      "exportSubLinkToClipboard": "صادر کردن لینک اشتراک به کلیپ‌بورد",
-      "subLinkQrCode": "کد QR لینک اشتراک",
-      "exportConfigToClipboard": "افزودن پیکربندی به کلیپ‌بورد",
-      "exportConfigToClipboardSuccess": "پیکربندی در کلیپ‌بورد کپی شد"
-    },
-    "edit": {
-      "buttonTxt": "ویرایش",
-      "selectActiveTxt": "انتخاب پروفایل فعال"
-    },
-    "delete": {
-      "buttonTxt": "حذف",
-      "confirmationMsg": "پروفایل برای همیشه حذف شود؟",
-      "successMsg": "پروفایل با موفقیت حذف شد"
     },
     "save": {
       "buttonText": "ذخیره",

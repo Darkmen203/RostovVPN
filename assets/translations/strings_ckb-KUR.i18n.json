@@ -63,7 +63,6 @@
   },
   "profile": {
     "overviewPageTitle": "پرۆفایلەکان",
-    "detailsPageTitle": "پرۆفایل",
     "activeProfileNameSemanticLabel": "ناوی پڕۆفایلی چالاک: \"${name}\".",
     "activeProfileBtnSemanticLabel": "بینینی هەموو پڕۆفایلیەکان",
     "nonActiveProfileBtnSemanticLabel": "\"${name}\" وەکو پرۆفایلی چالاک هەڵبژێرە",
@@ -107,23 +106,6 @@
       "successMsg": "بەڕۆژکردنەوەی پرۆفایل بە سەرکەوتوویی",
       "namedFailureMsg": "شکستی هێنا لە بەڕۆژکردنەوەی \"${name}\"",
       "namedSuccessMsg": "\"${name}\" بە سەرکەوتوویی بەڕۆژکرایەوە"
-    },
-    "share": {
-      "buttonText": "هاوبەش کردن",
-      "exportToClipboardSuccess": "هەناردە کراوە بۆ کلیپبۆرد",
-      "exportSubLinkToClipboard": "هەناردەکردنی بەستەری بەشداربوون بۆ کلیپبۆرد",
-      "subLinkQrCode": "بەستەری بەشداریکردن QR Code",
-      "exportConfigToClipboard": "ڕێکخستن هەناردە بکە بۆ کلیپبۆرد",
-      "exportConfigToClipboardSuccess": "ڕێکخستن کۆپی کرا بۆ کلیپبۆرد"
-    },
-    "edit": {
-      "buttonTxt": "ده‌ستكاری",
-      "selectActiveTxt": "هەڵبژاردنی پرۆفایلی چالاک"
-    },
-    "delete": {
-      "buttonTxt": "سڕینەوە",
-      "confirmationMsg": "سڕینەوەی پڕۆفایل بۆ هەمیشە؟",
-      "successMsg": "پڕۆفایلی بە سەرکەوتوویی سڕاوەتەوە"
     },
     "save": {
       "buttonText": "پاشەکەوت",
