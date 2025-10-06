@@ -33,7 +33,7 @@ dependencies:
   flutter_hooks: ^0.20.5
   riverpod_annotation: ^2.3.4
   rxdart: ^0.27.7
-  drift: ^2.16.0
+  drift: ^2.20.3
   sqlite3_flutter_libs: ^0.5.24
   shared_preferences: ^2.2.2
   dio: ^5.4.1
@@ -106,7 +106,7 @@ dev_dependencies:
   json_serializable: ^6.7.1
   freezed: ^2.4.7
   riverpod_generator: ^2.3.11
-  drift_dev: ^2.16.0
+  drift_dev: ^2.20.3
   ffigen: ^8.0.2
   slang_build_runner: ^3.30.0
   flutter_gen_runner: ^5.4.0

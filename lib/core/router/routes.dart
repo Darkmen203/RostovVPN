@@ -33,8 +33,6 @@ bool get isMobilePlatform =>
     }.contains(defaultTargetPlatform) &&
     !kIsWeb;
 
-final GlobalKey<NavigatorState> _dynamicRootKey = GlobalKey<NavigatorState>();
-
 @TypedShellRoute<AppShellRoute>(
   routes: [
     TypedGoRoute<HomeRoute>(
@@ -42,14 +40,20 @@ final GlobalKey<NavigatorState> _dynamicRootKey = GlobalKey<NavigatorState>();
       name: HomeRoute.name,
       routes: [
         TypedGoRoute<ProfilesOverviewRoute>(
-            path: "profiles", name: ProfilesOverviewRoute.name,),
+          path: "profiles",
+          name: ProfilesOverviewRoute.name,
+        ),
         TypedGoRoute<ConfigOptionsRoute>(
-            path: "config-options", name: ConfigOptionsRoute.name,),
+          path: "config-options",
+          name: ConfigOptionsRoute.name,
+        ),
         TypedGoRoute<QuickSettingsRoute>(
-            path: "quick-settings", name: QuickSettingsRoute.name,),
-    // TypedGoRoute<SettingsRoute>(path: "/settings", name: SettingsRoute.name),
+          path: "quick-settings",
+          name: QuickSettingsRoute.name,
+        ),
+        // TypedGoRoute<SettingsRoute>(path: "/settings", name: SettingsRoute.name),
 
-        TypedGoRoute<SettingsRoute>( 
+        TypedGoRoute<SettingsRoute>(
           path: "settings",
           name: SettingsRoute.name,
           routes: [
@@ -64,9 +68,14 @@ final GlobalKey<NavigatorState> _dynamicRootKey = GlobalKey<NavigatorState>();
     ),
   ],
 )
-
 class AppShellRoute extends ShellRouteData {
   const AppShellRoute();
+
+  static final GlobalKey<NavigatorState> $navigatorKey =
+      GlobalKey<NavigatorState>();
+
+  /// Переопределяем ключ навигатора shell-а (в аннотации его указывать нельзя)
+  GlobalKey<NavigatorState> get navigatorKey => $navigatorKey;
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget child) {
@@ -112,9 +121,12 @@ class _AppShellWidgetState extends State<AppShellWidget> {
         onTabSelected: (index) {
           setState(() => _selectedIndex = index);
           switch (index) {
-            case 0: context.go('/');
-            case 1: context.go('/settings');
-            case 2: context.go('/about');
+            case 0:
+              context.go('/');
+            case 1:
+              context.go('/settings');
+            case 2:
+              context.go('/about');
           }
         },
       ),
@@ -190,7 +202,8 @@ class SettingsRoute extends GoRouteData {
   const SettingsRoute();
   static const name = "Settings";
 
-  static final GlobalKey<NavigatorState> $parentNavigatorKey = _dynamicRootKey;
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppShellRoute.$navigatorKey;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
@@ -209,7 +222,8 @@ class ConfigOptionsRoute extends GoRouteData {
   final String? section;
   static const name = "Config Options";
 
-  static final GlobalKey<NavigatorState> $parentNavigatorKey = _dynamicRootKey;
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppShellRoute.$navigatorKey;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
@@ -246,7 +260,8 @@ class AboutRoute extends GoRouteData {
   const AboutRoute();
   static const name = "About";
 
-  static final GlobalKey<NavigatorState> $parentNavigatorKey = _dynamicRootKey;
+  static final GlobalKey<NavigatorState> $parentNavigatorKey =
+      AppShellRoute.$navigatorKey;
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
