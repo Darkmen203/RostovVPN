@@ -91,14 +91,16 @@ Future<void> lazyBootstrap(
   final debug = container.read(debugModeNotifierProvider) || kDebugMode;
 
   if (PlatformUtils.isDesktop) {
-    await _init(
-      "tunnel self-heal",
-      () async {
-        try {
-          await TunnelServiceController.selfHealOnStartup();
-        } catch (_) {}
-      },
-    );
+    if (!Platform.isMacOS) {
+      await _init(
+        "tunnel self-heal",
+        () async {
+          try {
+            await TunnelServiceController.selfHealOnStartup();
+          } catch (_) {}
+        },
+      );
+    }
     await _init(
       "window controller",
       () => container.read(windowNotifierProvider.future),
