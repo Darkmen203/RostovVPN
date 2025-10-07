@@ -12,13 +12,16 @@ class AppDelegate: FlutterAppDelegate {
 
   override func applicationDidFinishLaunching(_ aNotification: Notification) {
     if #available(macOS 10.14, *) {
-      let isRunningAsRoot = getuid() == 0 || geteuid() == 0
-      if isRunningAsRoot {
-        NSLog("Skipping notification authorization when running as root user")
+      if launchedWithElevatedPrivileges() {
+        NSLog("Skipping notification authorization because app was launched with elevated privileges")
       } else {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { _, error in
-          if let error {
-            NSLog("Error requesting notification authorization: \(error)")
+          if let nsError = error as NSError? {
+            if nsError.domain == NSCocoaErrorDomain, nsError.code == 4099 {
+              NSLog("Notification service not reachable (probably launched without a user session); continuing without notifications")
+            } else {
+              NSLog("Error requesting notification authorization: \(nsError)")
+            }
           }
         }
       }
@@ -54,6 +57,19 @@ class AppDelegate: FlutterAppDelegate {
     // Prefer delegating to CLI (it knows all services/interfaces)
     let p = Process(); p.launchPath = cli; p.arguments = ["proxy", "off"]; try? p.run()
     // If CLI is unavailable we could fallback to networksetup for "Wi-Fi"/"Ethernet".
+  }
+
+  private func launchedWithElevatedPrivileges() -> Bool {
+    if getuid() == 0 || geteuid() == 0 {
+      return true
+    }
+
+    let env = ProcessInfo.processInfo.environment
+    if env["SUDO_UID"] != nil || env["SUDO_USER"] != nil || env["SUDO_COMMAND"] != nil {
+      return true
+    }
+
+    return false
   }
 
   // // window manager restore from dock: https://leanflutter.dev/blog/click-dock-icon-to-restore-after-closing-the-window
