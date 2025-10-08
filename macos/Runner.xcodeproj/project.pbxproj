@@ -65,8 +65,8 @@
 		27D596A22A92B6AB00E2BE2B /* Embed CLI */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = Contents/MacOS;
-			dstSubfolderSpec = 6;
+			dstPath = "";
+			dstSubfolderSpec = 3;
 			files = (
 				27D596A02A92B6AB00E2BE2B /* RostovVPNCli in Embed CLI */,
 			);
