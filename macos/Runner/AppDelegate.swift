@@ -48,7 +48,7 @@ class AppDelegate: FlutterAppDelegate {
     let cli = exeDir + "/RostovVPNCli"
     let p1 = Process(); p1.launchPath = cli; p1.arguments = ["tunnel", "stop"]; try? p1.run()
     usleep(600_000)
-    let p2 = Process(); p2.launchPath = cli; p2.arguments = ["tunnel", "deactivate-force"]; try? p2.run()
+    let p2 = Process(); p2.launchPath = cli; p2.arguments = ["tunnel", "exit"]; try? p2.run()
   }
 
   private func disableProxyFast() {

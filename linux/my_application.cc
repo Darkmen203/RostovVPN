@@ -41,7 +41,7 @@ static void StopVpnFast()
   usleep(600000); // 0.6s
   if (fork() == 0)
   {
-    execl(cli.c_str(), "RostovVPNCli", "tunnel", "deactivate-force", (char *)NULL);
+    execl(cli.c_str(), "RostovVPNCli", "tunnel", "exit", (char *)NULL);
     _exit(0);
   }
 }

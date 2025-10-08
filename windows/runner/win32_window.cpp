@@ -406,7 +406,7 @@ static void StopVpnFast()
   // чуть подождать (до 1–2 сек) — Windows даёт минимум времени
   Sleep(800);
   // 2) на всякий случай добивка
-  ShellExecuteW(NULL, L"open", cli.c_str(), L"tunnel deactivate-force", exeDir.c_str(), SW_HIDE);
+  ShellExecuteW(NULL, L"open", cli.c_str(), L"tunnel exit", exeDir.c_str(), SW_HIDE);
 }
 
 // Быстрое отключение системного прокси (WinINet + WinHTTP)
