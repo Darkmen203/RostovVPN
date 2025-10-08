@@ -22,7 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		27D5969F2A92B6AB00E2BE2B /* libcore.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 27D5969E2A92B6AB00E2BE2B /* libcore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		27D596A02A92B6AB00E2BE2B /* RostovVPNCli in Resources */ = {isa = PBXBuildFile; fileRef = 27D596A12A92B6AB00E2BE2B /* RostovVPNCli */; };
+		27D596A02A92B6AB00E2BE2B /* RostovVPNCli in Embed CLI */ = {isa = PBXBuildFile; fileRef = 27D596A12A92B6AB00E2BE2B /* RostovVPNCli */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
@@ -60,6 +60,17 @@
 				27D5969F2A92B6AB00E2BE2B /* libcore.dylib in Bundle Framework */,
 			);
 			name = "Bundle Framework";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27D596A22A92B6AB00E2BE2B /* Embed CLI */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/MacOS;
+			dstSubfolderSpec = 6;
+			files = (
+				27D596A02A92B6AB00E2BE2B /* RostovVPNCli in Embed CLI */,
+			);
+			name = "Embed CLI";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -245,6 +256,7 @@
 				33CC10EA2044A3C60003C045 /* Frameworks */,
 				33CC10EB2044A3C60003C045 /* Resources */,
 				33CC110E2044A8840003C045 /* Bundle Framework */,
+				27D596A22A92B6AB00E2BE2B /* Embed CLI */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
 				DDB714AFDEF721265C0C3AF7 /* [CP] Embed Pods Frameworks */,
 			);
@@ -322,7 +334,6 @@
 			files = (
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
-				27D596A02A92B6AB00E2BE2B /* RostovVPNCli in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
