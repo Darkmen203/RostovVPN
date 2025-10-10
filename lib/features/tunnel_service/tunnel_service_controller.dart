@@ -53,12 +53,27 @@ class TunnelServiceController {
     final exe = Platform.isWindows ? 'RostovVPNCli.exe' : 'RostovVPNCli';
 
     // Набор кандидатов: PATH/текущая папка/рядом с exe/bin
+    final resolvedDir = _resolvedDir();
+    // macOS bundle may place CLI next to Runner or under Frameworks/Resources.
+    var contentsDir = '';
+    try {
+      contentsDir = Directory(resolvedDir).parent.path;
+    } catch (_) {/* ignore */}
+    final frameworksDir = contentsDir.isEmpty
+        ? ''
+        : '$contentsDir${Platform.pathSeparator}Frameworks';
+    final resourcesDir = contentsDir.isEmpty
+        ? ''
+        : '$contentsDir${Platform.pathSeparator}Resources';
+
     final candidates = <String>[
       exe,
       'bin/$exe',
       '../bin/$exe',
-      _joinIfExists(_resolvedDir(), exe),
-      _joinIfExists(Directory(_resolvedDir()).parent.path, exe),
+      _joinIfExists(resolvedDir, exe),
+      if (contentsDir.isNotEmpty) _joinIfExists(contentsDir, exe),
+      if (frameworksDir.isNotEmpty) _joinIfExists(frameworksDir, exe),
+      if (resourcesDir.isNotEmpty) _joinIfExists(resourcesDir, exe),
     ].where((e) => e.isNotEmpty).toList();
 
     Object? lastErr;
@@ -184,3 +199,5 @@ class TunnelServiceController {
     return File(p).existsSync() ? p : '';
   }
 }
+
+

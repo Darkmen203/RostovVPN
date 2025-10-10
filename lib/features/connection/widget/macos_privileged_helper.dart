@@ -64,6 +64,8 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
   }();
 
   final candidates = <String>[
+    if (contentsDir.isNotEmpty) '$contentsDir/Frameworks/RostovVPNCli',
+    if (contentsDir.isNotEmpty) '$contentsDir/MacOS/RostovVPNCli',
     if (contentsDir.isNotEmpty) '$contentsDir/Resources/RostovVPNCli',
     if (contentsDir.isNotEmpty) '$contentsDir/Resources/rostovvpn-helper',
     '${Directory.current.path}/libcore/bin/RostovVPNCli',
@@ -213,3 +215,4 @@ Future<void> _attemptInstallHelper(BuildContext context) async {
 }
 
 String _shQ(String path) => "'${path.replaceAll("'", "'\\''")}'";
+

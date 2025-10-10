@@ -44,19 +44,35 @@ class AppDelegate: FlutterAppDelegate {
   }
 
   private func stopVpnFast() {
-    let exeDir = Bundle.main.bundlePath + "/Contents/MacOS"
-    let cli = exeDir + "/RostovVPNCli"
+    guard let cli = resolveCliPath() else { return }
     let p1 = Process(); p1.launchPath = cli; p1.arguments = ["tunnel", "stop"]; try? p1.run()
     usleep(600_000)
     let p2 = Process(); p2.launchPath = cli; p2.arguments = ["tunnel", "exit"]; try? p2.run()
   }
 
   private func disableProxyFast() {
-    let exeDir = Bundle.main.bundlePath + "/Contents/MacOS"
-    let cli = exeDir + "/RostovVPNCli"
+    guard let cli = resolveCliPath() else { return }
     // Prefer delegating to CLI (it knows all services/interfaces)
     let p = Process(); p.launchPath = cli; p.arguments = ["proxy", "off"]; try? p.run()
     // If CLI is unavailable we could fallback to networksetup for "Wi-Fi"/"Ethernet".
+  }
+
+  private func resolveCliPath() -> String? {
+    let bundlePath = Bundle.main.bundlePath
+    let candidates = [
+      bundlePath + "/Contents/Frameworks/RostovVPNCli",
+      bundlePath + "/Contents/MacOS/RostovVPNCli",
+      bundlePath + "/RostovVPNCli",
+    ]
+
+    let fm = FileManager.default
+    for candidate in candidates {
+      if fm.isExecutableFile(atPath: candidate) {
+        return candidate
+      }
+    }
+    NSLog("RostovVPNCli not found in bundle; checked: \(candidates)")
+    return nil
   }
 
   private func launchedWithElevatedPrivileges() -> Bool {
@@ -86,3 +102,4 @@ class AppDelegate: FlutterAppDelegate {
   //   return true
   // }
 }
+
