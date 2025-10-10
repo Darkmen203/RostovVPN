@@ -72,7 +72,8 @@
 			);
 			name = "Bundle Executables";
 			runOnlyForDeploymentPostprocessing = 0;
-		};\r\n/* End PBXCopyFilesBuildPhase section */
+		};
+		/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1A1027315C9B3E3F83410A09 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
