@@ -66,14 +66,14 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Contents/MacOS;
-			dstSubfolderSpec = 0;
+			dstSubfolderSpec = 1;
 			files = (
 				1F7FB0FE2E983B8D0065E8B5 /* RostovVPNCli in Bundle MacOS */,
 			);
 			name = "Bundle Executables";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		/* End PBXCopyFilesBuildPhase section */
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1A1027315C9B3E3F83410A09 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -813,3 +813,4 @@
 	};
 	rootObject = 33CC10E52044A3C60003C045 /* Project object */;
 }
+
