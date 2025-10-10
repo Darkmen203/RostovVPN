@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		1F7FB0FE2E983B8D0065E8B5 /* RostovVPNCli in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 1F7FB0FD2E983B8D0065E8B5 /* RostovVPNCli */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1F7FB0FE2E983B8D0065E8B5 /* RostovVPNCli in Bundle MacOS */ = {isa = PBXBuildFile; fileRef = 1F7FB0FD2E983B8D0065E8B5 /* RostovVPNCli */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		27D5969F2A92B6AB00E2BE2B /* libcore.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 27D5969E2A92B6AB00E2BE2B /* libcore.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
@@ -57,13 +57,22 @@
 			dstPath = Contents/Frameworks;
 			dstSubfolderSpec = 1;
 			files = (
-				1F7FB0FE2E983B8D0065E8B5 /* RostovVPNCli in Bundle Framework */,
 				27D5969F2A92B6AB00E2BE2B /* libcore.dylib in Bundle Framework */,
 			);
 			name = "Bundle Framework";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXCopyFilesBuildPhase section */
+		1F7FB1012E983B8D0065E8B5 /* Bundle Executables */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/MacOS;
+			dstSubfolderSpec = 0;
+			files = (
+				1F7FB0FE2E983B8D0065E8B5 /* RostovVPNCli in Bundle MacOS */,
+			);
+			name = "Bundle Executables";
+			runOnlyForDeploymentPostprocessing = 0;
+		};\r\n/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1A1027315C9B3E3F83410A09 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -246,6 +255,7 @@
 				33CC10EA2044A3C60003C045 /* Frameworks */,
 				33CC10EB2044A3C60003C045 /* Resources */,
 				33CC110E2044A8840003C045 /* Bundle Framework */,
+				1F7FB1012E983B8D0065E8B5 /* Bundle Executables */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
 				DDB714AFDEF721265C0C3AF7 /* [CP] Embed Pods Frameworks */,
 			);
