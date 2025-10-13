@@ -3,7 +3,7 @@ set -euo pipefail
 
 in="${1:-}"                          # входной PNG или базовое имя без .png
 outdir="${2:-windows/runner/resources/icons}"
-sizes="${3:-180,120,87,60}"
+sizes="${3:-16,32,64,128,256,512,1024}"
 
 [[ -z "$in" ]] && { echo "Usage: $0 <input(.png)> [outdir] [sizes_csv]"; exit 1; }
 [[ "${in,,}" != *.png ]] && in="${in}.png"

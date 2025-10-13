@@ -11,7 +11,7 @@ case "${src,,}" in
 esac
 
 # размеры по умолчанию
-sizes="${2:-256,128,64,48,32,16}"
+sizes="${2:-64,128,256,48,32,16}"
 
 # ImageMagick v7: magick, v6: convert
 cmd="$(command -v magick || command -v convert || true)"

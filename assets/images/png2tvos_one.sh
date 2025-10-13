@@ -23,7 +23,7 @@ cmd="$(command -v magick || command -v convert || true)"
 [ -n "$cmd" ] || { echo "ImageMagick not found (need 'magick' or 'convert')"; exit 1; }
 
 # Набор размеров tvOS 5:3
-sizes=("400x240:400" "800x480:400@2x" "1280x768:1280x768", "256x256:LaunchImage", "512x512:LaunchImage@2x", "768x768:LaunchImage@3x")
+sizes=("400x240:400" "800x480:400@2x" "1280x768:app-icon-front-1280x768", "256x256:LaunchImage", "512x512:LaunchImage@2x", "768x768:LaunchImage@3x")
 
 for item in "${sizes[@]}"; do
   IFS=: read -r size suffix <<< "$item"
