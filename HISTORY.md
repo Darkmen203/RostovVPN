@@ -1,7 +1,103 @@
 # Changelog
 
 
-## 2.7.8 (2025-09-13)
+## 2.8.0 (2025-10-14)
+
+#### Other
+
+* Fix tray icons and in app icon. 
+
+* Fix icons. 
+
+* Added tunService for macos. 
+
+* Fix in app main image button. 
+
+* Update and optimise icons. 
+
+* Fix build macos. 
+
+* Fix line in macos. 
+
+* RostovVPNCli build in Macos excutable. 
+
+* Update path to rostovvpncli run or stop. 
+
+* Update added RostovVPNCli in macos build. 
+
+* Try fix build cli on macos. 
+
+* Fix added cli on macos. 
+
+* Fix build macos. 
+
+* Added in macos build RostovVPNCli. 
+
+* Fix close command after start on TunService. 
+
+* Added no heal on startup on macos. 
+
+* Try fix macos start admin. 
+
+* Try fix macos start admin. 
+
+* Fix added rule for androidManifest. 
+
+* Update drift and fix routes. 
+
+* Added withalpha. 
+
+* Added rule for macos notification. 
+
+* Optimise project. 
+
+* Delete extra functionality, optimise images, optimise animation. 
+
+* Delete extra functions. 
+
+* Optimise project. 
+
+* Fix package windows. 
+
+* Delete extra files build and update release message. 
+
+* Update cli commands. 
+
+* Fix android exclude mode. 
+
+* Fix android connecting. 
+
+* Fix android exclude apps. 
+
+* Added auto off and start app when cli is started. 
+
+* Fix tray error and states in conection button. 
+
+* Fix error on init tray. 
+
+* Refactor code. 
+
+* Fix app for new deps. 
+
+* Fix build android errors on new version. 
+
+* Fix android build. 
+
+* Fix commandClient. 
+
+* Fix func for api revision libbox android. 
+
+* Try fix andorid build. 
+
+* Try fix android build for new libbox. 
+
+* Change logindata save dir and fix android crash build. 
+
+* Deleted wrap and added macos privileged helper. 
+
+
+
+## v2.7.8 (2025-09-13)
 
 #### Other
 
